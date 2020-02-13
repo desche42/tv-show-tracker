@@ -1,6 +1,6 @@
 # TV TORRENT AUTO DOWNLOADER
 
-This is a project to automate tv show torrents download.
+This is a project to help lazy people who like to sit and do nothing, DO EVEN LESS!
 
 ## TV SHOW SCHEDULE
 
