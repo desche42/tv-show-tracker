@@ -18,7 +18,7 @@
     "fs-extra": "^8.1.0",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.8",
-    "torrent-stream": "^1.2.0"
+    "torrent-search-api": "^2.0.10"
   },
   "devDependencies": {
     "debug": "^4.1.1"

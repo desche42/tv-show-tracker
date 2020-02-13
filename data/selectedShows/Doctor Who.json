@@ -1,7 +1,29 @@
 {
   "12": {
     "06": {
-      "date": "2-2-2020"
+      "date": "2-2-2020",
+      "torrents": [
+        {
+          "title": "Doctor.Who.2005.S12E06.HDTV.x264-PHOENiX[eztv]",
+          "peers": 158,
+          "seeds": 389,
+          "time": "1 week",
+          "size": "353.64 MB",
+          "magnet": "magnet:?xt=urn:btih:714F83C9B0957E13D1851BCF9A2102D9612D4C43&dn=Doctor.Who.2005.S12E06.HDTV.x264-PHOENiX%5Beztv%5D&tr=udp%3A%2F%2Fglotorrents.pw%3A6969%2Fannounce;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969;tr=udp%3A%2F%2Ftorrent.gresille.org%3A80%2Fannounce;tr=udp%3A%2F%2F9.rarbg.me%3A2710%2Fannounce;tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337;tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337",
+          "desc": "http://extratorrent.ag/torrent/8132097/Doctor.Who.2005.S12E06.HDTV.x264-PHOENiX%5Beztv%5D.html#comments",
+          "provider": "ExtraTorrent"
+        },
+        {
+          "provider": "Rarbg",
+          "title": "Doctor.Who.2005.S12E06.1080p.HDTV.H264-MTB[rartv]",
+          "time": "2020-02-02 20:11:58 +0000",
+          "seeds": 444,
+          "peers": 17,
+          "size": "1.4 GiB",
+          "magnet": "magnet:?xt=urn:btih:c3fbd8fdf490f46a9328ddeba2b3d52b08fd7131&dn=Doctor.Who.2005.S12E06.1080p.HDTV.H264-MTB%5Brartv%5D&tr=http%3A%2F%2Ftracker.trackerfix.com%3A80%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2710&tr=udp%3A%2F%2F9.rarbg.to%3A2710&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce",
+          "desc": "https://torrentapi.org/redirect_to_info.php?token=8qbvh0x5d2&p=2_1_3_4_1_6_2__c3fbd8fdf4"
+        }
+      ]
     },
     "07": {
       "date": "9-2-2020"
