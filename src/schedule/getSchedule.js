@@ -43,9 +43,13 @@ function _parseDays ($) {
   // parse each day and return schedule object
   daysHTML.each((i, day) => {
     const date = $('strong a', day).attr('href').split('/').pop();
-    const episodeList = $('div.ep', day);
+    const episodeList = [];
 
-    parsedDays[date] = _parseEpisodesList(episodeList, $);
+    $('div.ep', day).each((i, episode) => {
+      episodeList.push(_parseEpisode(selector => $(selector, episode)));
+    });
+
+    parsedDays[date] = episodeList;
   });
 
   return parsedDays;
@@ -53,12 +57,14 @@ function _parseDays ($) {
 
 /**
  * Extracts data from each episode
- * @param {Cheerio Context} episodeList
+ * @param {$} episode cheerio context
  * @param {*} $
  */
-function _parseEpisodesList(episodeList, $) {
-  // return episodeList;
+function _parseEpisode($) {
+  const title = $('p a:nth-child(1)').text().trim();
 
-  return 'hello'
 
+
+
+  return title;
 }
