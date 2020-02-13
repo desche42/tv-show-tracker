@@ -28,20 +28,27 @@ module.exports = async function getSchedule () {
     JSON.parse(fs.readFileSync('./data/schedule-raw.txt'))
   );
 
-  return getRawData(response);
+  return _parseData(response);
 }
 
 /**
  * Extracts data from cheerio loaded html
- * @param {CheerioObject} $
+ * @param {CheerioObject} $ entry point for manipulating the page
  */
-function getRawData ($) {
-  const days = $('div.day,div.today');
+function _parseData ($) {
+  const daysHTML = $('div.day,div.today');
 
-  console.log(days)
+  // get available days in curren month
+  const availableDays = Object.keys(daysHTML).filter(str => /^\d*$/.test(str));
 
-  fs.writeFileSync(
-    './data/schedule.json',
-    days
-  )
+  // parse each day and return schedule object
+  return availableDays.reduce((acc, nDay) => {
+    const day = daysHTML[nDay];
+
+    const date = $('strong a', day).attr('href').split('/').pop();
+
+    acc[date] = date;
+
+    return acc;
+  }, {});
 }
