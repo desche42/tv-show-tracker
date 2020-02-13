@@ -6,7 +6,7 @@
 const cheerio = require('cheerio');
 const rp = require('request-promise-native');
 
-const fs = require('fs');
+const fs = require('fs-extra');
 /**
  * CURRENT MONTH SHCEDULE URL
  */
@@ -15,7 +15,7 @@ const SCHEDULE_URL = 'https://www.pogdesign.co.uk/cat/';
 /**
  * Gets schedule from an online TV Calendar
  */
-module.exports = async function getSchedule () {
+module.exports = async function getEpisodes () {
 
   // const response = await rp({
   //     uri: SCHEDULE_URL,
@@ -24,6 +24,7 @@ module.exports = async function getSchedule () {
   //     }
   // });
 
+  // debug
   const response = cheerio.load(
     JSON.parse(fs.readFileSync('./data/schedule-raw.txt'))
   );
@@ -38,33 +39,41 @@ module.exports = async function getSchedule () {
 function _parseDays ($) {
   const daysHTML = $('div.day,div.today');
 
-  const parsedDays = {};
+  const episodeList = [];
 
   // parse each day and return schedule object
   daysHTML.each((i, day) => {
     const date = $('strong a', day).attr('href').split('/').pop();
-    const episodeList = [];
 
     $('div.ep', day).each((i, episode) => {
-      episodeList.push(_parseEpisode(selector => $(selector, episode)));
+      const parsedEpisode = _parseEpisode(selector => $(selector, episode))
+      parsedEpisode.date = date;
+      episodeList.push(parsedEpisode);
     });
-
-    parsedDays[date] = episodeList;
   });
 
-  return parsedDays;
+  return episodeList;
 }
 
 /**
  * Extracts data from each episode
+ *  Show title
  * @param {$} episode cheerio context
  * @param {*} $
  */
 function _parseEpisode($) {
-  const title = $('p a:nth-child(1)').text().trim();
+  const showTitle = $('p a:nth-child(1)').text().trim();
 
+  const [
+    inputText,
+    season,
+    episode,
+    ...rest
+  ] = $('p a:nth-child(2)').text().match(/s(\d*)e(\d*)/);
 
-
-
-  return title;
+  return {
+    showTitle,
+    season,
+    episode
+  };
 }
