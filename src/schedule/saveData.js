@@ -1,5 +1,5 @@
 const fs = require('fs-extra');
-const debug = require('debug')('save data:')
+const debug = require('debug')('save data:');
 
 
 /**
@@ -9,13 +9,32 @@ const debug = require('debug')('save data:')
 module.exports = async function saveData (episodes) {
   const tvShows = [...new Set(episodes.map(ep => ep.showTitle))].sort();
 
-  await _updateAvailableShows(tvShows);
+  const availableShows = await _updateAvailableShows(tvShows);
 
+  const selectedShows = Object.keys(availableShows)
+    .filter(showName => availableShows[showName]);
 
-  // tvShows.forEach(showTitle => {
-  //   const showEpisodes = episodes.filter(ep => ep.showTitle === showTitle);
+  return await Promise.all(selectedShows.map(async showTitle => {
+    const showPath = `./data/selectedShows/${showTitle}.json`;
 
-  // });
+    const show = await _assignLocalJson(showPath, {});
+
+    const filteredEpisodes = episodes.filter(ep => ep.showTitle === showTitle);
+
+    filteredEpisodes.forEach(episode => {
+      if (!show[episode.season]) {
+        show[episode.season] = {};
+      }
+
+      if (!show[episode.season][episode.episode]) {
+        show[episode.season][episode.episode] = {
+          date: episode.date
+        }
+      }
+    });
+
+    return fs.writeJson(showPath, show, {spaces: 2});
+  }));
 }
 
 
@@ -32,11 +51,21 @@ async function _updateAvailableShows (shows) {
     return acc;
   }, {});
 
-  if (await fs.exists(availableShowsPath)) {
-    Object.assign(availableShows, await fs.readJson(availableShowsPath));
-  } else {
-    await fs.ensureFile(availableShowsPath);
-  }
+  await _assignLocalJson(availableShowsPath, availableShows);
 
-  await fs.writeJson(availableShowsPath, availableShows, {spaces: 2});
+  await fs.writeJson(
+    availableShowsPath, availableShows, {spaces: 2}
+  );
+
+  return availableShows;
 }
+
+async function _assignLocalJson(path, defaultVal) {
+  if (await fs.exists(path)) {
+    return Object.assign(defaultVal, await fs.readJson(path));
+  } else {
+    await fs.ensureFile(path);
+    return defaultVal;
+  }
+}
+
