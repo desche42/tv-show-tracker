@@ -1,0 +1,21 @@
+{
+  "name": "torrent-auto-downloader",
+  "version": "1.0.0",
+  "description": "Torrent auto downloader",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "torrent",
+    "downloader"
+  ],
+  "author": "Alejandro Sánchez Pineda",
+  "license": "MIT",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.8",
+    "torrent-stream": "^1.2.0"
+  }
+}
