@@ -10,10 +10,10 @@ const fs = require('fs');
 /**
  * CURRENT MONTH SHCEDULE URL
  */
-const SCHEDULE_URL = 'https://www.pogdesign.co.uk/cat/';
 
+const SCHEDULE_URL = 'https://www.pogdesign.co.uk/cat/';
 /**
- * Gets and parses schedule
+ * Gets schedule from an online TV Calendar
  */
 module.exports = async function getSchedule () {
 
@@ -28,27 +28,37 @@ module.exports = async function getSchedule () {
     JSON.parse(fs.readFileSync('./data/schedule-raw.txt'))
   );
 
-  return _parseData(response);
+  return _parseDays(response);
 }
 
 /**
- * Extracts data from cheerio loaded html
+ * Extracts data from cheerio loaded html and returns result for each day
  * @param {CheerioObject} $ entry point for manipulating the page
  */
-function _parseData ($) {
+function _parseDays ($) {
   const daysHTML = $('div.day,div.today');
 
-  // get available days in curren month
-  const availableDays = Object.keys(daysHTML).filter(str => /^\d*$/.test(str));
+  const parsedDays = {};
 
   // parse each day and return schedule object
-  return availableDays.reduce((acc, nDay) => {
-    const day = daysHTML[nDay];
-
+  daysHTML.each((i, day) => {
     const date = $('strong a', day).attr('href').split('/').pop();
+    const episodeList = $('div.ep', day);
 
-    acc[date] = date;
+    parsedDays[date] = _parseEpisodesList(episodeList, $);
+  });
 
-    return acc;
-  }, {});
+  return parsedDays;
+}
+
+/**
+ * Extracts data from each episode
+ * @param {Cheerio Context} episodeList
+ * @param {*} $
+ */
+function _parseEpisodesList(episodeList, $) {
+  // return episodeList;
+
+  return 'hello'
+
 }
