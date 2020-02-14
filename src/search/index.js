@@ -41,7 +41,7 @@ module.exports = async function searchEpisodes(episodes) {
 async function _searchEpisode(episode) {
   const {showTitle, season: s, episode: e} = episode;
   const episodeId = `${showTitle} season ${s} episode ${e}`;
-  const limit = 20;
+  const limit = 100;
 
 
   debug(`Searching ${episodeId}...`);
