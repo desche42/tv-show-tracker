@@ -19,6 +19,7 @@
   "license": "MIT",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
+    "config": "^3.2.5",
     "fs-extra": "^8.1.0",
     "lowdb": "^1.0.0",
     "request": "^2.88.2",
@@ -30,5 +31,7 @@
     "debug": "^4.1.1"
   },
   "repository": "github:desche42/tv-show-tracker.git",
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  }
 }

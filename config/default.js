@@ -1,0 +1,6 @@
+/**
+ * Default configuration
+ */
+module.exports = {
+  
+}

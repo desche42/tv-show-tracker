@@ -3,3 +3,6 @@ node_modules
 
 # Database
 database
+
+# local configuration
+config/local.js
