@@ -11,15 +11,15 @@ const saveData = require('./saveData');
  * CURRENT MONTH SHCEDULE URL
  */
 
-const SCHEDULE_URL = 'https://www.pogdesign.co.uk/cat/';
+const SCHEDULE_URL = 'https://www.pogdesign.co.uk/cat';
 
 /**
  * Gets schedule from an online TV Calendar
  * and sets episodes into DB
  */
-module.exports = async function getCurrentMonthSchedule () {
+module.exports = async function getMonthSchedule (month, year) {
   const response = await rp({
-      uri: SCHEDULE_URL,
+      uri: `${SCHEDULE_URL}/${month}-${year}`,
       transform: function (body) {
           return cheerio.load(body);
       }
