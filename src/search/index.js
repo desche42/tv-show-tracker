@@ -1,8 +1,7 @@
 /**
  * Search torrents from available episodes in selected shows
  */
-const fs = require('fs-extra');
-const debug = require('debug')('torrent-auto-downloader: searchTorrent');
+const debug = require('debug')('torrent-auto-downloader: search');
 const DB = require('../database');
 
 /**
@@ -21,18 +20,16 @@ torrentSearch.enablePublicProviders();
 async function _searchEpisode(episode) {
   const {showTitle, season: s, episode: e} = episode;
   const episodeId = `${showTitle} season ${s} episode ${e}`;
+  const limit = 20;
 
 
   debug(`Searching ${episodeId}...`);
-  // const torrents = await torrentSearch.search(showTitle, 'All', limit);
-  const torrents = JSON.parse(fs.readFileSync('./src/search/torrents.json'));
+  const torrents = await torrentSearch.search(showTitle, 'All', limit);
   const showRegex = new RegExp(`.*(s0?${s}e0?${e}).*`, 'gi');
   const filteredTorrents = torrents.filter(torrent => showRegex.test(torrent.title));
 
 
-
   debug(`${filteredTorrents.length} torrents found for ${episodeId}...`);
-
   if(filteredTorrents.length) {
     const selectedTorrent = _getHighestSize(filteredTorrents);
 
@@ -75,10 +72,13 @@ function _parseSize(size) {
   * @returns search results
   */
 async function searchEpisodes(episodes) {
-  debug('Searching torrentless episodes');
-  episodes = episodes.filter(episode => !episode.torrent);
-
-  await Promise.all(episodes.map(_searchEpisode));
+  if(episodes.length) {
+    debug('Searching torrentless episodes');
+    episodes = episodes.filter(episode => !episode.torrent);
+    await Promise.all(episodes.map(_searchEpisode));
+  } else {
+    debug('No new episodes to search');
+  }
 }
 
 module.exports = {

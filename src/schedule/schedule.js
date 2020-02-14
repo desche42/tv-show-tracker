@@ -5,31 +5,29 @@
 
 const cheerio = require('cheerio');
 const rp = require('request-promise-native');
+const saveData = require('./saveData');
 
-const fs = require('fs-extra');
 /**
  * CURRENT MONTH SHCEDULE URL
  */
 
 const SCHEDULE_URL = 'https://www.pogdesign.co.uk/cat/';
+
 /**
  * Gets schedule from an online TV Calendar
+ * and sets episodes into DB
  */
-module.exports = async function getEpisodes () {
+module.exports = async function getCurrentMonthSchedule () {
+  const response = await rp({
+      uri: SCHEDULE_URL,
+      transform: function (body) {
+          return cheerio.load(body);
+      }
+  });
 
-  // const response = await rp({
-  //     uri: SCHEDULE_URL,
-  //     transform: function (body) {
-  //         return cheerio.load(body);
-  //     }
-  // });
+  await saveData(_parseDays(response));
 
-  // debug
-  const response = cheerio.load(
-    JSON.parse(fs.readFileSync('./data/schedule-raw.txt'))
-  );
-
-  return _parseDays(response);
+  return response.html();
 }
 
 /**

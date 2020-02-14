@@ -1,23 +1,26 @@
-const getEpisodes = require('./getEpisodes');
-const saveData = require('./saveData');
+const getCurrentMonthSchedule = require('./schedule');
 const debug = require('debug')('torrent-auto-downloader: schedule');
 const DB = require('../database');
+const fs = require('fs-extra');
 
 /**
  * Get, parse and set schedule
  */
 async function update () {
+  const currentMonth = (new Date()).getMonth();
+  const currentYear = (new Date()).getFullYear();
+
+  const monthSchedulePath = `./database/schedule/${currentMonth}-${currentYear}.txt`;
+  if (await fs.existsSync(monthSchedulePath)) {
+    debug('This month schedule is already loaded');
+    return;
+  }
+
   try {
-    // @todo do not save data if old schedule
-    // for now ill comment this lines
-
-    // debug('Getting episodes...');
-    // const episodes = await getEpisodes();
-
-    // debug('Saving data');
-    // await saveData(episodes);
-    // debug('Data saved');
-
+    debug('Load online tv calendar.');
+    const response = await getCurrentMonthSchedule();
+    await fs.ensureFile(monthSchedulePath);
+    await fs.writeFile(monthSchedulePath, response);
   } catch (err) {
     console.error(err);
   }

@@ -31,6 +31,8 @@ Select your favorites by setting the value to true and episodes will be saved to
 
 ## TO DO's
 
+- Tests
 - Select shows easily
 - Option of download whole seasons
 - Check last schedule update date to avoid unnecesary API calls as schedule most probably won't change (maybe add --force-schedule-update option)
+- Figure out which torrent search provider is giving timeout and disable it to speed up process

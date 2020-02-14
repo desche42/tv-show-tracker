@@ -9,7 +9,7 @@ const download = require('./src/download');
 
 
 /**
- * Updates the schedule
+ * Update schedule and search available torrents for downloading.
  */
 async function start() {
   try {
@@ -20,6 +20,8 @@ async function start() {
   } catch (err) {
     debug(err)
   }
+
+  debug('All torrents downloaded. Nice!!!');
 }
 
 start();

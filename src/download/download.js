@@ -11,16 +11,15 @@ const DB = require('../database');
 module.exports = async function downloadTorrent(episode) {
   const {showTitle, season, episode: ep, torrent}  = episode;
 
-  debug(`start ${torrent.title}`);
   const engine = torrentStream(torrent.magnet, {
-    path: 'data/download'
+    path: 'database/download'
   });
 
   engine.on('ready', function () {
     engine.files.forEach(file => {
       if (isVideoFile(file.name)) {
         file.select();
-        debug(`${file.name} selected`);
+        debug(`${file.name} downloading!`);
       }
     })
   });

@@ -1,5 +1,9 @@
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
+const fs = require('fs-extra');
+
+const DATABASE_PATH = './database/db.json';
+fs.ensureFileSync(DATABASE_PATH);
 
 const adapter = new FileSync('./database/db.json');
 
