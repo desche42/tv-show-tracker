@@ -1,7 +1,7 @@
 /**
 * Search torrents from available episodes in selected shows
  */
-const debug = require('debug')('torrent-auto-downloader: search');
+const debug = require('debug')('tv-show-tracker: search');
 const DB = require('../database');
 
 // Configure torrent search

@@ -47,7 +47,7 @@ Every time the app is launched, checks for new aired episodes in the schedule so
 If your terminal allows you to create aliases for commands (like zsh), adding: 
 
 ```bash
-alias checkTvShows="cd ~/code/torrent-auto-downloader/; npm run start;"
+alias checkTvShows="cd ~/code/tv-show-tracker/; npm run start;"
 ```
 
 to your `.zshrc` file (or similar) will allow you to run the app opening a terminal and doing: `checkTvShows`.
