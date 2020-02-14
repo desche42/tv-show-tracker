@@ -43,11 +43,14 @@ function _parseDays ($) {
 
   // parse each day and return schedule object
   daysHTML.each((i, day) => {
-    const date = $('strong a', day).attr('href').split('/').pop();
+    const dateStr = $('strong a', day).attr('href').split('/').pop();
 
     $('div.ep', day).each((i, episode) => {
-      const parsedEpisode = _parseEpisode(selector => $(selector, episode))
-      parsedEpisode.date = date;
+      const parsedEpisode = Object.assign(
+        _parseEpisode(selector => $(selector, episode)),
+        { date: formatDate(dateStr) }
+      );
+
       episodeList.push(parsedEpisode);
     });
   });
@@ -73,7 +76,17 @@ function _parseEpisode($) {
 
   return {
     showTitle,
-    season,
-    episode
+    season: Number(season),
+    episode: Number(episode)
   };
+}
+
+/**
+ * Converts date string to js date object
+ * @param {String} date DD-MM-YYYY
+ * @returns {Date}
+ */
+function formatDate(datestr) {
+  const [day, month, year] = datestr.split('-');
+  return new Date([month, day, year].join('-'));
 }

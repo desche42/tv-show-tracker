@@ -1,71 +1,41 @@
-const fs = require('fs-extra');
-const debug = require('debug')('save data:');
+const debug = require('debug')('schedule:');
+const debugNewShow = require('debug')('New show available:');
+const DB = require('../database');
 
-
+const DB_SHOWS_KEY = 'shows';
+const DB_EPISODES_KEY = 'episodes';
 /**
- * Save data into json files for each show.
- * "DATABASE"
+ * Saves data into database
+ * - update show collection
+ * - save show episode
  */
 module.exports = async function saveData (episodes) {
-  const tvShows = [...new Set(episodes.map(ep => ep.showTitle))].sort();
+  const shows = [];
 
-  const availableShows = await _updateAvailableShows(tvShows);
+  episodes.forEach(episode => {
+    shows.push(episode.showTitle);
+    DB.get(DB_EPISODES_KEY).push(episode).write();
+  });
 
-  const selectedShows = Object.keys(availableShows)
-    .filter(showName => availableShows[showName]);
+  await _updateShowsInfo(shows);
 
-  return await Promise.all(selectedShows.map(async showTitle => {
-    const showPath = `./data/selectedShows/${showTitle}.json`;
-
-    const show = await _assignLocalJson(showPath, {});
-
-    const filteredEpisodes = episodes.filter(ep => ep.showTitle === showTitle);
-
-    filteredEpisodes.forEach(episode => {
-      if (!show[episode.season]) {
-        show[episode.season] = {};
-      }
-
-      if (!show[episode.season][episode.episode]) {
-        show[episode.season][episode.episode] = {
-          date: episode.date
-        }
-      }
-    });
-
-    return fs.writeJson(showPath, show, {spaces: 2});
-  }));
 }
-
 
 /**
- * Update local json of available tv shows
- * @param {Array} shows names
+ * Update db of available shows and returns selected
+ * @param {Array} newShows
+ * @returns Promise<void>
  */
-async function _updateAvailableShows (shows) {
-  debug('Updating available shows...');
-  const availableShowsPath = './data/availableShows.json';
+async function _updateShowsInfo (newShows) {
+  return Promise.all(newShows.map(async (showName) => {
+    const show = DB.get(DB_SHOWS_KEY)
+      .find({ title: showName })
+      .value();
 
-  const availableShows = shows.reduce((acc, showName) => {
-    acc[showName] = false;
-    return acc;
-  }, {});
-
-  await _assignLocalJson(availableShowsPath, availableShows);
-
-  await fs.writeJson(
-    availableShowsPath, availableShows, {spaces: 2}
-  );
-
-  return availableShows;
+    if (!show) {
+      debugNewShow(showName);
+      // write to db in saveData fn at the end
+      DB.get(DB_SHOWS_KEY).push({title: showName}).write();
+    }
+  }));
 }
-
-async function _assignLocalJson(path, defaultVal) {
-  if (await fs.exists(path)) {
-    return Object.assign(defaultVal, await fs.readJson(path));
-  } else {
-    await fs.ensureFile(path);
-    return defaultVal;
-  }
-}
-

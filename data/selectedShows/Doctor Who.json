@@ -1,5 +1,10 @@
 {
   "12": {
+    "01": {},
+    "02": {},
+    "03": {},
+    "04": {},
+    "05": {},
     "06": {
       "date": "2-2-2020",
       "torrents": [
@@ -23,7 +28,8 @@
           "magnet": "magnet:?xt=urn:btih:c3fbd8fdf490f46a9328ddeba2b3d52b08fd7131&dn=Doctor.Who.2005.S12E06.1080p.HDTV.H264-MTB%5Brartv%5D&tr=http%3A%2F%2Ftracker.trackerfix.com%3A80%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2710&tr=udp%3A%2F%2F9.rarbg.to%3A2710&tr=udp%3A%2F%2Fopen.demonii.com%3A1337%2Fannounce",
           "desc": "https://torrentapi.org/redirect_to_info.php?token=8qbvh0x5d2&p=2_1_3_4_1_6_2__c3fbd8fdf4"
         }
-      ]
+      ],
+      "downloaded": true
     },
     "07": {
       "date": "9-2-2020"
