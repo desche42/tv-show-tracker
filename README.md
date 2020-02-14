@@ -1,18 +1,25 @@
-# TV TORRENT AUTO DOWNLOADER
+# TV SHOW TRACKER
 
-Stop searching for torrents, select which shows you want to track and new episodes will be waiting for you!
+Stop searching for torrents, simply select which shows you want to track and new episodes will be automatically dowloaded as soon
+as they're available!
 
 ## Usage
 
 Clone the repo and install node dependencies:
 
-```
+```bash
+git clone https://github.com/desche42/tv-show-tracker.git
+cd tv-show-tracker
 npm i
+```
 
-// lots of console info
+Change into directory and start!
+
+```bash
+# starts with lots of console info
 npm run debug
 
-// redable console info
+# starts with redable console info
 npm run start
 ```
 
@@ -35,6 +42,16 @@ Edit this file to **select the shows want to track**:
 
 Every time the app is launched, checks for new aired episodes in the schedule so you don't have to track every tv show, searches for the magnet and downloads it.
 
+# Tips
+
+If your terminal allows you to create aliases for commands (like zsh), adding: 
+
+```bash
+alias checkTvShows="cd ~/code/torrent-auto-downloader/; npm run start;"
+```
+
+to your `.zshrc` file (or similar) will allow you to run the app opening a terminal and doing: `checkTvShows`.
+
 
 # TO DO's
 
@@ -45,3 +62,5 @@ Every time the app is launched, checks for new aired episodes in the schedule so
 - Option of download whole seasons
 
 - Figure out which torrent search provider is giving timeout and disable it to speed up process
+
+- Globally available

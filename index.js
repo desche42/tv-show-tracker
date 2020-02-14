@@ -15,7 +15,7 @@ async function start() {
   try {
     await schedule.update();
     const availableEpisodes = await schedule.getAvailableEpisodes();
-    await search.searchEpisodes(availableEpisodes);
+    await search(availableEpisodes);
     await download.downloadTorrents();
   } catch (err) {
     debug(err)
@@ -25,4 +25,3 @@ async function start() {
 }
 
 start();
-

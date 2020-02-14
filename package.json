@@ -9,6 +9,9 @@
     "start": "DEBUG=torrent-auto-downloader:* node index.js"
   },
   "keywords": [
+    "tv",
+    "show",
+    "automatic",
     "torrent",
     "downloader"
   ],
@@ -25,5 +28,6 @@
   },
   "devDependencies": {
     "debug": "^4.1.1"
-  }
+  },
+  "repository": "github:desche42/tv-show-tracker.git"
 }
