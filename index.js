@@ -13,11 +13,10 @@ const debug = require('debug')('torrent-auto-downloader');
 async function start() {
   try {
     await schedule.update();
-    await schedule.getAvailableEpisodes();
+    const availableEpisodes = await schedule.getAvailableEpisodes();
 
   } catch (err) {
     debug(err)
-    console.error('There was an error');
   }
 }
 
