@@ -1,15 +1,36 @@
 /**
- * Search torrents from available episodes in selected shows
+* Search torrents from available episodes in selected shows
  */
 const debug = require('debug')('torrent-auto-downloader: search');
 const DB = require('../database');
 
-/**
- * Configure torrent search
- */
-const torrentSearch = require('torrent-search-api');
+// Configure torrent search
 // more info about providers using await torrentSearch.getActiveProviders();
+const torrentSearch = require('torrent-search-api');
 torrentSearch.enablePublicProviders();
+
+
+
+/**
+ * API
+ *
+ * Searches torrents of all given episodes
+ * @param {Array} episodes to search
+ * @returns search results
+ */
+module.exports = async function searchEpisodes(episodes) {
+  if(episodes.length) {
+    debug('Searching torrentless episodes');
+    episodes = episodes.filter(episode => !episode.torrent);
+    await Promise.all(episodes.map(_searchEpisode));
+  } else {
+    debug('No new episodes to search');
+  }
+}
+
+
+
+
 
 /**
  * Searches torrent with given params and chooses the biggest found
@@ -30,6 +51,7 @@ async function _searchEpisode(episode) {
 
 
   debug(`${filteredTorrents.length} torrents found for ${episodeId}...`);
+
   if(filteredTorrents.length) {
     const selectedTorrent = _getHighestSize(filteredTorrents);
 
@@ -38,6 +60,9 @@ async function _searchEpisode(episode) {
     }).set('torrent', selectedTorrent).write();
   }
 }
+
+
+
 
 /**
  * Returns torrent with highest size
@@ -48,6 +73,9 @@ function _getHighestSize(torrents) {
     _parseSize(prev) > _parseSize(act) ? prev : act
   );
 }
+
+
+
 
 /**
  * @param {String} size 1.4 Gib | 333 MB | ....
@@ -64,23 +92,3 @@ function _parseSize(size) {
   } else return size;
 }
 
-
-/**
- *
-  * Searches torrents of all given episodes
-  * @param {Array} episodes to search
-  * @returns search results
-  */
-async function searchEpisodes(episodes) {
-  if(episodes.length) {
-    debug('Searching torrentless episodes');
-    episodes = episodes.filter(episode => !episode.torrent);
-    await Promise.all(episodes.map(_searchEpisode));
-  } else {
-    debug('No new episodes to search');
-  }
-}
-
-module.exports = {
-  searchEpisodes
-}

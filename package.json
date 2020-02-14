@@ -1,12 +1,12 @@
 {
   "name": "torrent-auto-downloader",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Torrent auto downloader",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "debug": "DEBUG=torrent-auto-downloader:* node index.js"
+    "debug": "DEBUG=* node index.js",
+    "start": "DEBUG=torrent-auto-downloader:* node index.js"
   },
   "keywords": [
     "torrent",

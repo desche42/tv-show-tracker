@@ -22,11 +22,4 @@ db.defaults({
   schedules: []
 }).write();
 
-
-/**
- * Some functionallity
- */
-db._.mixin({
-});
-
 module.exports = db;

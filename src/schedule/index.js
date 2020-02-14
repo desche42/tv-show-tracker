@@ -3,6 +3,12 @@ const debug = require('debug')('torrent-auto-downloader: schedule');
 const DB = require('../database');
 const fs = require('fs-extra');
 
+
+module.exports = {
+  update,
+  getAvailableEpisodes
+}
+
 /**
  * Get, parse and set schedule
  */
@@ -72,7 +78,3 @@ function _filterFutureEpisodes(episodes) {
   );
 }
 
-module.exports = {
-  update,
-  getAvailableEpisodes
-}
