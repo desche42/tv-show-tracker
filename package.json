@@ -29,5 +29,6 @@
   "devDependencies": {
     "debug": "^4.1.1"
   },
-  "repository": "github:desche42/tv-show-tracker.git"
+  "repository": "github:desche42/tv-show-tracker.git",
+  "publishConfig": { "registry": "https://npm.pkg.github.com/" }
 }
