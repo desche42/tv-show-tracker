@@ -15,13 +15,18 @@ async function start() {
   try {
     await schedule.update();
     const availableEpisodes = await schedule.getAvailableEpisodes();
+
+    if (!availableEpisodes.length) {
+      throw 'No new available episodes';
+    }
+
     await search(availableEpisodes);
     await download.downloadTorrents();
-  } catch (err) {
-    debug(err)
-  }
 
-  debug('All torrents downloaded. Nice!!!');
+    debug('All torrents downloaded. Nice!!!');
+  } catch (err) {
+    debug(err);
+  }
 }
 
 start();
