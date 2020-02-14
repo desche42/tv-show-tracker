@@ -11,7 +11,7 @@ const db = low(adapter);
 db.defaults({
   // array of tv shows { title: string , selected: bool}
   shows: [],
-  // episodes
+  // episodes 
   episodes: [],
   // schedules
   // @todo save crawled schedules to keep track
