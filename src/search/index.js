@@ -2,7 +2,7 @@
  * Search torrents from available episodes in selected shows
  */
 const fs = require('fs-extra');
-const debug = require('debug')('searchTorrent');
+const debug = require('debug')('torrent-auto-downloader: searchTorrent');
 const DB = require('../database');
 
 /**

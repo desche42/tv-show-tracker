@@ -1,12 +1,11 @@
 /**
- * Starter point of the application
+ * Entry point of the library
  */
+
 const schedule = require('./src/schedule');
 const search = require('./src/search');
-const debug = require('debug')('torrent-auto-downloader');
+const debug = require('debug')('torrent-auto-downloader:');
 const download = require('./src/download');
-
-// arguments passed
 
 
 /**

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "debug": "DEBUG=* node index.js"
+    "debug": "DEBUG=torrent-auto-downloader:* node index.js"
   },
   "keywords": [
     "torrent",

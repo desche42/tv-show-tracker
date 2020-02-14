@@ -1,6 +1,6 @@
 const getEpisodes = require('./getEpisodes');
 const saveData = require('./saveData');
-const debug = require('debug')('schedule');
+const debug = require('debug')('torrent-auto-downloader: schedule');
 const DB = require('../database');
 
 /**

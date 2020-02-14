@@ -1,4 +1,4 @@
-const debug = require('debug')('schedule:');
+const debug = require('debug')('torrent-auto-downloader: schedule:');
 const debugNewShow = require('debug')('New show available:');
 const DB = require('../database');
 
