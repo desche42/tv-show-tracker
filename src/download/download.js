@@ -1,7 +1,7 @@
 /**
  * Downloads available magnets in selected shows
  */
-const debug = require('debug')('torrent-auto-downloader: download:');
+const debug = require('debug')('tv-show-tracker: download:');
 
 // torrent-search-api download not working
 const torrentStream = require('torrent-stream');

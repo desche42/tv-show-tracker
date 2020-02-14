@@ -1,5 +1,5 @@
 const getCurrentMonthSchedule = require('./schedule');
-const debug = require('debug')('torrent-auto-downloader: schedule');
+const debug = require('debug')('tv-show-tracker: schedule');
 const DB = require('../database');
 const fs = require('fs-extra');
 

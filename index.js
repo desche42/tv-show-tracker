@@ -4,7 +4,7 @@
 
 const schedule = require('./src/schedule');
 const search = require('./src/search');
-const debug = require('debug')('torrent-auto-downloader:');
+const debug = require('debug')('tv-show-tracker:');
 const download = require('./src/download');
 
 

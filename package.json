@@ -1,12 +1,12 @@
 {
-  "name": "torrent-auto-downloader",
+  "name": "tv-show-tracker",
   "version": "0.1.0",
-  "description": "Torrent auto downloader",
+  "description": "Select which shows you want to track and new episodes will be automatically dowloaded as soon as they're available!",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "debug": "DEBUG=* node index.js",
-    "start": "DEBUG=torrent-auto-downloader:* node index.js"
+    "start": "DEBUG=tv-show-tracker:* node index.js"
   },
   "keywords": [
     "tv",
