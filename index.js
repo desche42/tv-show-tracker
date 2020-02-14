@@ -4,6 +4,7 @@
 const schedule = require('./src/schedule');
 const search = require('./src/search');
 const debug = require('debug')('torrent-auto-downloader');
+const download = require('./src/download');
 
 // arguments passed
 
@@ -16,7 +17,7 @@ async function start() {
     await schedule.update();
     const availableEpisodes = await schedule.getAvailableEpisodes();
     await search.searchEpisodes(availableEpisodes);
-
+    await download.downloadTorrents();
   } catch (err) {
     debug(err)
   }

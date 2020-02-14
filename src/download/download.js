@@ -1,16 +1,17 @@
 /**
  * Downloads available magnets in selected shows
  */
-const fs = require('fs-extra');
-const debug = require('debug')('download torrent:');
+const debug = require('debug')('download:');
 
 // torrent-search-api download not working
 const torrentStream = require('torrent-stream');
+const DB = require('../database');
 
 
-async function downloadTorrent(torrent) {
-  debug(`Downloading torrent ${torrent.title}`);
+module.exports = async function downloadTorrent(episode) {
+  const {showTitle, season, episode: ep, torrent}  = episode;
 
+  debug(`start ${torrent.title}`);
   const engine = torrentStream(torrent.magnet, {
     path: 'data/download'
   });
@@ -19,13 +20,19 @@ async function downloadTorrent(torrent) {
     engine.files.forEach(file => {
       if (isVideoFile(file.name)) {
         file.select();
+        debug(`${file.name} selected`);
       }
     })
   });
 
   engine.on('idle', () => {
-    debug('Torrent downloaded.');
-    engine.destroy(() => process.exit());
+    debug(`Torrent ${torrent.title} downloaded.`);
+    DB.get('episodes')
+      .find({ showTitle, season, episode: ep })
+      .set('downloaded', true)
+      .write();
+
+    engine.destroy();
   });
 }
 
@@ -33,7 +40,3 @@ function isVideoFile (fileName) {
   const extensions = ['mkv', 'avi', 'mp4'];
   return extensions.some(extension => fileName.endsWith(`.${extension}`));
 }
-
-downloadTorrent(
-  JSON.parse(fs.readFileSync('data/selectedShows/Doctor Who.json'))["12"]["06"].torrents[0]
-);
