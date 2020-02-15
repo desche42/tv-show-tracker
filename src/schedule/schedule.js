@@ -63,7 +63,7 @@ function _parseDays ($) {
  * @param {*} $
  */
 function _parseEpisode($) {
-  const show = $('p a:nth-child(1)').text().trim();
+  const show = $('p a:nth-child(1)').text().trim().toLowerCase();
 
   const [
     inputText,
