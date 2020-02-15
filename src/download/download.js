@@ -11,10 +11,15 @@ const DB = require('../database');
 module.exports = function downloadTorrent(episode) {
   const {showTitle, season, episode: ep, torrent}  = episode;
   return new Promise((res, rej) => {
-
-    const engine = torrentStream(torrent.magnet, {
-      path: 'database/download'
-    });
+    let engine;
+    try {
+      engine = torrentStream(torrent.magnet, {
+        path: 'database/download'
+      });
+    } catch (error) {
+      debug(`Error downloading episode ${episode.showTitle} ${episode.season} ${episode.ep}`);
+      rej();
+    }
 
     engine.on('ready', function () {
       engine.files.forEach(file => {

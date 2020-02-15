@@ -28,7 +28,7 @@ module.exports = async function searchEpisodes(episodes) {
 
   if(episodes.length) {
     debug(`Searching ${episodes.length} torrentless episodes`);
-    
+
     await Promise.all(episodes.map(_searchEpisode));
   } else {
     debug('No new episodes to search');
@@ -56,9 +56,9 @@ async function _searchEpisode(episode) {
     showTitle, season: s, episode: e
   }).set('searchAttempts', (searchAttempts || 0) + 1).write();
 
-
-
   const torrents = await torrentSearch.search(showTitle, 'All', limit);
+
+  // @toDo  add parse show names module to avoid bad show match
   const showRegex = new RegExp(`.*(s0?${s}e0?${e}).*`, 'gi');
   const filteredTorrents = torrents.filter(torrent =>
     showRegex.test(torrent.title) && torrent.magnet
