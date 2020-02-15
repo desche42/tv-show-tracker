@@ -63,7 +63,7 @@ function _parseDays ($) {
  * @param {*} $
  */
 function _parseEpisode($) {
-  const showTitle = $('p a:nth-child(1)').text().trim();
+  const show = $('p a:nth-child(1)').text().trim();
 
   const [
     inputText,
@@ -73,7 +73,7 @@ function _parseEpisode($) {
   ] = $('p a:nth-child(2)').text().match(/s(\d*)e(\d*)/);
 
   return {
-    showTitle,
+    show,
     season: Number(season),
     episode: Number(episode)
   };

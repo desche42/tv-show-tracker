@@ -54,11 +54,11 @@ async function getAvailableEpisodes() {
  * of selected shows
  */
 function _getNotDownloaded(shows) {
-  return shows.reduce((acc, show) => {
-    const showTitle = show.title;
+  return shows.reduce((acc, actual) => {
+    const show = actual.title;
     const episodes = DB.get('episodes')
       .filter({
-        showTitle,
+        show,
         downloaded: false
       }).value();
 

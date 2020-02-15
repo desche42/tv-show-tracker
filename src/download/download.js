@@ -10,7 +10,7 @@ const config = require('config');
 
 
 module.exports = function downloadTorrent(episode) {
-  const {showTitle, season, episode: ep, torrent}  = episode;
+  const {show, season, episode: ep, torrent}  = episode;
   return new Promise((res, rej) => {
     let engine;
     try {
@@ -18,7 +18,7 @@ module.exports = function downloadTorrent(episode) {
         path: config.get('downloadPath')
       });
     } catch (error) {
-      debug(`Error downloading episode ${episode.showTitle} ${episode.season} ${episode.ep}`);
+      debug(`Error downloading episode ${episode.show} ${episode.season} ${episode.ep}`);
       rej();
     }
 
@@ -33,7 +33,7 @@ module.exports = function downloadTorrent(episode) {
 
     engine.on('idle', () => {
       DB.get('episodes')
-      .find({ showTitle, season, episode: ep })
+      .find({ show, season, episode: ep })
       .set('downloaded', true)
       .write();
       engine.destroy(() => {

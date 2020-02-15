@@ -46,17 +46,17 @@ module.exports = async function searchEpisodes(episodes) {
  * @returns episode with search result
  */
 async function _searchEpisode(episode) {
-  const {showTitle, season: s, episode: e, searchAttempts} = episode;
-  const episodeId = `${showTitle} season ${s} episode ${e}`;
+  const {show, season: s, episode: e, searchAttempts} = episode;
+  const episodeId = `${show} season ${s} episode ${e}`;
   const limit = 100;
 
   debug(`Searching ${episodeId}...`);
 
   DB.get('episodes').find({
-    showTitle, season: s, episode: e
+    show, season: s, episode: e
   }).set('searchAttempts', (searchAttempts || 0) + 1).write();
 
-  const torrents = await torrentSearch.search(showTitle, 'All', limit);
+  const torrents = await torrentSearch.search(show, 'All', limit);
 
   // @toDo  add parse show names module to avoid bad show match
   const showRegex = new RegExp(`.*(s0?${s}e0?${e}).*`, 'gi');
@@ -71,7 +71,7 @@ async function _searchEpisode(episode) {
     const selectedTorrent = _getHighestSize(filteredTorrents);
 
     DB.get('episodes').find({
-      showTitle, season: s, episode: e
+      show, season: s, episode: e
     }).set('torrent', selectedTorrent).write();
   }
 }

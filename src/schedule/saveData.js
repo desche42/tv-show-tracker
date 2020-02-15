@@ -13,7 +13,7 @@ module.exports = async function saveData (episodes) {
   const shows = [];
 
   episodes.forEach(episode => {
-    shows.push(episode.showTitle);
+    shows.push(episode.show);
     episode.downloaded = false;
     DB.get(DB_EPISODES_KEY).push(episode).write();
   });
