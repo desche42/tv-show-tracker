@@ -1,6 +1,6 @@
 {
   "name": "tv-show-tracker",
-  "version": "0.1.2",
+  "version": "0.9.0",
   "description": "Select which shows you want to track and new episodes will be automatically dowloaded as soon as they're available!",
   "main": "index.js",
   "scripts": {
