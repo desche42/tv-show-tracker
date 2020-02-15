@@ -8,7 +8,7 @@ module.exports = {
    */
   completeLatestSeason: false,
   /**
-   * Torrent download path
+   * Torrent dir download path.
    */
   downloadPath:  './database/downloads',
   /**

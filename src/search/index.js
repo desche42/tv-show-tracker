@@ -5,6 +5,7 @@ const debug = require('debug')('tv-show-tracker: search');
 const DB = require('../database');
 const config = require('config');
 const episodeParser = require('episode-parser');
+const utils = require('../utils');
 
 // Configure torrent search
 // more info about providers using await torrentSearch.getActiveProviders();
@@ -67,7 +68,7 @@ async function _searchEpisode(episode) {
     show, season: s, episode: e
 	}).set('searchAttempts', (searchAttempts || 0) + 1).write();
 
-	const query = `${show} S${dobuleDigit(s)}E${dobuleDigit(e)}`;
+	const query = `${show} S${utils.doubleDigit(s)}E${utils.doubleDigit(e)}`;
 
 	debug(`Searching ${query}`);
 
@@ -76,16 +77,6 @@ async function _searchEpisode(episode) {
 	return await _parseSearchResult(torrents);
 }
 
-/**
- * Returns number as dobule digit string
- * @param {Number} n
- */
-function dobuleDigit(n) {
-	n = String(n);
-	return n.length < 2
-		? `0${n}`
-		: n;
-}
 
 /**
 * Analyzes search result

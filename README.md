@@ -77,7 +77,8 @@ to your `.zshrc` file (or similar) will allow you to run the app opening a termi
 
 - [ ] Tests
 - [ ] Calendar force update after X days
-- [ ] Storage system
+- [x] Select shows more easily
+- [ ] WIP: Storage system
   - [x] Parse file names
     - [x] change showtitle property of episodes to parse name with external module
     - [x] shows stored as lowercase
