@@ -6,7 +6,7 @@ const schedule = require('./src/schedule');
 const search = require('./src/search');
 const debug = require('debug')('tv-show-tracker:');
 const download = require('./src/download');
-
+const config = require('config');
 
 /**
  * Update schedule and search available torrents for downloading.
@@ -23,10 +23,18 @@ async function start() {
     await search(availableEpisodes);
     await download.downloadTorrents();
 
-    debug('All torrents downloaded. Nice!!!');
+    if(config.get('restart')) {
+      restart();
+    }
   } catch (err) {
     debug(err);
   }
+
+}
+
+function restart () {
+  debug('Restarting...');
+  setTimeout(start, 5000);
 }
 
 start();

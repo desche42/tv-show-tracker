@@ -62,7 +62,8 @@ to your `.zshrc` file (or similar) will allow you to run the app opening a termi
 - [ ] Select shows easily
 - [ ] Option of downloading complete seasons
   - [ ] Show info search --> episode details
-- [x] ~~Figure out which torrent search provider is giving timeout and disable it to speed up process~~
+- [x] Figure out which torrent search provider is giving timeout and disable it to speed up process
+- [x] Restart lifecycle to keep searching for torrents
 
 # v2
 - [ ] Globally available / CLI 

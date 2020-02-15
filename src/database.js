@@ -16,10 +16,7 @@ db.defaults({
   // array of tv shows { title: string , selected: bool}
   shows: [],
   // episodes
-  episodes: [],
-  // schedules
-  // @todo save crawled schedules to keep track
-  schedules: []
+  episodes: []
 }).write();
 
 module.exports = db;
