@@ -3,6 +3,15 @@
 Stop searching for torrents, simply select which shows you want to track and new episodes will be automatically dowloaded as soon
 as they're available!
 
+
+- [TV SHOW TRACKER](#tv-show-tracker)
+	- [Usage](#usage)
+		- [Tip](#tip)
+	- [Lifecycle](#lifecycle)
+- [TO DO's](#to-dos)
+	- [v1](#v1)
+	- [v2](#v2)
+
 ## Usage
 
 Clone the repo and install node dependencies:
@@ -42,7 +51,7 @@ Edit this file to **select the shows want to track**:
 
 Every time the app is launched, checks for new aired episodes in the schedule so you don't have to track every tv show, searches for the magnet and downloads it.
 
-# Tips
+### Tip
 
 If your terminal allows you to create aliases for commands (like zsh), adding: 
 
@@ -52,10 +61,17 @@ alias checkTvShows="cd ~/code/tv-show-tracker/; npm run start;"
 
 to your `.zshrc` file (or similar) will allow you to run the app opening a terminal and doing: `checkTvShows`.
 
+## Lifecycle
+
+1. Update calendar
+2. Start cycle
+   1. Search for new torrents
+   2. Download available magnets
+3. Go to 2.
 
 # TO DO's
 
-# v1
+## v1
 
 - [ ] Tests
 - [ ] Calendar force update after X days
@@ -69,7 +85,7 @@ to your `.zshrc` file (or similar) will allow you to run the app opening a termi
 - [x] Figure out which torrent search provider is giving timeout and disable it to speed up process
 - [x] Restart lifecycle to keep searching for torrents while dowloading
 
-# v2
+## v2
 - [ ] Globally available / CLI 
   - [ ] Add / remove shows
   - [ ] Add / remove seasons

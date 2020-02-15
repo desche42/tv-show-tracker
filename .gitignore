@@ -2,7 +2,8 @@
 node_modules
 
 # Database
-database
+database/*
+!database/db.json
 
 # local configuration
 config/local.js

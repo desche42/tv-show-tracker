@@ -33,17 +33,13 @@ config.get('torrentSearchDisableProviders').forEach(provider => {
 module.exports = async function searchEpisodes(episodes) {
   episodes = episodes
     .filter(episode => !episode.torrent)
-		.sort((a, b) => (a.searchAttempts || 0) - (b.searchAttempts || 0));
+		.sort((a, b) => (a.searchAttempts || 0) - (b.searchAttempts || 0))
+		.slice(0, config.get('simultaneousSearchLimit'));
 
   if(episodes.length) {
     debug(`Searching ${episodes.length} torrentless episodes`);
 
-		await episodes.reduce(async (prev, episode) => {
-			await prev;
-			return !episode.torrent
-				? _searchEpisode(episode)
-				: Promise.resolve();
-		}, Promise.resolve());
+		await Promise.all(episodes.map(_searchEpisode));
   } else {
     debug('No new episodes to search');
   }
@@ -69,11 +65,26 @@ async function _searchEpisode(episode) {
 
   DB.get('episodes').find({
     show, season: s, episode: e
-  }).set('searchAttempts', (searchAttempts || 0) + 1).write();
+	}).set('searchAttempts', (searchAttempts || 0) + 1).write();
 
-  const torrents = await torrentSearch.search(show, 'All', limit);
+	const query = `${show} S${dobuleDigit(s)}E${dobuleDigit(e)}`;
+
+	debug(`Searching ${query}`);
+
+  const torrents = await torrentSearch.search(query, 'All', limit);
 
 	return await _parseSearchResult(torrents);
+}
+
+/**
+ * Returns number as dobule digit string
+ * @param {Number} n
+ */
+function dobuleDigit(n) {
+	n = String(n);
+	return n.length < 2
+		? `0${n}`
+		: n;
 }
 
 /**

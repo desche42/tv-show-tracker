@@ -17,13 +17,16 @@ module.exports = {
   /**
    * searches for new torrents in chunks, newer are prioritized
    */
-	simultaneousSearchLimit: 3,
+	simultaneousSearchLimit: 6,
 	/**
 	 * Torrent search configuration
 	 */
 	torrentSearchEnablePublicProviders: true,
 	// only if public providers not enabled
-	torrentSearchEnableProviders: ['ExtraTorrent', 'Torrent9'],
+	torrentSearchEnableProviders: [
+		'ExtraTorrent',
+		'Torrent9'
+	],
 	// always disable
 	torrentSearchDisableProviders: ['torrentz2'],
   /**

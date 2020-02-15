@@ -11,9 +11,9 @@ const config = require('config');
 /**
  * Update schedule and search available torrents for downloading.
  */
-async function start() {
+async function start(updateCalendar = true) {
 	try {
-		if (config.get('updateCalendar')) {
+		if (config.get('updateCalendar') && updateCalendar) {
 			await schedule.update();
 		}
 
@@ -50,7 +50,7 @@ async function start() {
 
 function restart () {
 	debug('Restarting...');
-	setTimeout(start, 500);
+	setTimeout(() => start(false), 500);
 }
 
 
