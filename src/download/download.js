@@ -6,6 +6,7 @@ const debug = require('debug')('tv-show-tracker: download:');
 // torrent-search-api download not working
 const torrentStream = require('torrent-stream');
 const DB = require('../database');
+const config = require('config');
 
 
 module.exports = function downloadTorrent(episode) {
@@ -14,7 +15,7 @@ module.exports = function downloadTorrent(episode) {
     let engine;
     try {
       engine = torrentStream(torrent.magnet, {
-        path: 'database/download'
+        path: config.get('downloadPath')
       });
     } catch (error) {
       debug(`Error downloading episode ${episode.showTitle} ${episode.season} ${episode.ep}`);
