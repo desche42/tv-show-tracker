@@ -13,28 +13,50 @@ const config = require('config');
  */
 async function start() {
   try {
-    await schedule.update();
-    const availableEpisodes = await schedule.getAvailableEpisodes();
-
-    if (!availableEpisodes.length) {
-      throw 'No new available episodes';
+    if (config.get('updateCalendar')) {
+      await schedule.update();
     }
 
-    await search(availableEpisodes);
-    await download.downloadTorrents();
+   const {
+     magnets,
+     newEpisodes
+   } = await _getAvailableEpisodes();
 
-    if(config.get('restart')) {
+   const actions = [];
+
+   newEpisodes.length && actions.push(search(newEpisodes));
+   magnets.length && actions.push(download.downloadTorrents(magnets));
+
+   await Promise.all(actions);
+
+    if (config.get('restart')) {
       restart();
+    } else {
+      debug('Finished.');
     }
   } catch (err) {
     debug(err);
   }
-
 }
 
 function restart () {
   debug('Restarting...');
   setTimeout(start, 5000);
+}
+
+/**
+ * @returns available episodes classified as {
+ *  mangets, // ready ro download
+ *  newEpisodes // search for torrent
+ * }
+ */
+async function _getAvailableEpisodes() {
+  const episodes = await schedule.getAvailableEpisodes();
+
+  return {
+    magnets: episodes.filter(ep => ep.torrent && ep.torrent.magnet),
+    newEpisodes: episodes.filter(ep => !ep.torrent)
+  }
 }
 
 start();
