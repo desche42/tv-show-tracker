@@ -12,51 +12,46 @@ const config = require('config');
  * Update schedule and search available torrents for downloading.
  */
 async function start() {
-  try {
-    if (config.get('updateCalendar')) {
-      await schedule.update();
-    }
+	try {
+		if (config.get('updateCalendar')) {
+			await schedule.update();
+		}
 
-   const {
-     magnets,
-     newEpisodes
-   } = await _getAvailableEpisodes();
+		const {
+			magnets,
+			newEpisodes
+		} = await schedule.getAvailableEpisodes();
 
-   const actions = [];
+		const actions = [];
 
-   newEpisodes.length && actions.push(search(newEpisodes));
-   magnets.length && actions.push(download.downloadTorrents(magnets));
+		if (newEpisodes.length) {
+			debug('Starting search...');
+			actions.push(search(newEpisodes));
+		}
 
-   await Promise.all(actions);
+		if (magnets.length) {
+			debug('Starting download...');
+			actions.push(download.downloadTorrents(magnets));
+		} else {
+			debug('No new mangnets available to download.');
+		}
 
-    if (config.get('restart')) {
-      restart();
-    } else {
-      debug('Finished.');
-    }
-  } catch (err) {
-    debug(err);
-  }
+		await Promise.all(actions);
+
+		if (config.get('restart') && (newEpisodes.length)) {
+			restart();
+		} else {
+			debug('Finished.');
+		}
+	} catch (err) {
+		debug(err);
+	}
 }
 
 function restart () {
-  debug('Restarting...');
-  setTimeout(start, 5000);
+	debug('Restarting...');
+	setTimeout(start, 500);
 }
 
-/**
- * @returns available episodes classified as {
- *  mangets, // ready ro download
- *  newEpisodes // search for torrent
- * }
- */
-async function _getAvailableEpisodes() {
-  const episodes = await schedule.getAvailableEpisodes();
-
-  return {
-    magnets: episodes.filter(ep => ep.torrent && ep.torrent.magnet),
-    newEpisodes: episodes.filter(ep => !ep.torrent)
-  }
-}
 
 start();

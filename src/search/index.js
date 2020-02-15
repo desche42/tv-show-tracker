@@ -3,14 +3,24 @@
  */
 const debug = require('debug')('tv-show-tracker: search');
 const DB = require('../database');
-const config = require('config')
+const config = require('config');
+const episodeParser = require('episode-parser');
 
 // Configure torrent search
 // more info about providers using await torrentSearch.getActiveProviders();
 const torrentSearch = require('torrent-search-api');
-torrentSearch.enablePublicProviders();
 
-torrentSearch.disableProvider("torrentz2");
+if (config.get('torrentSearchEnablePublicProviders')) {
+	torrentSearch.enablePublicProviders();
+} else {
+	config.get('torrentSearchEnableProviders').forEach(provider => {
+		torrentSearch.enableProvider(provider);
+	});
+}
+
+config.get('torrentSearchDisableProviders').forEach(provider => {
+	torrentSearch.disableProvider(provider);
+});
 
 
 /**
@@ -23,19 +33,21 @@ torrentSearch.disableProvider("torrentz2");
 module.exports = async function searchEpisodes(episodes) {
   episodes = episodes
     .filter(episode => !episode.torrent)
-    .sort((a, b) => (a.searchAttempts || 0) - (b.searchAttempts || 0))
-    .slice(0, config.get('simultaneousSearchLimit'));
+		.sort((a, b) => (a.searchAttempts || 0) - (b.searchAttempts || 0));
 
   if(episodes.length) {
     debug(`Searching ${episodes.length} torrentless episodes`);
 
-    await Promise.all(episodes.map(_searchEpisode));
+		await episodes.reduce(async (prev, episode) => {
+			await prev;
+			return !episode.torrent
+				? _searchEpisode(episode)
+				: Promise.resolve();
+		}, Promise.resolve());
   } else {
     debug('No new episodes to search');
   }
 }
-
-
 
 
 
@@ -46,11 +58,14 @@ module.exports = async function searchEpisodes(episodes) {
  * @returns episode with search result
  */
 async function _searchEpisode(episode) {
-  const {show, season: s, episode: e, searchAttempts} = episode;
-  const episodeId = `${show} season ${s} episode ${e}`;
-  const limit = 100;
+  const {
+		show,
+		season: s,
+		episode: e,
+		searchAttempts
+	} = episode;
 
-  debug(`Searching ${episodeId}...`);
+  const limit = 20;
 
   DB.get('episodes').find({
     show, season: s, episode: e
@@ -58,22 +73,46 @@ async function _searchEpisode(episode) {
 
   const torrents = await torrentSearch.search(show, 'All', limit);
 
-  // @toDo  add parse show names module to avoid bad show match
-  const showRegex = new RegExp(`.*(s0?${s}e0?${e}).*`, 'gi');
-  const filteredTorrents = torrents.filter(torrent =>
-    showRegex.test(torrent.title) && torrent.magnet
-  );
+	return await _parseSearchResult(torrents);
+}
+
+/**
+* Analyzes search result
+*/
+async function _parseSearchResult (torrents) {
+	debug('Parsing search results...');
+
+	torrents.filter(torrent => torrent.title).forEach(torrent => {
+		if (!torrent.magnet){
+			return;
+		}
+
+		const parsed = episodeParser(torrent.title);
+		parsed.show = parsed.show.toLowerCase();
+
+		// if show is selected in database
+		const {show, season, episode} = parsed;
+		if (DB.get('shows').find({title: show, selected: true}).value()) {
+			const dbEpisode = DB.get('episodes').find({show, season, episode});
+
+			const exists = dbEpisode.value();
 
 
-  debug(`${filteredTorrents.length} torrents found for ${episodeId}...`);
+			if (exists && exists.torrent) {
+				return;
+			}
 
-  if(filteredTorrents.length) {
-    const selectedTorrent = _getHighestSize(filteredTorrents);
-
-    DB.get('episodes').find({
-      show, season: s, episode: e
-    }).set('torrent', selectedTorrent).write();
-  }
+			if (exists) {
+				debug(`Torrent found for episode ${show} ${season} ${episode}`);
+				dbEpisode.set('torrent', torrent).write();
+			} else {
+				debug(`New episode found! ${show} ${season} ${episode}`);
+				DB.get('episodes').push({
+					show, season, episode, torrent
+				}).write();
+			}
+		}
+	},'');
 }
 
 

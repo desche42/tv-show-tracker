@@ -49,9 +49,15 @@ async function getAvailableEpisodes() {
     throw 'No shows selected, please select at least one in file database/db.json';
   }
 
-  const episodes = _getNotDownloaded(selectedShows);
+	const episodes = _filterFutureEpisodes(
+		_getNotDownloaded(selectedShows)
+	);
 
-  return _filterFutureEpisodes(episodes);
+	return {
+		magnets: episodes.filter(ep => ep.torrent && ep.torrent.magnet),
+		newEpisodes: episodes.filter(ep => !ep.torrent)
+	}
+
 }
 
 /**
