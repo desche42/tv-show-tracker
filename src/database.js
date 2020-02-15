@@ -16,7 +16,8 @@ db.defaults({
   // array of tv shows { title: string , selected: bool}
   shows: [],
   // episodes
-  episodes: []
+  episodes: [],
+  schedules: []
 }).write();
 
 module.exports = db;

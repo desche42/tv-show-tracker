@@ -1,7 +1,6 @@
 const getMonthSchedule = require('./schedule');
 const debug = require('debug')('tv-show-tracker: schedule');
 const DB = require('../database');
-const fs = require('fs-extra');
 
 
 module.exports = {
@@ -16,17 +15,24 @@ async function update (month, year) {
   month = month || (new Date()).getMonth();
   year = year || (new Date()).getFullYear();
 
-  const monthSchedulePath = `./database/schedule/${month}-${year}.txt`;
-  if (await fs.existsSync(monthSchedulePath)) {
-    debug('This month schedule is already loaded');
+  const date = `${month}-${year}`;
+
+  const monthSchedule = DB.get('schedules')
+    .find(schedule => schedule === date)
+    .value();
+
+
+  if (monthSchedule) {
+    debug('This month schedule is already loaded in db');
     return;
   }
 
   try {
     debug('Load online tv calendar.');
     const response = await getMonthSchedule(month, year);
-    await fs.ensureFile(monthSchedulePath);
-    await fs.writeFile(monthSchedulePath, response);
+    DB.get('schedules').push({
+      date
+    }).write();
   } catch (err) {
     console.error(err);
   }
