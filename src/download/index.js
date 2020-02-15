@@ -5,20 +5,14 @@ const DB = require('../database');
 const downloadTorrent = require('./download');
 const debug = require('debug')('tv-show-tracker: download ')
 
+async function downloadTorrents(torrents) {
+  const episodes = torrents
+    .filter(episode => episode.torrent && episode.torrent.magnet && !episode.downloaded)
 
-async function downloadTorrents() {
-  const episodes = DB.get('episodes')
-    .filter(episode => episode.torrent && !episode.downloaded)
-    .value();
-
-  if(!episodes) {
-    throw 'No new torrents found.'
-  }
   await Promise.all(episodes.map(function (episode) {
     return downloadTorrent(episode);
   }));
 }
-
 
 /**
  * Adds episode with 0 date to force download

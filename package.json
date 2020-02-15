@@ -28,7 +28,8 @@
     "torrent-stream": "^1.2.0"
   },
   "devDependencies": {
-    "debug": "^4.1.1"
+    "debug": "^4.1.1",
+    "episode-parser": "^1.5.0"
   },
   "repository": "github:desche42/tv-show-tracker.git",
   "publishConfig": {
