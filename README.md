@@ -57,19 +57,15 @@ to your `.zshrc` file (or similar) will allow you to run the app opening a termi
 
 # v1
 
-- Config file
-
-- Tests
-  
-- Select shows easily
-  
-- Option of downloading complete seasons
-  - Show info search --> episode details
-
-- Figure out which torrent search provider is giving timeout and disable it to speed up process
+- [x] Config file
+- [ ] Tests
+- [ ] Select shows easily
+- [ ] Option of downloading complete seasons
+  - [ ] Show info search --> episode details
+- [x] ~~Figure out which torrent search provider is giving timeout and disable it to speed up process~~
 
 # v2
-- Globally available / CLI 
-    - Add / remove shows
-    - Add / remove seasons
-    - Launch vlc for selected episode
+- [ ] Globally available / CLI 
+  - [ ] Add / remove shows
+  - [ ] Add / remove seasons
+  - [ ] Launch vlc for selected episode
