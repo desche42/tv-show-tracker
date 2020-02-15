@@ -65,11 +65,16 @@ async function getAvailableEpisodes() {
  */
 function _getNotDownloaded(shows) {
   return shows.reduce((acc, show) => {
-    const episodes = DB.get('episodes')
+    let episodes = DB.get('episodes')
       .filter({
-        show,
-        downloaded: false
-      }).value();
+        show
+			}).value();
+
+		if(config.get('downloadLastSeasonOnly')) {
+			const lastSeasonAvailable = Math.max(...episodes.map(episode => episode.season));
+			episodes = episodes.filter(episode => episode.season === lastSeasonAvailable);
+		}
+		episodes = episodes.filter(episode => !episode.dowmloaded);
 
     acc.push(...episodes);
     return acc;

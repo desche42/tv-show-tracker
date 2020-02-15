@@ -14,7 +14,11 @@ module.exports = {
   /**
    * Torrent dir download path.
    */
-  downloadPath:  './database/downloads',
+	downloadPath:  './database/downloads',
+	/**
+	 * If false, all episodes in db of selected shows will be downloaded
+	 */
+	downloadLastSeasonOnly: true,
   /**
    * Restarts life cycle (keeps relaunching until all torrents have been downloaded)
    */
