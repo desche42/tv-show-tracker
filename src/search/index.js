@@ -92,6 +92,7 @@ function dobuleDigit(n) {
 */
 async function _parseSearchResult (torrents) {
 	debug('Parsing search results...');
+	const selectedShows = config.get('selectedShows');
 
 	torrents.filter(torrent => torrent.title).forEach(torrent => {
 		if (!torrent.magnet){
@@ -103,7 +104,7 @@ async function _parseSearchResult (torrents) {
 
 		// if show is selected in database
 		const {show, season, episode} = parsed;
-		if (DB.get('shows').find({title: show, selected: true}).value()) {
+		if (selectedShows.includes(parsed.show)) {
 			const dbEpisode = DB.get('episodes').find({show, season, episode});
 
 			const exists = dbEpisode.value();

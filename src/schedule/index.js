@@ -1,6 +1,7 @@
 const getMonthSchedule = require('./schedule');
 const debug = require('debug')('tv-show-tracker: schedule');
 const DB = require('../database');
+const config = require('config');
 
 
 module.exports = {
@@ -42,7 +43,7 @@ async function update (month, year) {
  * before today.
  */
 async function getAvailableEpisodes() {
-  const selectedShows = DB.get('shows').filter({selected: true}).value();
+	const selectedShows = config.get('selectedShows');
 
   if (!selectedShows.length) {
     throw 'No shows selected, please select at least one in file database/db.json';
@@ -65,8 +66,7 @@ async function getAvailableEpisodes() {
  * of selected shows
  */
 function _getNotDownloaded(shows) {
-  return shows.reduce((acc, actual) => {
-    const show = actual.title;
+  return shows.reduce((acc, show) => {
     const episodes = DB.get('episodes')
       .filter({
         show,

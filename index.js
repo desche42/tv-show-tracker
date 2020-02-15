@@ -27,18 +27,18 @@ async function start(updateCalendar = true) {
 		if (newEpisodes.length) {
 			debug('Starting search...');
 			actions.push(search(newEpisodes));
+		} else {
+			debug('No new released episodes...');
 		}
 
 		if (magnets.length) {
 			debug('Starting download...');
 			actions.push(download.downloadTorrents(magnets));
-		} else {
-			debug('No new mangnets available to download.');
 		}
 
 		await Promise.all(actions);
 
-		if (config.get('restart') && (newEpisodes.length)) {
+		if (config.get('restart') && newEpisodes.length) {
 			restart();
 		} else {
 			debug('Finished.');

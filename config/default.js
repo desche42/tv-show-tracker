@@ -4,6 +4,7 @@
 module.exports = {
   /**
    * Download all episodes of current season for each selected show
+	 * @todo not implemented
    */
   completeLatestSeason: false,
   /**
@@ -13,11 +14,15 @@ module.exports = {
   /**
    * Restarts life cycle (keeps relaunching until all torrents have been downloaded)
    */
-  restart: false,
+	restart: false,
   /**
-   * searches for new torrents in chunks, newer are prioritized
+   * searches for new episode torrents in chunks, newer are prioritized
    */
 	simultaneousSearchLimit: 6,
+	/**
+	 *
+	 */
+	simultaneousDownloadLimit: 3,
 	/**
 	 * Torrent search configuration
 	 */

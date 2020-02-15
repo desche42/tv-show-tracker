@@ -3,6 +3,8 @@
 Stop searching for torrents, simply select which shows you want to track and new episodes will be automatically dowloaded as soon
 as they're available!
 
+This project is ment to automatically download latest episodes of tv shows, not downloading torrents in bulk (although searching for complete season torrents is in the roadmap), there are softwares for that.
+
 
 - [TV SHOW TRACKER](#tv-show-tracker)
 	- [Usage](#usage)
@@ -34,18 +36,18 @@ npm run start
 
 TV Show schedule is crawled from an online web and available tv shows are populated in the database: `database/db.json`. 
 
-Edit this file to **select the shows want to track**:
+Edit the file `config/local.js` to **select the shows want to track**:
 
 ```javascript
 {
-  "shows": [
-    // ...
-    {
-      title: "Doctro Who",
-      selected: true
-    },
-    //...
-  ]
+	...
+	selectedShows: [
+		'doctor who',
+		'the magicians',
+		'brooklyn nine nine',
+		...
+	]
+	...
 }
 ```
 
