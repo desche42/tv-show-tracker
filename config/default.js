@@ -2,6 +2,10 @@
  * Default configuration
  */
 module.exports = {
+	/**
+	 * File extensions to download
+	 */
+	allowedVideoExtensions: ['mkv', 'avi', 'mp4'],
   /**
    * Download all episodes of current season for each selected show
 	 * @todo not implemented

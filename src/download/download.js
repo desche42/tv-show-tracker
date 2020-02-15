@@ -7,15 +7,18 @@ const debug = require('debug')('tv-show-tracker: download:');
 const torrentStream = require('torrent-stream');
 const DB = require('../database');
 const config = require('config');
+const utils = require('../utils');
 
-
+/**
+ * Handles the download of a single torrent
+ */
 module.exports = function downloadTorrent(episode) {
   const {show, season, episode: ep, torrent}  = episode;
   return new Promise((res, rej) => {
-    let engine;
+		let engine;
     try {
       engine = torrentStream(torrent.magnet, {
-        path: config.get('downloadPath')
+				path: _getFilePath(show, season, ep)
       });
     } catch (error) {
       debug(`Error downloading episode ${episode.show} ${episode.season} ${episode.ep}`);
@@ -44,7 +47,26 @@ module.exports = function downloadTorrent(episode) {
   });
 }
 
+/**
+ * Checks if file is among allowed extensions
+ * @param {String} fileName
+ */
 function isVideoFile (fileName) {
-  const extensions = ['mkv', 'avi', 'mp4'];
-  return extensions.some(extension => fileName.endsWith(`.${extension}`));
+	const isAllowed = config.get('allowedVideoExtensions').some(extension => fileName.endsWith(`.${extension}`));
+
+	if (!isAllowed) {
+		debug(`Extension not allowed: ${filename}`);
+	}
+
+	return isAllowed;
+}
+
+/**
+ * Forms download path based on episode details
+ * @param {Object} episode
+ * @example doctor who, 12, 3 --> 'database/downloads/doctor who/S12E03'
+ */
+function _getFilePath(show, season, episode) {
+	const folderName = `S${utils.doubleDigit(season)}E${utils.doubleDigit(episode)}`;
+	return [config.get('downloadPath'), show, folderName].join('/');
 }
