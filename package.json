@@ -4,7 +4,7 @@
   "description": "Select which shows you want to track and new episodes will be automatically dowloaded as soon as they're available!",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha test/*.test.js",
     "debug": "DEBUG=* node index.js",
 		"start": "DEBUG=tv-show-tracker:* node index.js",
 		"checkDownloaded": "node src/getDownloadedEpisodes.js"

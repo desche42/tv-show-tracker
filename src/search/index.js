@@ -31,7 +31,7 @@ config.get('torrentSearchDisableProviders').forEach(provider => {
  * @param {Array} episodes to search
  * @returns search results
  */
-module.exports = async function searchEpisodes(episodes) {
+module.exports = async function searchEpisodes(episodes = []) {
   episodes = _getFilteredEpisodes(episodes);
 
   if(episodes.length) {
