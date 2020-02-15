@@ -8,7 +8,6 @@ This project is ment to automatically download latest episodes of tv shows, not 
 
 - [TV SHOW TRACKER](#tv-show-tracker)
 	- [Usage](#usage)
-		- [Tip](#tip)
 	- [Lifecycle](#lifecycle)
 - [TO DO's](#to-dos)
 	- [v1](#v1)
@@ -53,23 +52,23 @@ Edit the file `config/local.js` to **select the shows want to track**:
 
 Every time the app is launched, checks for new aired episodes in the schedule so you don't have to track every tv show, searches for the magnet and downloads it.
 
-### Tip
-
-If your terminal allows you to create aliases for commands (like zsh), adding: 
-
-```bash
-alias checkTvShows="cd ~/code/tv-show-tracker/; npm run start;"
-```
-
-to your `.zshrc` file (or similar) will allow you to run the app opening a terminal and doing: `checkTvShows`.
+> **TIP**
+> 
+> If your terminal allows you to create aliases for commands (like zsh), adding: 
+> 
+> ```bash
+> alias checkTvShows="cd ~/code/tv-show-tracker/; npm run start;"
+> ```
+> 
+> to your `.zshrc` file (or similar) will allow you to run the app opening a terminal and doing: > `checkTvShows`.
 
 ## Lifecycle
 
-1. Update calendar
-2. Start cycle
-   1. Search for new torrents
-   2. Download available magnets
-3. Go to 2.
+1. **Update calendar**
+2. **Start cycle**
+   1. **Search for new torrents**: if there are aired episodes without torrent, searches for them.
+   2. **Download available magnets**: available torrents start downloading.
+3. **Go to 2** after all searches and downloads have been completed.
 
 # TO DO's
 
@@ -78,7 +77,7 @@ to your `.zshrc` file (or similar) will allow you to run the app opening a termi
 - [ ] Tests
 - [ ] Calendar force update after X days
 - [x] Select shows more easily
-- [ ] WIP: Storage system
+- [x] Storage system
   - [x] Parse file names
     - [x] change showtitle property of episodes to parse name with external module
     - [x] shows stored as lowercase

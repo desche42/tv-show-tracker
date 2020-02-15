@@ -55,7 +55,7 @@ function isVideoFile (fileName) {
 	const isAllowed = config.get('allowedVideoExtensions').some(extension => fileName.endsWith(`.${extension}`));
 
 	if (!isAllowed) {
-		debug(`Extension not allowed: ${filename}`);
+		debug(`Extension not allowed: ${fileName}`);
 	}
 
 	return isAllowed;

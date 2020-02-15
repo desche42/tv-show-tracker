@@ -32,21 +32,27 @@ config.get('torrentSearchDisableProviders').forEach(provider => {
  * @returns search results
  */
 module.exports = async function searchEpisodes(episodes) {
-  episodes = episodes
-    .filter(episode => !episode.torrent)
-		.sort((a, b) => (a.searchAttempts || 0) - (b.searchAttempts || 0))
-		.slice(0, config.get('simultaneousSearchLimit'));
+  episodes = _getFilteredEpisodes(episodes);
 
   if(episodes.length) {
     debug(`Searching ${episodes.length} torrentless episodes`);
-
 		await Promise.all(episodes.map(_searchEpisode));
   } else {
     debug('No new episodes to search');
   }
 }
 
-
+/**
+ * Returns an array with the fewer search attempts
+ * episodes and size configured in config files
+ * @param {Array} episodes
+ */
+function _getFilteredEpisodes(episodes) {
+	return episodes
+		.filter(episode => !episode.torrent)
+		.sort((a, b) => (a.searchAttempts || 0) - (b.searchAttempts || 0))
+		.slice(0, config.get('simultaneousSearchLimit'));
+}
 
 /**
  * Searches torrent with given params and chooses the biggest found
@@ -115,7 +121,7 @@ async function _parseSearchResult (torrents) {
 				}).write();
 			}
 		}
-	},'');
+	});
 }
 
 
@@ -128,7 +134,6 @@ function _getHighestSize(torrents) {
     _parseSize(prev) > _parseSize(act) ? prev : act
   );
 }
-
 
 
 
