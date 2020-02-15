@@ -18,9 +18,8 @@ async function update (month, year) {
   const date = `${month}-${year}`;
 
   const monthSchedule = DB.get('schedules')
-    .find(schedule => schedule === date)
+    .find(schedule => schedule.date === date)
     .value();
-
 
   if (monthSchedule) {
     debug('This month schedule is already loaded in db');
