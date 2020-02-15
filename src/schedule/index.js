@@ -19,7 +19,7 @@ async function update (month, year) {
   const date = `${month}-${year}`;
 
   const monthSchedule = DB.get('schedules')
-    .find(schedule => schedule.date === date)
+    .find(schedule => schedule === date)
     .value();
 
   if (monthSchedule) {
@@ -30,9 +30,7 @@ async function update (month, year) {
   try {
     debug('Load online tv calendar.');
     const response = await getMonthSchedule(month, year);
-    DB.get('schedules').push({
-      date
-    }).write();
+    DB.get('schedules').push(date).write();
   } catch (err) {
     console.error(err);
   }
