@@ -3,12 +3,11 @@
 Stop searching for torrents, simply select which shows you want to track and new episodes will be automatically dowloaded as soon
 as they're available!
 
-This project is ment to automatically download latest episodes of tv shows, not downloading torrents in bulk (although searching for complete season torrents is in the roadmap), there are softwares for that.
-
 
 - [TV SHOW TRACKER](#tv-show-tracker)
 	- [Usage](#usage)
 	- [Lifecycle](#lifecycle)
+- [Limitations](#limitations)
 - [TO DO's](#to-dos)
 	- [v1](#v1)
 	- [v2](#v2)
@@ -70,12 +69,18 @@ Every time the app is launched, checks for new aired episodes in the schedule so
    2. **Download available magnets**: available torrents start downloading.
 3. **Go to 2** after all searches and downloads have been completed.
 
+
+# Limitations
+
+This project is ment to automatically download latest episodes of tv shows, so is expected to be very alive (lots of peers). Downloading past episodes is slower
+and may cause the app to hang, since it waits for the torrents to download before starting new downloads (see lifecycle).
+
 # TO DO's
 
 ## v1
 
 - [ ] Tests
-- [ ] Calendar force update after X days
+- [x] Calendar force update after X days --> when month is not in db
 - [x] Select shows more easily
 - [x] Storage system
   - [x] Parse file names
@@ -88,6 +93,7 @@ Every time the app is launched, checks for new aired episodes in the schedule so
 - [x] Restart lifecycle to keep searching for torrents while dowloading
 
 ## v2
+- [ ] Event emitters?
 - [ ] Globally available / CLI 
   - [ ] Add / remove shows
   - [ ] Add / remove seasons
