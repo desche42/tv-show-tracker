@@ -10,8 +10,10 @@ as they're available!
 - [Lifecycle](#lifecycle)
 - [Limitations](#limitations)
 - [TO DO's](#to-dos)
-	- [v1](#v1)
+	- [v1.1](#v11)
 	- [v2](#v2)
+- [Change log](#change-log)
+	- [v1](#v1)
 
 # Installation
 
@@ -116,9 +118,25 @@ and may cause the app to hang, since it waits for the torrents to download befor
 
 # TO DO's
 
-## v1
+## v1.1
 
 - [ ] Tests
+
+## v2
+- [ ] Event emitters?
+- [ ] Create separate DDBB for shows info (committed), and episodes
+- [ ] Globally available / CLI 
+  - [ ] Add / remove shows
+  - [ ] Add / remove seasons
+  - [ ] Launch vlc for selected episode
+- [ ] Option of downloading complete seasons
+  - [ ] Show info search --> episode details
+
+
+# Change log
+
+## v1
+
 - [x] Basic downloaded episode logger `npm run checkDownloaded`
 - [x] Calendar force update after X days --> when month is not in db
 - [x] Select shows more easily
@@ -132,13 +150,3 @@ and may cause the app to hang, since it waits for the torrents to download befor
 - [x] Figure out which torrent search provider is giving timeout and disable it to speed up process
 - [x] Restart lifecycle to keep searching for torrents while dowloading
 - [x] Documentation
-
-## v2
-- [ ] Event emitters?
-- [ ] Create separate DDBB for shows info (committed), and episodes
-- [ ] Globally available / CLI 
-  - [ ] Add / remove shows
-  - [ ] Add / remove seasons
-  - [ ] Launch vlc for selected episode
-- [ ] Option of downloading complete seasons
-  - [ ] Show info search --> episode details
