@@ -21,6 +21,7 @@
     "cheerio": "^1.0.0-rc.3",
     "config": "^3.2.5",
     "fs-extra": "^8.1.0",
+    "imdb-scrapper": "^2.3.0",
     "lowdb": "^1.0.0",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.8",
