@@ -3,3 +3,8 @@ node_modules
 
 # Database
 database
+
+# config
+config/local.js
+.editorconfig
+.gitignore
