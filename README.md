@@ -119,6 +119,7 @@ and may cause the app to hang, since it waits for the torrents to download befor
 ## v1
 
 - [ ] Tests
+- [x] Basic downloaded episode logger `npm run checkDownloaded`
 - [x] Calendar force update after X days --> when month is not in db
 - [x] Select shows more easily
 - [x] Storage system
