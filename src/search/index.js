@@ -113,7 +113,7 @@ async function _parseSearchResult (torrents) {
 
 			if (exists) {
 				debug(`Torrent found for episode ${show} ${season} ${episode}`);
-				dbEpisode.set('torrent', torrent).write();
+				DB.get('episodes').find({show, season, episode}).set('torrent', torrent).write();
 			} else {
 				debug(`New episode found! ${show} ${season} ${episode}`);
 				DB.get('episodes').push({

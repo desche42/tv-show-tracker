@@ -30,7 +30,9 @@ module.exports = function downloadTorrent(episode) {
         if (isVideoFile(file.name)) {
           file.select();
           debug(`${file.name} downloading!`);
-        }
+        } else {
+					file.deselect();
+				}
       })
     });
 
@@ -52,13 +54,7 @@ module.exports = function downloadTorrent(episode) {
  * @param {String} fileName
  */
 function isVideoFile (fileName) {
-	const isAllowed = config.get('allowedVideoExtensions').some(extension => fileName.endsWith(`.${extension}`));
-
-	if (!isAllowed) {
-		debug(`Extension not allowed: ${fileName}`);
-	}
-
-	return isAllowed;
+	return config.get('allowedVideoExtensions').some(extension => fileName.endsWith(`.${extension}`));
 }
 
 /**

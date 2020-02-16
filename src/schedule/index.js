@@ -74,7 +74,8 @@ function _getNotDownloaded(shows) {
 			const lastSeasonAvailable = Math.max(...episodes.map(episode => episode.season));
 			episodes = episodes.filter(episode => episode.season === lastSeasonAvailable);
 		}
-		episodes = episodes.filter(episode => !episode.dowmloaded);
+
+		episodes = episodes.filter(episode => !episode.downloaded);
 
     acc.push(...episodes);
     return acc;
