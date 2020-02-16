@@ -32,7 +32,12 @@ async function start(updateCalendar = true) {
 		}
 
 		if (magnets.length) {
-			debug(`${magnets.length} episodes ready. Starting download...`);
+			let simpleOutput = [...new Set(magnets.map(mag => mag.show))].reduce((acc, show) => {
+				acc[show] = magnets.filter(ep => ep.show === show).map(ep => `S${ep.season}E${ep.episode}`);
+				return acc;
+			}, {});
+
+			debug(`${magnets.length} episodes ready. Starting download... %O`, simpleOutput);
 			actions.push(download.downloadTorrents(magnets));
 		}
 

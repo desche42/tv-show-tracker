@@ -8,6 +8,7 @@ const torrentStream = require('torrent-stream');
 const DB = require('../database');
 const config = require('config');
 const utils = require('../utils');
+const logProgress = require('./logProgress');
 
 /**
  * Handles the download of a single torrent
@@ -23,12 +24,15 @@ module.exports = function downloadTorrent(episode) {
     } catch (error) {
       debug(`Error downloading episode ${episode.show} ${episode.season} ${episode.ep}`);
       rej();
-    }
+		}
+
+		let selectedFile;
 
     engine.on('ready', function () {
       engine.files.forEach(file => {
         if (isVideoFile(file.name)) {
-          file.select();
+					file.select();
+					selectedFile = file;
           debug(`${file.name} downloading!`);
         } else {
 					file.deselect();
@@ -45,7 +49,17 @@ module.exports = function downloadTorrent(episode) {
         debug(`Torrent ${torrent.title} downloaded.`);
         res();
       });
-    });
+		});
+
+		engine.on('download', (...args) => {
+			logProgress(selectedFile, engine);
+		});
+
+		engine.on('torrent', (metadata) => {
+			debug('Torrent metadata fetched');
+		});
+
+
   });
 }
 

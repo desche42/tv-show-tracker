@@ -20,13 +20,20 @@ module.exports = {
 	 */
 	downloadLastSeasonOnly: true,
 	/**
-	 * Attempts to search for a torrent
+	 * Attempts to search for a torrent. Careful if restart option is activated,
+	 * search limit will be reached, maybe blocking new episodes for being downloaded.
 	 */
-	maxSearchAttempts: 15,
+	maxSearchAttempts: 999,
   /**
    * Restarts life cycle (keeps relaunching until all torrents have been downloaded)
    */
 	restart: false,
+	/**
+	 * Starts searching for a torrent N hours after air date
+	 * Usually air date is only the day, if show is aired at night,
+	 * N should be at least 24
+	 */
+	searchAfterNHours: 24,
   /**
    * searches for new episode torrents in chunks, newer are prioritized
    */
@@ -40,10 +47,7 @@ module.exports = {
 	 */
 	torrentSearchEnablePublicProviders: true,
 	// only if public providers not enabled
-	torrentSearchEnableProviders: [
-		'ExtraTorrent',
-		'Torrent9'
-	],
+	torrentSearchEnableProviders: [],
 	// always disable
 	torrentSearchDisableProviders: ['torrentz2'],
   /**

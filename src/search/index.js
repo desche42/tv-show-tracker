@@ -67,13 +67,14 @@ async function _searchEpisode(episode) {
 		searchAttempts
 	} = episode;
 
-	if (!checkMaxAttempts(searchAttempts, s, e)) {
-		return;
-	}
 
   DB.get('episodes').find({
-    show, season: s, episode: e
+		show, season: s, episode: e
 	}).set('searchAttempts', (searchAttempts || 0) + 1).write();
+
+	if (!checkMaxAttempts(searchAttempts, show, s, e)) {
+		return;
+	}
 
 	const query = `${show} S${utils.doubleDigit(s)}E${utils.doubleDigit(e)}`;
 
@@ -92,7 +93,7 @@ async function _parseSearchResult (torrents) {
 	debug('Parsing search results...');
 	const selectedShows = config.get('selectedShows');
 
-	torrents.filter(torrent => torrent.title).forEach(torrent => {
+	const result = torrents.filter(torrent => torrent.title).forEach(torrent => {
 		if (!torrent.magnet){
 			return;
 		}
@@ -121,8 +122,13 @@ async function _parseSearchResult (torrents) {
 					show, season, episode, torrent
 				}).write();
 			}
+			return torrent;
 		}
 	});
+
+	if (!result) {
+		debug('No torrents found');
+	}
 }
 
 
@@ -157,11 +163,11 @@ function _parseSize(size) {
  * Returns true if maxSearchAttempts has not been reached
  * @param {Number} searchAttempts
  */
-function checkMaxAttempts (searchAttempts, season, episode) {
+function checkMaxAttempts (searchAttempts, show, season, episode) {
 	const attemptsLeft = config.get('maxSearchAttempts') - searchAttempts;
 
 	if (attemptsLeft <= 0){
-		debug(`Reached max search attempts for episode ${season} ${episode}..`);
+		debug(`Reached max search attempts for ${show} ${season} ${episode}..`);
 	}
 
 	if (attemptsLeft === 0){

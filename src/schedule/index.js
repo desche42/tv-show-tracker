@@ -89,7 +89,7 @@ function _getNotDownloaded(shows) {
 function _filterFutureEpisodes(episodes) {
   const now = +new Date();
   return episodes.filter(episode =>
-    +new Date(episode.date) < now
+    (+new Date(episode.date) + 1000*60*60*(config.get('searchAfterNHours') || 0)) < now
   );
 }
 

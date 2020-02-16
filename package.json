@@ -6,8 +6,8 @@
   "scripts": {
     "test": "mocha test/*.test.js",
     "debug": "DEBUG=* node index.js",
-		"start": "DEBUG=tv-show-tracker:* node index.js",
-		"checkDownloaded": "node src/getDownloadedEpisodes.js"
+    "start": "DEBUG=tv-show-tracker:* node index.js",
+    "checkDownloaded": "node src/getDownloadedEpisodes.js"
   },
   "keywords": [
     "tv",
@@ -21,9 +21,10 @@
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
     "config": "^3.2.5",
-		"episode-parser": "^1.5.0",
+    "episode-parser": "^1.5.0",
     "fs-extra": "^8.1.0",
     "lowdb": "^1.0.0",
+    "pretty-bytes": "^5.3.0",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.8",
     "torrent-search-api": "^2.0.10",
