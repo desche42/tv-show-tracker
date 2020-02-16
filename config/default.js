@@ -19,6 +19,10 @@ module.exports = {
 	 * If false, all episodes in db of selected shows will be downloaded
 	 */
 	downloadLastSeasonOnly: true,
+	/**
+	 * Attempts to search for a torrent
+	 */
+	maxSearchAttempts: 15,
   /**
    * Restarts life cycle (keeps relaunching until all torrents have been downloaded)
    */
@@ -28,7 +32,7 @@ module.exports = {
    */
 	simultaneousSearchLimit: 6,
 	/**
-	 *
+	 * Simultaneous torrent downloads each cycle
 	 */
 	simultaneousDownloadLimit: 3,
 	/**

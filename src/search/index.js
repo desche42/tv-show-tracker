@@ -68,7 +68,11 @@ async function _searchEpisode(episode) {
 		searchAttempts
 	} = episode;
 
-  const limit = 20;
+	if (searchAttempts === config.get('maxSearchAttempts')) {
+		debug(`Max search attempts for episode ${season} ${episode}..`);
+		debug(`Time of death... ${+ new Date()}. RIP`);
+		return;
+	}
 
   DB.get('episodes').find({
     show, season: s, episode: e
@@ -78,7 +82,7 @@ async function _searchEpisode(episode) {
 
 	debug(`Searching ${query}`);
 
-  const torrents = await torrentSearch.search(query, 'All', limit);
+  const torrents = await torrentSearch.search(query, 'All');
 
 	return await _parseSearchResult(torrents);
 }
