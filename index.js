@@ -25,14 +25,14 @@ async function start(updateCalendar = true) {
 		const actions = [];
 
 		if (newEpisodes.length) {
-			debug('Starting search...');
+			debug(`${newEpisodes.length} new episodes. Starting search...`);
 			actions.push(search(newEpisodes));
 		} else {
 			debug('No new released episodes...');
 		}
 
 		if (magnets.length) {
-			debug('Starting download...');
+			debug(`${magnets.length} episodes ready. Starting download...`);
 			actions.push(download.downloadTorrents(magnets));
 		}
 

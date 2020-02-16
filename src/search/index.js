@@ -35,7 +35,6 @@ module.exports = async function searchEpisodes(episodes) {
   episodes = _getFilteredEpisodes(episodes);
 
   if(episodes.length) {
-    debug(`Searching ${episodes.length} torrentless episodes`);
 		await Promise.all(episodes.map(_searchEpisode));
   } else {
     debug('No new episodes to search');
@@ -68,9 +67,7 @@ async function _searchEpisode(episode) {
 		searchAttempts
 	} = episode;
 
-	if (searchAttempts === config.get('maxSearchAttempts')) {
-		debug(`Max search attempts for episode ${season} ${episode}..`);
-		debug(`Time of death... ${+ new Date()}. RIP`);
+	if (!checkMaxAttempts(searchAttempts, s, e)) {
 		return;
 	}
 
@@ -156,3 +153,20 @@ function _parseSize(size) {
   } else return size;
 }
 
+/**
+ * Returns true if maxSearchAttempts has not been reached
+ * @param {Number} searchAttempts
+ */
+function checkMaxAttempts (searchAttempts, season, episode) {
+	const attemptsLeft = config.get('maxSearchAttempts') - searchAttempts;
+
+	if (attemptsLeft <= 0){
+		debug(`Reached max search attempts for episode ${season} ${episode}..`);
+	}
+
+	if (attemptsLeft === 0){
+		debug(`Time of death... ${+ new Date()}. RIP`);
+	}
+
+	return attemptsLeft > 0;
+}
