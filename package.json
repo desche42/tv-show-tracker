@@ -36,8 +36,5 @@
     "mocha": "^7.0.1",
     "sinon": "^8.1.1"
   },
-  "repository": "github:desche42/tv-show-tracker.git",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  }
+  "repository": "github:desche42/tv-show-tracker.git"
 }
