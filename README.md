@@ -90,7 +90,7 @@ and below.
 
 2. **Start cycle**
 	
-	Each cylce two things are done simultaneously:
+	In each cylce two things are done simultaneously:
 
    1. **Search for new torrents**
    	
