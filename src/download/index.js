@@ -4,10 +4,12 @@
 const DB = require('../database');
 const downloadTorrent = require('./download');
 const debug = require('debug')('tv-show-tracker: download ')
+const config = require('config');
 
 async function downloadTorrents(torrents) {
   const episodes = torrents
-    .filter(episode => episode.torrent && episode.torrent.magnet && !episode.downloaded)
+		.filter(episode => episode.torrent && episode.torrent.magnet && !episode.downloaded)
+		.slice(0, config.get('simultaneousDownloadLimit'))
 
   await Promise.all(episodes.map(function (episode) {
     return downloadTorrent(episode);

@@ -4,7 +4,16 @@
 
 Module exports a function that accepts an array of episodes to search.
 
-**If several torrents are found**, highest size is selected and stored in episode's db file:
+All torrents are checked:
+
+1. if has a magnet link
+2. title is parsed to extract episode info
+   1. show
+   2. season
+   3. episode
+3. if show is among selected episode is
+   1. updatad if exists in db
+   2. created if not
 
 ## Torrent found episode 
 ```javascript
@@ -23,5 +32,8 @@ Module exports a function that accepts an array of episodes to search.
       ...
     }
 ```
+
+
+[Main Page](../../README.md)
 
 

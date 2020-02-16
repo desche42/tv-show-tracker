@@ -36,7 +36,7 @@ async function _updateShowsInfo (newShows) {
 
     if (!show) {
       debugNewShow(showName);
-      DB.get(DB_SHOWS_KEY).push({title: showName, selected: false}).write();
+      DB.get(DB_SHOWS_KEY).push({title: showName}).write();
     }
   }));
 }

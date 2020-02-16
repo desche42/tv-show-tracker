@@ -25,20 +25,25 @@ async function start(updateCalendar = true) {
 		const actions = [];
 
 		if (newEpisodes.length) {
-			debug('Starting search...');
+			debug(`${newEpisodes.length} new episodes. Starting search...`);
 			actions.push(search(newEpisodes));
+		} else {
+			debug('No new released episodes...');
 		}
 
 		if (magnets.length) {
-			debug('Starting download...');
+			let simpleOutput = [...new Set(magnets.map(mag => mag.show))].reduce((acc, show) => {
+				acc[show] = magnets.filter(ep => ep.show === show).map(ep => `S${ep.season}E${ep.episode}`);
+				return acc;
+			}, {});
+
+			debug(`${magnets.length} episodes ready. Starting download... %O`, simpleOutput);
 			actions.push(download.downloadTorrents(magnets));
-		} else {
-			debug('No new mangnets available to download.');
 		}
 
 		await Promise.all(actions);
 
-		if (config.get('restart') && (newEpisodes.length)) {
+		if (config.get('restart') && newEpisodes.length) {
 			restart();
 		} else {
 			debug('Finished.');

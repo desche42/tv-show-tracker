@@ -5,15 +5,21 @@ as they're available!
 
 
 - [TV SHOW TRACKER](#tv-show-tracker)
-	- [Usage](#usage)
-		- [Tip](#tip)
-	- [Lifecycle](#lifecycle)
+- [Installation](#installation)
+	- [Configuration](#configuration)
+- [Lifecycle](#lifecycle)
+- [Limitations](#limitations)
 - [TO DO's](#to-dos)
-	- [v1](#v1)
+	- [v1.1](#v11)
 	- [v2](#v2)
+- [Change log](#change-log)
+	- [v1](#v1)
 
-## Usage
+# Installation
 
+>
+>*Commands may change depending on your OS.*
+>
 Clone the repo and install node dependencies:
 
 ```bash
@@ -29,53 +35,112 @@ Change into directory and start!
 npm run debug
 
 # starts with redable console info
-npm run start
+npm start
 ```
 
 TV Show schedule is crawled from an online web and available tv shows are populated in the database: `database/db.json`. 
 
-Edit this file to **select the shows want to track**:
+Edit the file `config/local.js` to **select the shows want to track**:
 
 ```javascript
 {
-  "shows": [
-    // ...
-    {
-      title: "Doctro Who",
-      selected: true
-    },
-    //...
-  ]
+	...
+	selectedShows: [
+		'doctor who',
+		'the magicians',
+		'brooklyn nine-nine',
+		...
+	]
+	...
 }
 ```
 
-Every time the app is launched, checks for new aired episodes in the schedule so you don't have to track every tv show, searches for the magnet and downloads it.
+And that's it!
 
-### Tip
+> **TIP**
+> 
+> If your terminal allows you to create aliases for commands (like zsh), adding: 
+> 
+> ```bash
+> alias checkTvShows="cd ~/path/to/tv-show-tracker/; npm start;"
+> ```
+> 
+> to your `.zshrc` file (or similar) will allow you to run the app opening a terminal and doing: > `checkTvShows`.
 
-If your terminal allows you to create aliases for commands (like zsh), adding: 
+## Configuration
 
-```bash
-alias checkTvShows="cd ~/code/tv-show-tracker/; npm run start;"
+Copy `config/default.js` to a file `config/local.js`:
+
+```
+cp config/default.js config/local.js
 ```
 
-to your `.zshrc` file (or similar) will allow you to run the app opening a terminal and doing: `checkTvShows`.
+Although config options are described, there is more information in:
 
-## Lifecycle
+- [Search](src/search/README.md)
+- [Schedule](src/schedule/README.md)
+- [Download](src/download/README.md)
 
-1. Update calendar
-2. Start cycle
-   1. Search for new torrents
-   2. Download available magnets
-3. Go to 2.
+and below.
+
+
+# Lifecycle
+
+1. **Update calendar**
+
+	Calendar is updated if *config key* `updateCalendar` is set to true and current month is not found in the database.
+
+2. **Start cycle**
+	
+	In each cylce two things are done simultaneously:
+
+   1. **Search for new torrents**
+   	
+		 Aired episodes without a torrent are searched. Results are stored
+		 into the DB to be downloaded next cycle.
+		 Config key `maxSearchAttempts` sets the number of times an episode will be searched for a torrent before considering its dead.
+
+   2. **Download available magnets**
+   
+	 	Episodes marked as not downloaded and have a torrent magnet start downloading.
+
+3. **Start new cycle** 
+   
+	 If *config key* `reset` is set to true, and there are new episodes to
+	 search, new cycle is started.
+	 --> if not torrents are found, it will keep searching **forever**.
+
+
+# Limitations
+
+This project is ment to automatically download latest episodes of tv shows, so them are expected to be alive (lots of peers). Downloading past episodes is slower
+and may cause the app to hang, since it waits for the torrents to download before starting new downloads (see lifecycle).
 
 # TO DO's
 
-## v1
+## v1.1
 
 - [ ] Tests
-- [ ] Calendar force update after X days
-- [ ] Storage system
+
+## v2
+- [ ] Event emitters?
+- [ ] Create separate DDBB for shows info (committed), and episodes
+- [ ] Globally available / CLI 
+  - [ ] Add / remove shows
+  - [ ] Add / remove seasons
+  - [ ] Launch vlc for selected episode
+- [ ] Option of downloading complete seasons
+  - [ ] Show info search --> episode details
+
+
+# Change log
+
+## v1
+
+- [x] Basic downloaded episode logger `npm run checkDownloaded`
+- [x] Calendar force update after X days --> when month is not in db
+- [x] Select shows more easily
+- [x] Storage system
   - [x] Parse file names
     - [x] change showtitle property of episodes to parse name with external module
     - [x] shows stored as lowercase
@@ -84,11 +149,4 @@ to your `.zshrc` file (or similar) will allow you to run the app opening a termi
   - [x] Restart lifecycle
 - [x] Figure out which torrent search provider is giving timeout and disable it to speed up process
 - [x] Restart lifecycle to keep searching for torrents while dowloading
-
-## v2
-- [ ] Globally available / CLI 
-  - [ ] Add / remove shows
-  - [ ] Add / remove seasons
-  - [ ] Launch vlc for selected episode
-- [ ] Option of downloading complete seasons
-  - [ ] Show info search --> episode details
+- [x] Documentation

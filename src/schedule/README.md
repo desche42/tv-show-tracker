@@ -1,8 +1,8 @@
 # Schedule
 
-Schedule is updated once a month from an online TV calendar.
+Monthly schedule is crawled from an online TV calendar.
 
-Result html is saved to txt file, parsed and episode data is set into the database.
+Result html is parsed and episode data is set into the database.
 
 ## New episode
 
@@ -17,3 +17,5 @@ Following data is available for new episodes:
   downloaded: false
 }
 ```
+
+[Main Page](../../README.md)
