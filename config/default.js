@@ -34,6 +34,7 @@ module.exports = {
 	 * N should be at least 24
 	 */
 	searchAfterNHours: 24,
+	selectedShows: [],
   /**
    * searches for new episode torrents in chunks, newer are prioritized
    */

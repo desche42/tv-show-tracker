@@ -13,7 +13,7 @@ module.exports = {
  * Get, parse and set schedule
  */
 async function update (month, year) {
-  month = month || (new Date()).getMonth();
+  month = month || ((new Date()).getMonth() + 1);
   year = year || (new Date()).getFullYear();
 
   const date = `${month}-${year}`;
@@ -44,7 +44,7 @@ async function getAvailableEpisodes() {
 	const selectedShows = config.get('selectedShows');
 
   if (!selectedShows.length) {
-    throw 'No shows selected, please select at least one in file database/db.json';
+    throw 'No shows selected, please add at least one in your config/local.js file.';
   }
 
 	const episodes = _filterFutureEpisodes(

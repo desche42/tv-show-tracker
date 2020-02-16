@@ -1,5 +1,5 @@
 const prettyBytes = require('pretty-bytes');
-
+const debug = require('debug')('tv-show-tracker: download progress');
 
 /**
  * Thanks https://github.com/mafintosh/torrent-stream/issues/72
@@ -19,11 +19,11 @@ module.exports = function logProgress(file, engine) {
 		.split("")
 		.slice(firstPiece, lastPiece - firstPiece);
 
-	const downloaded_file_pieces_amount = file_pieces_progess.filter(n => n == 1)
-		.length;
+	const downloaded_file_pieces_amount = file_pieces_progess.filter(n => n == 1).length;
 	const total_file_piceces = lastPiece - firstPiece;
 	const percentage = downloaded_file_pieces_amount / total_file_piceces * 100;
 
+	// avoid too much log, print when multiple of 5
 	if (!(Math.floor(percentage) % 5) && (percentage - Math.floor(percentage) < 0.1) && percentage < 100) {
 		debug(`${file.name}:  ${(percentage).toFixed(2)}% @${prettyBytes(engine.swarm.downloadSpeed())}/s`);
 	}
