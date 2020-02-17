@@ -3,26 +3,33 @@ const chalk = require('chalk');
 const DB = require('../database');
 const fs = require('fs-extra');
 const config = require('config');
+const cp = require('child_process');
+const path = require('path');
 
 /**
  * Watch a downloaded tv show
  */
 module.exports = async function watch () {
-	const path = [config.get('downloadPath')];
+	let filePath = path.join(__dirname, '/../../', config.get('downloadPath'));
 
-	const availableShows = await fs.readdir(path.join(''));
+	const availableShows = await fs.readdir(filePath);
 
 	const {show} = await _promptSelectList('show', availableShows, 'Select a show to watch');
-	path.push(show);
 
-	const availableEpisodes = await fs.readdir(path.join('/'));
+	filePath += `/${show}`;
+
+	const availableEpisodes = await fs.readdir(filePath);
 	const {episode} = await _promptSelectList('episode', availableEpisodes, 'Select an episode to watch');
-	path.push(episode);
 
-	const [file] = await fs.readdir(path.join('/'));
-	path.push(file);
+	filePath += `/${episode}`;
 
-	console.log(path.join('/'));
+	const [file] = await fs.readdir(filePath);
+
+	filePath += `/${file}`;
+
+	console.log(filePath);
+
+	const child = cp.exec(`vlc "${filePath}"`);
 
 
 }
