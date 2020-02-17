@@ -5,32 +5,37 @@ const fs = require('fs-extra');
 const config = require('config');
 const cp = require('child_process');
 const path = require('path');
+const episodeParser = require('episode-parser');
 
 /**
  * Watch a downloaded tv show
  */
 module.exports = async function watch () {
-	let filePath = path.join(__dirname, '/../../', config.get('downloadPath'));
+	let downloadPath = path.join(__dirname, '/../../', config.get('downloadPath'));
+	let episodes = await _getCompleteDownloads(downloadPath);
 
-	const availableShows = await fs.readdir(filePath);
+	console.log(episodes)
 
-	const {show} = await _promptSelectList('show', availableShows, 'Select a show to watch');
+	// // select show
+	// const availableShows = await fs.readdir(filePath);
+	// const {show} = await _promptSelectList('show', availableShows, 'Select a show to watch');
 
-	filePath += `/${show}`;
+	// // select episode
+	// filePath += `/${show}`;
+	// const availableEpisodes = await fs.readdir(filePath);
 
-	const availableEpisodes = await fs.readdir(filePath);
-	const {episode} = await _promptSelectList('episode', availableEpisodes, 'Select an episode to watch');
 
-	filePath += `/${episode}`;
+	// const {episode} = await _promptSelectList('episode', availableEpisodes, 'Select an episode to watch');
 
-	const [file] = await fs.readdir(filePath);
+	// filePath += `/${episode}`;
 
-	filePath += `/${file}`;
+	// const [file] = await fs.readdir(filePath);
 
-	console.log(filePath);
+	// filePath += `/${file}`;
 
-	const child = cp.exec(`vlc "${filePath}"`);
+	// console.log(filePath);
 
+	// const child = cp.exec(`vlc "${filePath}"`);
 
 }
 
@@ -49,6 +54,57 @@ function _promptSelectList(name, choices, message) {
 			choices
 		}
 	]);
+}
+
+/**
+ * Returns an array of
+ */
+async function _getCompleteDownloads (downloadPath) {
+	const files = await _recReadDir(downloadPath);
+	const videoFiles = files.filter(name => {
+		const extension = name.split('.').pop();
+		return config.get('allowedVideoExtensions').includes(extension)
+	});
+	const parsedEpisodes = videoFiles.map(path => {
+		let filename = path.split('/').pop();
+		let episode = episodeParser(filename);
+		episode.path = path;
+		return episode;
+	});
+
+	const completedDownloads = parsedEpisodes.filter(parsedEpisode => {
+		const {show, season, episode} = parsedEpisode;
+		return DB.get('episodes').find({
+			show, season, episode,
+			downloaded: true
+		});
+	});
+
+	return completedDownloads;
+}
+
+/**
+ * Recursively reads all directories in path and
+ * returns all files
+ * @param {String} path
+ */
+async function _recReadDir(path) {
+	const read = await fs.readdir(path);
+
+	const fileList = await read.reduce(async (acc, act) => {
+		acc = await acc;
+
+		const actPath = `${path}/${act}`;
+
+		if (fs.statSync(actPath).isDirectory()) {
+			const result =  await _recReadDir(actPath);
+			acc.push(...result);
+		} else {
+			acc.push(actPath);
+		}
+		return acc;
+	}, Promise.resolve([]));
+	return fileList;
 }
 
 

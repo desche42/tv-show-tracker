@@ -129,6 +129,7 @@ and may cause the app to hang, since it waits for the torrents to download befor
   - [ ] Add / remove shows
   - [ ] Add / remove seasons
   - [x] Launch vlc for selected episode
+    - [ ] Filter episodes that are marked as downloaded
 - [ ] Option of downloading complete seasons
   - [ ] Show info search --> episode details
 - [ ] Secure file path reading using path library
