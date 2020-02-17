@@ -26,7 +26,7 @@ program
  * Watch a show
  */
 program
-	.command('watch <show>')
+	.command('watch')
 	.alias('a')
 	.description('Watch a show')
 	.action(() => cli.watch());
