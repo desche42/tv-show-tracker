@@ -1,3 +1,45 @@
 #!/usr/bin/env node
+/**
+ * Entry point of the library
+ */
 
-require('../src/cli')(process.argv);
+const program = require('commander');
+const {version, description} = require('../package.json');
+const chalk = require('chalk');
+const figlet = require('figlet');
+const cli = require('./../src/cli');
+const clear = require('clear');
+
+/**
+ * Prints the title (duh)
+ */
+clear();
+console.log(chalk.red(
+	figlet.textSync('Tv Show Tracker', {horizontalLayout: 'full'})
+));
+
+program
+	.version(version)
+	.description(description);
+
+/**
+ * Watch a show
+ */
+program
+	.command('watch <show>')
+	.alias('a')
+	.description('Watch a show')
+	.action(() => cli.watch());
+
+
+/**
+ * Parse arguments given
+ */
+program.parse(process.argv);
+
+/**
+ * Default option if no command given
+ */
+if (program.args.length < 1) {
+
+}

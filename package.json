@@ -1,6 +1,6 @@
 {
   "name": "tv-show-tracker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Select which shows you want to track and new episodes will be automatically dowloaded as soon as they're available!",
   "main": "index.js",
   "scripts": {
@@ -15,18 +15,23 @@
     "automatic",
     "torrent",
     "downloader"
-	],
-	"bin": {
-		"tv-show-tracker": "bin/tv-show-tracker"
-	},
+  ],
+  "bin": {
+    "tv-show-tracker": "bin/tv-show-tracker"
+  },
   "author": "Alejandro Sánchez Pineda",
   "license": "MIT",
   "dependencies": {
+    "chalk": "^3.0.0",
     "cheerio": "^1.0.0-rc.3",
+    "clear": "^0.1.0",
     "commander": "^4.1.1",
     "config": "^3.2.5",
+    "debug": "^4.1.1",
     "episode-parser": "^1.5.0",
+    "figlet": "^1.2.4",
     "fs-extra": "^8.1.0",
+    "inquirer": "^7.0.4",
     "lowdb": "^1.0.0",
     "pretty-bytes": "^5.3.0",
     "request": "^2.88.2",
@@ -36,12 +41,11 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "debug": "^4.1.1",
     "mocha": "^7.0.1",
     "sinon": "^8.1.1"
   },
-	"repository": "github:desche42/tv-show-tracker.git",
-	"publishConfig": {
-		"access": "public"
-	}
+  "repository": "github:desche42/tv-show-tracker.git",
+  "publishConfig": {
+    "access": "public"
+  }
 }

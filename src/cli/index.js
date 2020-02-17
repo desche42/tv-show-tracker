@@ -1,9 +1,11 @@
 /**
+ *
  * Command line interface fot tv-show-tracker
+ *
  */
+const watch = require('./watchEpisode');
 
-const program = require('commander');
 
-module.exports = args => {
-	console.log(args);
+module.exports = {
+	watch
 }
