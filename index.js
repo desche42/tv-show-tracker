@@ -26,9 +26,9 @@ async function start(updateCalendar = true) {
 
 		if (newEpisodes.length) {
 			debug(`${newEpisodes.length} new episodes. Starting search...`);
-			actions.push(search(newEpisodes));
+			actions.search = search(newEpisodes);
 		} else {
-			debug('No new released episodes...');
+			debug('No new released episodes among selected shows');
 		}
 
 		if (magnets.length) {
@@ -38,12 +38,12 @@ async function start(updateCalendar = true) {
 			}, {});
 
 			debug(`${magnets.length} episodes ready. Starting download... %O`, simpleOutput);
-			actions.push(download.downloadTorrents(magnets));
+			actions.download = download.downloadTorrents(magnets);
 		}
 
-		await Promise.all(actions);
+		await Promise.all(Object.values(actions));
 
-		if (config.get('restart') && newEpisodes.length) {
+		if (config.get('restart') && actions.search) {
 			restart();
 		} else {
 			debug('Finished.');

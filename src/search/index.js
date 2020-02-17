@@ -93,7 +93,8 @@ async function _parseSearchResult (torrents) {
 	debug('Parsing search results...');
 	const selectedShows = config.get('selectedShows');
 
-	const result = torrents.filter(torrent => torrent.title).forEach(torrent => {
+	let torrentsFound = 0;
+	torrents.filter(torrent => torrent.title).forEach(torrent => {
 		if (!torrent.magnet){
 			return;
 		}
@@ -102,8 +103,8 @@ async function _parseSearchResult (torrents) {
 		parsed.show = parsed.show.toLowerCase();
 
 		// if show is selected in database
-		const {show, season, episode} = parsed;
 		if (selectedShows.includes(parsed.show)) {
+			const {show, season, episode} = parsed;
 			const dbEpisode = DB.get('episodes').find({show, season, episode});
 
 			const exists = dbEpisode.value();
@@ -122,13 +123,17 @@ async function _parseSearchResult (torrents) {
 					show, season, episode, torrent
 				}).write();
 			}
+
+			torrentsFound++;
 			return torrent;
 		}
 	});
 
-	if (!result) {
+	if (!torrentsFound) {
 		debug('No torrents found');
 	}
+
+	return torrentsFound;
 }
 
 
