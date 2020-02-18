@@ -132,7 +132,9 @@ and may cause the app to hang, since it waits for the torrents to download befor
     - [x] Filter episodes that are marked as downloaded
     - [ ] Mark episode as watched
       - [x] detect vlc video finished
-      - [ ] differenciate beetween video finished and user closing vlc
+      - [x] differenciate beetween video finished and user closing vlc
+      - [ ] inquire and set to db
+      - [ ] clean code
 - [ ] Option of downloading complete seasons
   - [ ] Show info search --> episode details
 - [ ] Secure file path reading using path library

@@ -13,49 +13,34 @@ const episodeParser = require('episode-parser');
  */
 module.exports = async function watch () {
 
+	const {show, episode, filePath, fileName} = await _selectEpisode();
+
+	return await _launchVlc(filePath, fileName);
+}
+
+/**
+ * Inquires for an episode and
+ * @returns {show, episode, filePath, file}
+ */
+async function _selectEpisode () {
 	let downloadPath = path.join(__dirname, '/../../', config.get('downloadPath'));
-	// let episodes = await _getCompleteDownloads(downloadPath);
+	const availableShows = await fs.readdir(downloadPath);
 
-	let filePath = downloadPath;
 	// select show
-	const availableShows = await fs.readdir(filePath);
-
 	const {show} = await _promptSelectList('show', availableShows, 'Select a show to watch');
-	filePath += `/${show}`;
+	let filePath = `${downloadPath}/${show}`;
 
 	// select episode
 	const availableEpisodes = await fs.readdir(filePath);
-
 	const {episode} = await _promptSelectList('episode', availableEpisodes, 'Select an episode to watch');
 
 	filePath += `/${episode}`;
 
-	const [file] = await fs.readdir(filePath);
+	// filter by extension?
+	// @todo
+	const [fileName] = await fs.readdir(filePath);
 
-	const vlc_process = cp.spawn('vlc', ['--fullscreen', '-vv', `${file}`], {
-		cwd: filePath
-	});
-
-	return new Promise((resolve, rej) => {
-		let isVideoFinished = true;
-
-		vlc_process.stdout.on('data', data => {
-			// console.log('stdout', data.toString());
-		});
-
-		vlc_process.stderr.on('data', data => {
-			if (data.toString().includes('main playlist debug: nothing to play')) {
-				vlc_process.kill();
-			} else if (data.toString().includes('main playlist debug: incoming request - stopping current input')) {
-				vlc_process.kill();
-				isVideoFinished = false;
-			}
-		});
-
-		vlc_process.on('close', code => {
-			resolve(isVideoFinished);
-		});
-	});
+	return { show, episode, filePath, fileName };
 }
 
 /**
@@ -75,55 +60,53 @@ function _promptSelectList(name, choices, message) {
 	]);
 }
 
-/**
- * Returns an array of
- */
-async function _getCompleteDownloads (downloadPath) {
-	const files = await _recReadDir(downloadPath);
-	const videoFiles = files.filter(name => {
-		const extension = name.split('.').pop();
-		return config.get('allowedVideoExtensions').includes(extension)
-	});
-	const parsedEpisodes = videoFiles.map(path => {
-		let filename = path.split('/').pop();
-		let episode = episodeParser(filename);
-		episode.path = path;
-		return episode;
+function _launchVlc(filePath, file) {
+	const vlc_process = cp.spawn('vlc', ['--fullscreen', '-vv', `${file}`], {
+		cwd: filePath
 	});
 
-	const completedDownloads = parsedEpisodes.filter(parsedEpisode => {
-		const {show, season, episode} = parsedEpisode;
-		return DB.get('episodes').find({
-			show, season, episode,
-			downloaded: true
-		});
-	})
-
-	return parsedEpisodes;
+	return new Promise((resolve, rej) => {
+		_monitorProcess(vlc_process, resolve);
+	});
 }
 
 /**
- * Recursively reads all directories in path and
- * returns all files
- * @param {String} path
+ * Checks process stderr for video finis
+ * @param {Object} process
+ * @param {Function} resolve
+ * @returns {Boolean} true if video ended, false if vlc closed
  */
-async function _recReadDir(path) {
-	const read = await fs.readdir(path);
+function _monitorProcess(process, resolve) {
+	let result;
+	process.stderr.on('data', data => {
+		const isEnd = _checkVideoFinished(data.toString());
 
-	const fileList = await read.reduce(async (acc, act) => {
-		acc = await acc;
-
-		const actPath = `${path}/${act}`;
-
-		if (fs.statSync(actPath).isDirectory()) {
-			const result =  await _recReadDir(actPath);
-			acc.push(...result);
-		} else {
-			acc.push(actPath);
+		if (isEnd) {
+			process.kill();
+			result = isEnd.isVideoFinished;
 		}
-		return acc;
-	}, Promise.resolve([]));
-	return fileList;
+	});
+
+	process.on('close', code => {
+		resolve(result);
+	});
 }
 
+/**
+ * Checks if video has finished
+ * @param {String} dataStr
+ */
+function _checkVideoFinished(dataStr) {
+	const options = [
+		{
+			value: 'main playlist debug: nothing to play',
+			isVideoFinished: true
+		},
+		{
+			value: 'main playlist debug: incoming request - stopping current input',
+			isVideoFinished: false
+		}
+	];
 
+	return options.find(option => dataStr.includes(option.value));
+}
