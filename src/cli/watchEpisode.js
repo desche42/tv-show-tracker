@@ -9,8 +9,10 @@ const episodeParser = require('episode-parser');
 
 /**
  * Watch a downloaded tv show
+ * @returns {Promise} that resolves when vlc is closed
  */
 module.exports = async function watch () {
+
 	let downloadPath = path.join(__dirname, '/../../', config.get('downloadPath'));
 	// let episodes = await _getCompleteDownloads(downloadPath);
 
@@ -34,25 +36,20 @@ module.exports = async function watch () {
 		cwd: filePath
 	});
 
-	// const vlc_process = cp.spawn('pwd', [], {
-	// 	cwd: filePath
-	// });
+	return new Promise((resolve, rej) => {
+		vlc_process.stdout.on('data', data => {
+			// console.log('stdout', data.toString());
+		});
 
-	vlc_process.stdout.on('data', data => {
-		// console.log('stdout', data.toString());
+		vlc_process.stderr.on('data', data => {
+			if (data.toString().includes('main playlist debug: nothing to play')) {
+				vlc_process.kill();
+			}
+		});
 
-	});
-
-	vlc_process.stderr.on('data', data => {
-		data = data.toString();
-		if (data.includes('main playlist debug: nothing to play')) {
-			console.log('video finished');
-			vlc_process.kill();
-		}
-	});
-
-	vlc_process.on('close', code => {
-		console.log('closed', code)
+		vlc_process.on('close', code => {
+			resolve();
+		});
 	});
 }
 

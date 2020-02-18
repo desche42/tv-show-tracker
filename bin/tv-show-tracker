@@ -32,7 +32,10 @@ program
 	.command('watch')
 	.alias('a')
 	.description('Watch a show')
-	.action(() => cli.watch());
+	.action(async () => {
+		// then ask if mark chapter as watched
+		const result = await cli.watch();
+	});
 
 
 /**
