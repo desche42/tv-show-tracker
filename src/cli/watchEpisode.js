@@ -30,9 +30,30 @@ module.exports = async function watch () {
 
 	const [file] = await fs.readdir(filePath);
 
-	filePath += `/${file}`;
+	const vlc_process = cp.spawn('vlc', ['--fullscreen', '-vv', `${file}`], {
+		cwd: filePath
+	});
 
-	const child = cp.exec(`vlc "${filePath}"`);
+	// const vlc_process = cp.spawn('pwd', [], {
+	// 	cwd: filePath
+	// });
+
+	vlc_process.stdout.on('data', data => {
+		// console.log('stdout', data.toString());
+
+	});
+
+	vlc_process.stderr.on('data', data => {
+		data = data.toString();
+		if (data.includes('main playlist debug: nothing to play')) {
+			console.log('video finished');
+			vlc_process.kill();
+		}
+	});
+
+	vlc_process.on('close', code => {
+		console.log('closed', code)
+	});
 }
 
 /**
