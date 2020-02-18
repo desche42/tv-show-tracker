@@ -12,31 +12,27 @@ const episodeParser = require('episode-parser');
  */
 module.exports = async function watch () {
 	let downloadPath = path.join(__dirname, '/../../', config.get('downloadPath'));
-	let episodes = await _getCompleteDownloads(downloadPath);
+	// let episodes = await _getCompleteDownloads(downloadPath);
 
-	console.log(episodes)
+	let filePath = downloadPath;
+	// select show
+	const availableShows = await fs.readdir(filePath);
 
-	// // select show
-	// const availableShows = await fs.readdir(filePath);
-	// const {show} = await _promptSelectList('show', availableShows, 'Select a show to watch');
+	const {show} = await _promptSelectList('show', availableShows, 'Select a show to watch');
+	filePath += `/${show}`;
 
-	// // select episode
-	// filePath += `/${show}`;
-	// const availableEpisodes = await fs.readdir(filePath);
+	// select episode
+	const availableEpisodes = await fs.readdir(filePath);
 
+	const {episode} = await _promptSelectList('episode', availableEpisodes, 'Select an episode to watch');
 
-	// const {episode} = await _promptSelectList('episode', availableEpisodes, 'Select an episode to watch');
+	filePath += `/${episode}`;
 
-	// filePath += `/${episode}`;
+	const [file] = await fs.readdir(filePath);
 
-	// const [file] = await fs.readdir(filePath);
+	filePath += `/${file}`;
 
-	// filePath += `/${file}`;
-
-	// console.log(filePath);
-
-	// const child = cp.exec(`vlc "${filePath}"`);
-
+	const child = cp.exec(`vlc "${filePath}"`);
 }
 
 /**
@@ -78,9 +74,9 @@ async function _getCompleteDownloads (downloadPath) {
 			show, season, episode,
 			downloaded: true
 		});
-	});
+	})
 
-	return completedDownloads;
+	return parsedEpisodes;
 }
 
 /**

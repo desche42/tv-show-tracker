@@ -2,7 +2,8 @@
  * Utils Module
  */
  module.exports = {
-	doubleDigit
+	doubleDigit,
+	uniqueArray
  }
 
  /**
@@ -11,5 +12,9 @@
  */
 function doubleDigit (n) {
 	return n < 10 ? `0${n}` : n;
+}
+
+function uniqueArray (arr) {
+	return [...new Set(arr)];
 }
 
