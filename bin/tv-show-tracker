@@ -35,6 +35,7 @@ program
 	.action(async () => {
 		// then ask if mark chapter as watched
 		const result = await cli.watch();
+		console.log(result)
 	});
 
 

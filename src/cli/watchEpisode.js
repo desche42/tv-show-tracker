@@ -37,6 +37,8 @@ module.exports = async function watch () {
 	});
 
 	return new Promise((resolve, rej) => {
+		let isVideoFinished = true;
+
 		vlc_process.stdout.on('data', data => {
 			// console.log('stdout', data.toString());
 		});
@@ -44,11 +46,14 @@ module.exports = async function watch () {
 		vlc_process.stderr.on('data', data => {
 			if (data.toString().includes('main playlist debug: nothing to play')) {
 				vlc_process.kill();
+			} else if (data.toString().includes('main playlist debug: incoming request - stopping current input')) {
+				vlc_process.kill();
+				isVideoFinished = false;
 			}
 		});
 
 		vlc_process.on('close', code => {
-			resolve();
+			resolve(isVideoFinished);
 		});
 	});
 }
