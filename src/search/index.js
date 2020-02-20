@@ -2,7 +2,7 @@
 * Search torrents from available episodes in selected shows
  */
 const output = require('../utils').output('search');
-const DB = require('../database');
+const {rawDb} = require('../database');
 const config = require('config');
 const episodeParser = require('episode-parser');
 const utils = require('../utils');
@@ -68,7 +68,7 @@ async function _searchEpisode(episode) {
 	} = episode;
 
 
-  DB.get('episodes').find({
+  rawDb.get('episodes').find({
 		show, season: s, episode: e
 	}).set('searchAttempts', (searchAttempts || 0) + 1).write();
 
@@ -104,7 +104,7 @@ async function _parseSearchResult (torrents) {
 		// if show is selected in database
 		const {show, season, episode} = parsed;
 		if (selectedShows.includes(parsed.show)) {
-			const dbEpisode = DB.get('episodes').find({show, season, episode});
+			const dbEpisode = rawDb.get('episodes').find({show, season, episode});
 
 			const exists = dbEpisode.value();
 
@@ -115,10 +115,10 @@ async function _parseSearchResult (torrents) {
 
 			if (exists) {
 				output(`Torrent found for episode ${show} ${season} ${episode}`);
-				DB.get('episodes').find({show, season, episode}).set('torrent', torrent).write();
+				rawDb.get('episodes').find({show, season, episode}).set('torrent', torrent).write();
 			} else {
 				output(`New episode found! ${show} ${season} ${episode}`);
-				DB.get('episodes').push({
+				rawDb.get('episodes').push({
 					show, season, episode, torrent
 				}).write();
 			}

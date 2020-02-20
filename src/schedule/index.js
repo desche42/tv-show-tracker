@@ -1,6 +1,6 @@
 const getMonthSchedule = require('./schedule');
 const output = require('../utils').output('schedule');
-const DB = require('../database');
+const {rawDb} = require('../database');
 const config = require('config');
 
 
@@ -18,7 +18,7 @@ async function update (month, year) {
 
   const date = `${month}-${year}`;
 
-  const monthSchedule = DB.get('schedules')
+  const monthSchedule = rawDb.get('schedules')
     .find(schedule => schedule === date)
     .value();
 
@@ -30,7 +30,7 @@ async function update (month, year) {
   try {
     output('Load online tv calendar.');
     const response = await getMonthSchedule(month, year);
-    DB.get('schedules').push(date).write();
+    rawDb.get('schedules').push(date).write();
   } catch (err) {
     console.error(err);
   }
@@ -65,7 +65,7 @@ async function getAvailableEpisodes() {
  */
 function _getNotDownloaded(shows) {
   return shows.reduce((acc, show) => {
-    let episodes = DB.get('episodes')
+    let episodes = rawDb.get('episodes')
       .filter({
         show
 			}).value();

@@ -4,7 +4,7 @@
  const fs = require('fs-extra');
  const config = require('config');
  const episodeParser = require('episode-parser');
- const DB = require('../database');
+ const {rawDb} = require('../database');
  const output = require('../utils').output('check downloads');
 
 
@@ -22,15 +22,15 @@
 
    downloadedEpisodes.forEach(ep => {
      const {show, season, episode} = ep;
-     const found = DB.get('episodes')
+     const found = rawDb.get('episodes')
       .find({show, season, episode})
       .value();
 
     if (found && !found.downloaded) {
         counterFound++;
-        DB.get('episodes').find({show, season, episode}).set('downloaded', true).write();
+        rawDb.get('episodes').find({show, season, episode}).set('downloaded', true).write();
       } else {
-        DB.get('episodes').push({show, season, episode, downloaded: true}).write();
+        rawDb.get('episodes').push({show, season, episode, downloaded: true}).write();
       }
     })
 

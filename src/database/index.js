@@ -9,12 +9,12 @@ fs.ensureFileSync(DATABASE_PATH);
 
 const adapter = new FileSync(DATABASE_PATH);
 
-const db = low(adapter);
+const rawDb = low(adapter);
 
 /**
  * Database default structure
  */
-db.defaults({
+rawDb.defaults({
   // array of tv shows { title: string , selected: bool}
   shows: [],
   // episodes
@@ -22,4 +22,6 @@ db.defaults({
   schedules: []
 }).write();
 
-module.exports = db;
+module.exports = {
+	rawDb
+};

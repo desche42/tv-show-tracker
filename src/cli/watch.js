@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 const chalk = require('chalk');
-const DB = require('../database');
+const {rawDb} = require('../database');
 const fs = require('fs-extra');
 const config = require('config');
 const cp = require('child_process');
