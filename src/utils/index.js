@@ -1,9 +1,13 @@
+const output = require('./output');
+
+
 /**
  * Utils Module
  */
  module.exports = {
 	doubleDigit,
-	uniqueArray
+	uniqueArray,
+	output
  }
 
  /**
