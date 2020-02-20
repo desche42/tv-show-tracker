@@ -10,7 +10,11 @@ module.exports = {
    * Download all episodes of current season for each selected show
 	 * @todo not implemented
    */
-  completeLatestSeason: false,
+	completeLatestSeason: false,
+	/**
+	 * Path for the database
+	 */
+	databasePath: './data/db.json',
   /**
    * Torrent dir download path.
    */
