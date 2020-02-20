@@ -6,7 +6,7 @@ const search = require('../search');
 const download = require('../download');
 const config = require('config');
 
-const debug = require('debug')('tv-show-tracker:');
+const output = require('../utils').output('');
 /**
  * Update schedule and search available torrents for downloading.
  */
@@ -24,10 +24,10 @@ module.exports = async function start(updateCalendar = true) {
 		const actions = [];
 
 		if (newEpisodes.length) {
-			debug(`${newEpisodes.length} new episodes. Starting search...`);
+			output(`${newEpisodes.length} new episodes. Starting search...`);
 			actions.push(search(newEpisodes));
 		} else {
-			debug('No new released episodes...');
+			output('No new released episodes...');
 		}
 
 		if (magnets.length) {
@@ -36,7 +36,7 @@ module.exports = async function start(updateCalendar = true) {
 				return acc;
 			}, {});
 
-			debug(`${magnets.length} episodes ready. Starting download... %O`, simpleOutput);
+			output(`${magnets.length} episodes ready. Starting download... %O`, simpleOutput);
 			actions.push(download.downloadTorrents(magnets));
 		}
 
@@ -45,14 +45,14 @@ module.exports = async function start(updateCalendar = true) {
 		if (config.get('restart') && newEpisodes.length) {
 			restart();
 		} else {
-			debug('Finished.');
+			output('Finished.');
 		}
 	} catch (err) {
-		debug(err);
+		output(err);
 	}
 }
 
 function restart () {
-	debug('Restarting...');
+	output('Restarting...');
 	setTimeout(() => start(false), 500);
 }

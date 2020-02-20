@@ -1,5 +1,4 @@
-const debug = require('debug')('tv-show-tracker: schedule:');
-const debugNewShow = require('debug')('New show available:');
+const output = require('../utils').output('schedule');
 const DB = require('../database');
 
 const DB_SHOWS_KEY = 'shows';
@@ -35,7 +34,7 @@ async function _updateShowsInfo (newShows) {
       .value();
 
     if (!show) {
-      debugNewShow(showName);
+      output(`new show "${showName}" available!!`);
       DB.get(DB_SHOWS_KEY).push({title: showName}).write();
     }
   }));

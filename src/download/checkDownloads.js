@@ -5,7 +5,7 @@
  const config = require('config');
  const episodeParser = require('episode-parser');
  const DB = require('../database');
- const debug = require('debug')('torrent downloader: check downloads');
+ const output = require('../utils').output('check downloads');
 
 
  async function checkDownloads () {
@@ -16,7 +16,7 @@
      return ep;
    }).filter(Boolean);
 
-   debug(`Downloaded episodes ${downloadedEpisodes.length}`);
+   output(`Downloaded episodes ${downloadedEpisodes.length}`);
 
    let counterFound = 0;
 
@@ -34,7 +34,7 @@
       }
     })
 
-    debug(`found episodes ${counterFound}`);
+    output(`found episodes ${counterFound}`);
 
 }
 

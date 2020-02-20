@@ -1,7 +1,7 @@
 /**
 * Search torrents from available episodes in selected shows
  */
-const debug = require('debug')('tv-show-tracker: search');
+const output = require('../utils').output('search');
 const DB = require('../database');
 const config = require('config');
 const episodeParser = require('episode-parser');
@@ -37,7 +37,7 @@ module.exports = async function searchEpisodes(episodes = []) {
   if(episodes.length) {
 		await Promise.all(episodes.map(_searchEpisode));
   } else {
-    debug('No new episodes to search');
+    output('No new episodes to search');
   }
 }
 
@@ -78,7 +78,7 @@ async function _searchEpisode(episode) {
 
 	const query = `${show} S${utils.doubleDigit(s)}E${utils.doubleDigit(e)}`;
 
-	debug(`Searching ${query}`);
+	output(`Searching ${query}`);
 
   const torrents = await torrentSearch.search(query, 'All');
 
@@ -90,7 +90,7 @@ async function _searchEpisode(episode) {
 * Analyzes search result
 */
 async function _parseSearchResult (torrents) {
-	debug('Parsing search results...');
+	output('Parsing search results...');
 	const selectedShows = config.get('selectedShows');
 
 	const result = torrents.filter(torrent => torrent.title).forEach(torrent => {
@@ -114,10 +114,10 @@ async function _parseSearchResult (torrents) {
 			}
 
 			if (exists) {
-				debug(`Torrent found for episode ${show} ${season} ${episode}`);
+				output(`Torrent found for episode ${show} ${season} ${episode}`);
 				DB.get('episodes').find({show, season, episode}).set('torrent', torrent).write();
 			} else {
-				debug(`New episode found! ${show} ${season} ${episode}`);
+				output(`New episode found! ${show} ${season} ${episode}`);
 				DB.get('episodes').push({
 					show, season, episode, torrent
 				}).write();
@@ -127,7 +127,7 @@ async function _parseSearchResult (torrents) {
 	});
 
 	if (!result) {
-		debug('No torrents found');
+		output('No torrents found');
 	}
 }
 
@@ -167,11 +167,11 @@ function checkMaxAttempts (searchAttempts, show, season, episode) {
 	const attemptsLeft = config.get('maxSearchAttempts') - searchAttempts;
 
 	if (attemptsLeft <= 0){
-		debug(`Reached max search attempts for ${show} ${season} ${episode}..`);
+		output(`Reached max search attempts for ${show} ${season} ${episode}..`);
 	}
 
 	if (attemptsLeft === 0){
-		debug(`Time of death... ${+ new Date()}. RIP`);
+		output(`Time of death... ${+ new Date()}. RIP`);
 	}
 
 	return attemptsLeft > 0;

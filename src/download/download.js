@@ -1,7 +1,7 @@
 /**
  * Downloads available magnets in selected shows
  */
-const debug = require('debug')('tv-show-tracker: download:');
+const output = require('../utils').output('download');
 
 // torrent-search-api download not working
 const torrentStream = require('torrent-stream');
@@ -22,7 +22,7 @@ module.exports = function downloadTorrent(episode) {
 				path: _getFilePath(show, season, ep)
       });
     } catch (error) {
-      debug(`Error downloading episode ${episode.show} ${episode.season} ${episode.ep}`);
+      output(`Error downloading episode ${episode.show} ${episode.season} ${episode.ep}`);
       rej();
 		}
 
@@ -33,7 +33,7 @@ module.exports = function downloadTorrent(episode) {
         if (isVideoFile(file.name)) {
 					file.select();
 					selectedFile = file;
-          debug(`${file.name} downloading!`);
+          output(`${file.name} downloading!`);
         } else {
 					file.deselect();
 				}
@@ -46,7 +46,7 @@ module.exports = function downloadTorrent(episode) {
       .set('downloaded', true)
       .write();
       engine.destroy(() => {
-        debug(`Torrent ${torrent.title} downloaded.`);
+        output(`Torrent ${torrent.title} downloaded.`);
         res();
       });
 		});
@@ -56,7 +56,7 @@ module.exports = function downloadTorrent(episode) {
 		});
 
 		engine.on('torrent', (metadata) => {
-			debug('Torrent metadata fetched');
+			output('Torrent metadata fetched');
 		});
 
 

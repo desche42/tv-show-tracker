@@ -3,7 +3,7 @@
  */
 const DB = require('../database');
 const downloadTorrent = require('./download');
-const debug = require('debug')('tv-show-tracker: download ')
+const output = require('../utils').output('download');
 const config = require('config');
 
 async function downloadTorrents(torrents) {
@@ -30,10 +30,10 @@ function forceAddEpisode(ep) {
 
 
   if (!isAlready) {
-    debug(`force download on show ${ep.show} S${ep.season} E${ep.episode}`);
+    output(`force download on show ${ep.show} S${ep.season} E${ep.episode}`);
     DB.get('episodes').push(ep).write();
   } else {
-    debug('forced fail, episode exists');
+    output('forced fail, episode exists');
   }
 }
 

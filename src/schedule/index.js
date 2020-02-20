@@ -1,5 +1,5 @@
 const getMonthSchedule = require('./schedule');
-const debug = require('debug')('tv-show-tracker: schedule');
+const output = require('../utils').output('schedule');
 const DB = require('../database');
 const config = require('config');
 
@@ -23,12 +23,12 @@ async function update (month, year) {
     .value();
 
   if (monthSchedule) {
-    debug('This month schedule is already loaded in db');
+    output('This month schedule is already loaded in db');
     return;
   }
 
   try {
-    debug('Load online tv calendar.');
+    output('Load online tv calendar.');
     const response = await getMonthSchedule(month, year);
     DB.get('schedules').push(date).write();
   } catch (err) {
