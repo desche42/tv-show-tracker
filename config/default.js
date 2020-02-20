@@ -14,7 +14,7 @@ module.exports = {
   /**
    * Torrent dir download path.
    */
-	downloadPath:  './database/downloads',
+	downloadPath:  './data/downloads',
 	/**
 	 * If false, all episodes in db of selected shows will be downloaded
 	 */

@@ -1,8 +1,8 @@
 #!/usr/bin/env node
+
 /**
  * Entry point of the library
  */
-
 const program = require('commander');
 const {version, description} = require('../package.json');
 const chalk = require('chalk');
@@ -14,7 +14,7 @@ const clear = require('clear');
 const app = require('../');
 
 /**
- * Prints the title (duh)
+ * Print title
  */
 clear();
 console.log(chalk.red(

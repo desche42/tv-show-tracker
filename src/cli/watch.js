@@ -5,7 +5,6 @@ const fs = require('fs-extra');
 const config = require('config');
 const cp = require('child_process');
 const path = require('path');
-const episodeParser = require('episode-parser');
 
 /**
  * Watch a downloaded tv show

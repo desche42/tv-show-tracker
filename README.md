@@ -137,11 +137,12 @@ and may cause the app to hang, since it waits for the torrents to download befor
       - [ ] clean code
   - [ ] Clear searchAttempts option
 - [ ] Change output / debug
-  - [x] Add output module
-  - [ ] Migrate module
+  - [x] Add output module, uses debug package behind the scenes
+  - [ ] Migrate module?
 - [ ] Option of downloading complete seasons
   - [ ] Show info search --> episode details
 - [ ] Secure file path reading using path library
+- [ ] Move all db transactions to a module with exposed methods
 
 
 # Change log
