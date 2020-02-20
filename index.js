@@ -1,6 +1,6 @@
 /**
  * Entry point of the library
  */
-const startLifeCycle = require('./src/lifecycle');
+const {start} = require('./src/lifecycle');
 
-module.exports = {startLifeCycle};
+module.exports = {start};

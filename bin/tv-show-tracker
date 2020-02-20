@@ -48,6 +48,5 @@ program.parse(process.argv);
  * Default option if no command given
  */
 if (program.args.length < 1) {
-	console.log(chalk.green('Starting app... set debug env to "tv-show-tracker:*" for more info'))
-	app.startLifeCycle();
+	app.start();
 }

@@ -1,13 +1,12 @@
 /**
  * Entry point of the library
  */
-
-const schedule = require('./schedule');
-const search = require('./search');
-const debug = require('debug')('tv-show-tracker:');
-const download = require('./download');
+const schedule = require('../schedule');
+const search = require('../search');
+const download = require('../download');
 const config = require('config');
 
+const debug = require('debug')('tv-show-tracker:');
 /**
  * Update schedule and search available torrents for downloading.
  */

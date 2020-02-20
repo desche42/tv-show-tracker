@@ -135,6 +135,7 @@ and may cause the app to hang, since it waits for the torrents to download befor
       - [x] differenciate beetween video finished and user closing vlc
       - [ ] inquire and set to db
       - [ ] clean code
+- [ ] Change output / debug
 - [ ] Option of downloading complete seasons
   - [ ] Show info search --> episode details
 - [ ] Secure file path reading using path library
