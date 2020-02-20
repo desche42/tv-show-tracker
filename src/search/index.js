@@ -93,7 +93,7 @@ async function _parseSearchResult (torrents) {
 	output('Parsing search results...');
 	const selectedShows = config.get('selectedShows');
 
-	const result = torrents.filter(torrent => torrent.title).forEach(torrent => {
+	const result = torrents.filter(torrent => torrent.title).map(torrent => {
 		if (!torrent.magnet){
 			return;
 		}
@@ -126,7 +126,7 @@ async function _parseSearchResult (torrents) {
 		}
 	});
 
-	if (!result) {
+	if (!result.length) {
 		output('No torrents found');
 	}
 }
