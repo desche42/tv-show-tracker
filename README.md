@@ -128,7 +128,8 @@ and may cause the app to hang, since it waits for the torrents to download befor
 - [ ] Globally available / CLI 
   - [ ] Add / remove shows
   - [ ] Add / remove seasons
-  - [x] Launch vlc for selected episode
+  - [x] Set default action if no command is given 
+  - [x] Launch vlc for selected episode - **watch command**
     - [x] Filter episodes that are marked as downloaded
     - [ ] Mark episode as watched
       - [x] detect vlc video finished
