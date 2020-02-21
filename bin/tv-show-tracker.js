@@ -10,7 +10,7 @@ const figlet = require('figlet');
 const clear = require('clear');
 
 // default option
-const app = require('../');
+const app = require('..');
 
 /**
  * Print title

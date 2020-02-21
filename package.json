@@ -17,8 +17,9 @@
     "downloader"
   ],
   "bin": {
-    "tv-show-tracker": "bin/tv-show-tracker"
-  },
+		"tv-show-tracker": "./bin/tv-show-tracker.js"
+	},
+	"preferGlobal": true,
   "author": "Alejandro Sánchez Pineda",
   "license": "MIT",
   "dependencies": {

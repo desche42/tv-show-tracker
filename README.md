@@ -126,6 +126,7 @@ and may cause the app to hang, since it waits for the torrents to download befor
 - [ ] Event emitters?
 - [ ] Create separate DDBB for shows info (committed), and episodes
 - [ ] Globally available / CLI 
+  - [ ] Change file path reading using path library
   - [ ] Add / remove shows
   - [ ] Add / remove seasons
   - [x] Set default action if no command is given 
@@ -142,7 +143,6 @@ and may cause the app to hang, since it waits for the torrents to download befor
   - [ ] Migrate module?
 - [ ] Option of downloading complete seasons
   - [ ] Show info search --> episode details
-- [ ] Secure file path reading using path library
 - [ ] Move all db transactions to a module with exposed methods
 
 
