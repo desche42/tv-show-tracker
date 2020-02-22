@@ -39,11 +39,6 @@ which node
 
 In this folder **database**, **downloads** and **config** files are stored.
 
-Run the program:
-
-```
-tv-show-tracker
-```
 
 # Usage
 
@@ -59,7 +54,7 @@ and you will be prompted for the show name.
 
 > Note that show name has to be the same as stored in database file.
 
-Selected shos are stored the file `config/local.js`:
+Selected shos are stored the file `config/local.json`:
 
 ```javascript
 {
@@ -158,7 +153,22 @@ and may cause the app to hang, since it waits for the torrents to download befor
 
 # TO DO's
 
-- [ ] Tests
+- [ ] Tests:
+
+	Ohh tests! I love testing. I really do!!
+
+
+	Sadly, this project started as:
+	
+	>Fuck! I missed the last season of The Magicians! And Modern Family! And The flash! And Dr Who! And ... <several more>, why Netflix doesn't have these shows?? (in Spain at least). 
+	> 
+	> This can never happen again...
+	>
+	> Anyway lets download them... 
+	>
+	> Ugh! 35 magnets? Let's automate this
+
+	So tests weren't implemented. I needed to watch new shows I didn't have time for tests!
 
 ## v2
 - [x] Globally available / CLI 
@@ -169,7 +179,7 @@ and may cause the app to hang, since it waits for the torrents to download befor
     - [x] Filter episodes that are marked as downloaded
   - [x] Set config key maxSearchAttempts to 0 to infinite search attempts
   - [x] Move cli files to bin folder
-- [ ] Documentation
+- [x] Documentation
 
 ## v2.1
 
