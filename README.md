@@ -127,7 +127,9 @@ and may cause the app to hang, since it waits for the torrents to download befor
 - [ ] Create separate DDBB for shows info (committed), and episodes
 - [ ] Globally available / CLI 
   - [x] Change file path reading using path library
-  - [ ] Add / remove shows
+  - [x] Add show
+  - [ ] Add magnet
+  - [ ] remove shows
   - [ ] Add / remove seasons
   - [x] Set default action if no command is given 
   - [x] Launch vlc for selected episode - **watch command**
@@ -144,6 +146,7 @@ and may cause the app to hang, since it waits for the torrents to download befor
 - [ ] Option of downloading complete seasons
   - [ ] Show info search --> episode details
 - [ ] Move all db transactions to a module with exposed methods
+- [ ] Move cli files to bin folder
 
 
 # Change log

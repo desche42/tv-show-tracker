@@ -29,6 +29,7 @@ program
 	.version(version)
 	.description(description)
 	.command('watch', 'watch show', {executableFile: 'watch'})
+	.command('add', 'adds a show or a magnet to download', {executableFile: 'add'})
 	.command('track', 'track show', {executableFile: 'track', isDefault: true})
 
 /**

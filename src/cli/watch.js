@@ -1,6 +1,5 @@
 const inquirer = require('inquirer');
 const chalk = require('chalk');
-const {rawDb} = require('../database');
 const fs = require('fs-extra');
 const config = require('config');
 const cp = require('child_process');
@@ -12,7 +11,7 @@ const path = require('path');
  */
 module.exports = async function watch () {
 
-	const {show, episode, filePath, fileName} = await _selectEpisode();
+	const {filePath, fileName} = await _selectEpisode();
 
 	return await _launchVlc(filePath, fileName);
 }
