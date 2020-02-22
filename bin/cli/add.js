@@ -3,11 +3,12 @@ const path = require('path');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 
+add();
 
 /**
  * Add a show to track or a magnet to download
  */
-module.exports = async function add () {
+async function add () {
 	const choices = {
 		"Magnet": _addMagnet,
 		"Show": _addShow

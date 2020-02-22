@@ -1,5 +1,6 @@
 const path = require('path');
 const output = require(path.join(__dirname, 'output'));
+const debug = require(path.join(__dirname, 'debug'));
 
 
 /**
@@ -8,7 +9,8 @@ const output = require(path.join(__dirname, 'output'));
  module.exports = {
 	doubleDigit,
 	uniqueArray,
-	output
+	output,
+	debug
  }
 
  /**

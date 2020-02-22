@@ -5,16 +5,17 @@ const config = require('config');
 const cp = require('child_process');
 const path = require('path');
 
+
 /**
  * Watch a downloaded tv show
  * @returns {Promise} that resolves when vlc is closed
  */
-module.exports = async function watch () {
+(async function watch () {
 
 	const {filePath, fileName} = await _selectEpisode();
 
 	return await _launchVlc(filePath, fileName);
-}
+})();
 
 /**
  * Inquires for an episode and

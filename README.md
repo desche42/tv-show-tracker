@@ -121,14 +121,14 @@ and may cause the app to hang, since it waits for the torrents to download befor
 - [ ] Tests
 
 ## v2
-- [ ] Globally available / CLI 
+- [x] Globally available / CLI 
   - [x] Change file path reading using path library
-  - [x] Add show
-  - [x] Set default action if no command is given 
+  - [x] Add show **add command**
+  - [x] Set track shows as default action if no command is given **track command**
   - [x] Launch vlc for selected episode - **watch command**
     - [x] Filter episodes that are marked as downloaded
   - [x] Set config key maxSearchAttempts to 0 to infinite search attempts
-  - [ ] Move cli files to bin folder
+  - [x] Move cli files to bin folder
 - [ ] Documentation
 
 ## v2.1
