@@ -124,22 +124,15 @@ and may cause the app to hang, since it waits for the torrents to download befor
 - [ ] Globally available / CLI 
   - [x] Change file path reading using path library
   - [x] Add show
-  - [ ] remove shows
   - [x] Set default action if no command is given 
   - [x] Launch vlc for selected episode - **watch command**
     - [x] Filter episodes that are marked as downloaded
-    - [ ] Mark episode as watched
-      - [x] detect vlc video finished
-      - [x] differenciate beetween video finished and user closing vlc
-      - [ ] inquire and set to db
-      - [ ] clean code
   - [x] Set config key maxSearchAttempts to 0 to infinite search attempts
   - [ ] Move cli files to bin folder
 - [ ] Documentation
 
 ## v2.1
 
-- [ ] Create separate DDBB for shows info (committed), and episodes
 - CLI
   - [ ] Add / remove seasons
   - [ ] Add magnet
@@ -148,7 +141,14 @@ and may cause the app to hang, since it waits for the torrents to download befor
   - [ ] Migrate module?
 - [ ] Option of downloading complete seasons
   - [ ] Show info search --> episode details
-- [ ] Move all db transactions to a module with exposed methods, v3?
+- [ ] Create separate DDBB for shows info (committed), and episodes
+  - [ ] Move all db transactions to a module with exposed methods, v3?
+    - [ ] Mark episode as watched
+      - [x] detect vlc video finished
+      - [x] differenciate beetween video finished and user closing vlc
+      - [ ] inquire and set to db
+      - [ ] clean code
+    - [ ] remove shows / mark as disabled
 
 # Change log
 
