@@ -10,8 +10,8 @@ as they're available!
 - [Lifecycle](#lifecycle)
 - [Limitations](#limitations)
 - [TO DO's](#to-dos)
-	- [v1.1](#v11)
 	- [v2](#v2)
+	- [v2.1](#v21)
 - [Change log](#change-log)
 	- [v1](#v1)
 
@@ -118,19 +118,13 @@ and may cause the app to hang, since it waits for the torrents to download befor
 
 # TO DO's
 
-## v1.1
-
 - [ ] Tests
 
 ## v2
-- [ ] Event emitters?
-- [ ] Create separate DDBB for shows info (committed), and episodes
 - [ ] Globally available / CLI 
   - [x] Change file path reading using path library
   - [x] Add show
-  - [ ] Add magnet
   - [ ] remove shows
-  - [ ] Add / remove seasons
   - [x] Set default action if no command is given 
   - [x] Launch vlc for selected episode - **watch command**
     - [x] Filter episodes that are marked as downloaded
@@ -140,14 +134,21 @@ and may cause the app to hang, since it waits for the torrents to download befor
       - [ ] inquire and set to db
       - [ ] clean code
   - [x] Set config key maxSearchAttempts to 0 to infinite search attempts
+  - [ ] Move cli files to bin folder
+- [ ] Documentation
+
+## v2.1
+
+- [ ] Create separate DDBB for shows info (committed), and episodes
+- CLI
+  - [ ] Add / remove seasons
+  - [ ] Add magnet
 - [ ] Change output / debug
   - [x] Add output module, uses debug package behind the scenes
   - [ ] Migrate module?
 - [ ] Option of downloading complete seasons
   - [ ] Show info search --> episode details
-- [ ] Move all db transactions to a module with exposed methods
-- [ ] Move cli files to bin folder
-
+- [ ] Move all db transactions to a module with exposed methods, v3?
 
 # Change log
 
