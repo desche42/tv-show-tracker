@@ -14,10 +14,10 @@ as they're available!
 - [Lifecycle](#lifecycle)
 - [Limitations](#limitations)
 - [TO DO's](#to-dos)
-	- [v2](#v2)
 	- [v2.1](#v21)
 - [Change log](#change-log)
 	- [v1](#v1)
+	- [v2](#v2)
 
 # Installation
 
@@ -170,17 +170,6 @@ and may cause the app to hang, since it waits for the torrents to download befor
 
 	So tests weren't implemented. I needed to watch new shows I didn't have time for tests!
 
-## v2
-- [x] Globally available / CLI 
-  - [x] Change file path reading using path library
-  - [x] Add show **add command**
-  - [x] Set track shows as default action if no command is given **track command**
-  - [x] Launch vlc for selected episode - **watch command**
-    - [x] Filter episodes that are marked as downloaded
-  - [x] Set config key maxSearchAttempts to 0 to infinite search attempts
-  - [x] Move cli files to bin folder
-- [x] Documentation
-
 ## v2.1
 
 - CLI
@@ -216,4 +205,15 @@ and may cause the app to hang, since it waits for the torrents to download befor
   - [x] Restart lifecycle
 - [x] Figure out which torrent search provider is giving timeout and disable it to speed up process
 - [x] Restart lifecycle to keep searching for torrents while dowloading
+- [x] Documentation
+
+## v2
+- [x] Globally available / CLI 
+  - [x] Change file path reading using path library
+  - [x] Add show **add command**
+  - [x] Set track shows as default action if no command is given **track command**
+  - [x] Launch vlc for selected episode - **watch command**
+    - [x] Filter episodes that are marked as downloaded
+  - [x] Set config key maxSearchAttempts to 0 to infinite search attempts
+  - [x] Move cli files to bin folder
 - [x] Documentation
