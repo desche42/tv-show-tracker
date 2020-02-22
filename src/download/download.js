@@ -30,7 +30,7 @@ module.exports = function downloadTorrent(episode) {
 		let selectedFile;
 
     engine.on('ready', function () {
-      engine.files.forEach(file => {
+      engine.files.forEach(file => {
         if (isVideoFile(file.name)) {
 					file.select();
 					selectedFile = file;
@@ -52,15 +52,13 @@ module.exports = function downloadTorrent(episode) {
       });
 		});
 
-		engine.on('download', (...args) => {
+		engine.on('download', () => {
 			logProgress(selectedFile, engine);
 		});
 
-		engine.on('torrent', (metadata) => {
+		engine.on('torrent', () => {
 			output('Torrent metadata fetched');
 		});
-
-
   });
 }
 

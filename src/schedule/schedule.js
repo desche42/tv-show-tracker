@@ -67,10 +67,8 @@ function _parseEpisode($) {
   const show = $('p a:nth-child(1)').text().trim().toLowerCase();
 
   const [
-    inputText,
-    season,
-    episode,
-    ...rest
+    // eslint-disable-next-line no-unused-vars
+    inputText, season, episode, ...rest
   ] = $('p a:nth-child(2)').text().match(/s(\d*)e(\d*)/);
 
   return {

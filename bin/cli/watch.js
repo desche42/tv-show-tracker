@@ -64,7 +64,7 @@ function _launchVlc(filePath, file) {
 		cwd: filePath
 	});
 
-	return new Promise((resolve, rej) => {
+	return new Promise((resolve) => {
 		_monitorProcess(vlc_process, resolve);
 	});
 }
@@ -86,7 +86,7 @@ function _monitorProcess(process, resolve) {
 		}
 	});
 
-	process.on('close', code => {
+	process.on('close', () => {
 		resolve(result);
 	});
 }

@@ -12,8 +12,8 @@
  async function checkDownloads () {
    const paths = await fs.readdir(path.join(__dirname, '../../', config.get('downloadPath')));
    const downloadedEpisodes = paths.map(ep => {
-     ep = episodeParser(ep || ' ') || {};
-     ep.show = (ep.show || '').toLowerCase();
+     ep = episodeParser(ep || ' ') || {};
+     ep.show = (ep.show || '').toLowerCase();
      return ep;
    }).filter(Boolean);
 

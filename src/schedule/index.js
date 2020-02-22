@@ -30,7 +30,7 @@ async function update (month, year) {
 
   try {
     output('Load online tv calendar.');
-    const response = await getMonthSchedule(month, year);
+    await getMonthSchedule(month, year);
     rawDb.get('schedules').push(date).write();
   } catch (err) {
     console.error(err);

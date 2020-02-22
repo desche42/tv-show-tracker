@@ -10,7 +10,7 @@ const output = require('../utils').output('');
 /**
  * Update schedule and search available torrents for downloading.
  */
-module.exports = async function start(updateCalendar = true) {
+async function start(updateCalendar = true) {
 	try {
 		if (config.get('updateCalendar') && updateCalendar) {
 			await schedule.update();
@@ -56,3 +56,5 @@ function restart () {
 	output('Restarting...');
 	setTimeout(() => start(false), 500);
 }
+
+module.exports = start;
