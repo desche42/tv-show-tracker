@@ -1,14 +1,15 @@
 /**
  * Downloads available magnets in selected shows
  */
-const debug = require('debug')('tv-show-tracker: download:');
+const output = require('../utils').output('download');
 
 // torrent-search-api download not working
 const torrentStream = require('torrent-stream');
-const DB = require('../database');
+const {rawDb} = require('../database');
 const config = require('config');
 const utils = require('../utils');
-const logProgress = require('./logProgress');
+const path = require('path');
+const logProgress = require(path.join(__dirname, 'logProgress'));
 
 /**
  * Handles the download of a single torrent
@@ -22,18 +23,18 @@ module.exports = function downloadTorrent(episode) {
 				path: _getFilePath(show, season, ep)
       });
     } catch (error) {
-      debug(`Error downloading episode ${episode.show} ${episode.season} ${episode.ep}`);
+      output(`Error downloading episode ${episode.show} ${episode.season} ${episode.ep}`);
       rej();
 		}
 
 		let selectedFile;
 
     engine.on('ready', function () {
-      engine.files.forEach(file => {
+      engine.files.forEach(file => {
         if (isVideoFile(file.name)) {
 					file.select();
 					selectedFile = file;
-          debug(`${file.name} downloading!`);
+          output(`${file.name} downloading!`);
         } else {
 					file.deselect();
 				}
@@ -41,25 +42,23 @@ module.exports = function downloadTorrent(episode) {
     });
 
     engine.on('idle', () => {
-      DB.get('episodes')
+      rawDb.get('episodes')
       .find({ show, season, episode: ep })
       .set('downloaded', true)
       .write();
       engine.destroy(() => {
-        debug(`Torrent ${torrent.title} downloaded.`);
+        output(`Torrent ${torrent.title} downloaded.`);
         res();
       });
 		});
 
-		engine.on('download', (...args) => {
+		engine.on('download', () => {
 			logProgress(selectedFile, engine);
 		});
 
-		engine.on('torrent', (metadata) => {
-			debug('Torrent metadata fetched');
+		engine.on('torrent', () => {
+			output('Torrent metadata fetched');
 		});
-
-
   });
 }
 
@@ -78,5 +77,6 @@ function isVideoFile (fileName) {
  */
 function _getFilePath(show, season, episode) {
 	const folderName = `S${utils.doubleDigit(season)}E${utils.doubleDigit(episode)}`;
-	return [config.get('downloadPath'), show, folderName].join('/');
+   const downloadPath = path.join(__dirname, '../../', config.get('downloadPath'));
+	return [downloadPath, show, folderName].join('/');
 }

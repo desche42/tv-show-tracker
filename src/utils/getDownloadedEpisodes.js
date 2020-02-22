@@ -1,5 +1,5 @@
-const DB = require('./database');
-const downloaded = DB.get('episodes').filter({downloaded: true}).value();
+const {rawDb} = require('../database');
+const downloaded = rawDb.get('episodes').filter({downloaded: true}).value();
 
 const uniqueArray = arr => [...new Set(arr)];
 

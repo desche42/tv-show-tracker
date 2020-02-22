@@ -1,6 +1,5 @@
-const debug = require('debug')('tv-show-tracker: schedule:');
-const debugNewShow = require('debug')('New show available:');
-const DB = require('../database');
+const output = require('../utils').output('schedule');
+const {rawDb} = require('../database');
 
 const DB_SHOWS_KEY = 'shows';
 const DB_EPISODES_KEY = 'episodes';
@@ -16,7 +15,7 @@ module.exports = async function saveData (episodes) {
     episode.show = episode.show.toLowerCase();
     shows.push(episode.show);
     episode.downloaded = false;
-    DB.get(DB_EPISODES_KEY).push(episode).write();
+    rawDb.get(DB_EPISODES_KEY).push(episode).write();
   });
 
   await _updateShowsInfo(shows);
@@ -30,13 +29,13 @@ module.exports = async function saveData (episodes) {
  */
 async function _updateShowsInfo (newShows) {
   return Promise.all(newShows.map(async (showName) => {
-    const show = DB.get(DB_SHOWS_KEY)
+    const show = rawDb.get(DB_SHOWS_KEY)
       .find({ title: showName })
       .value();
 
     if (!show) {
-      debugNewShow(showName);
-      DB.get(DB_SHOWS_KEY).push({title: showName}).write();
+      output(`new show "${showName}" available!!`);
+      rawDb.get(DB_SHOWS_KEY).push({title: showName}).write();
     }
   }));
 }
