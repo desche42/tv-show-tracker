@@ -126,7 +126,7 @@ and may cause the app to hang, since it waits for the torrents to download befor
 - [ ] Event emitters?
 - [ ] Create separate DDBB for shows info (committed), and episodes
 - [ ] Globally available / CLI 
-  - [ ] Change file path reading using path library
+  - [x] Change file path reading using path library
   - [ ] Add / remove shows
   - [ ] Add / remove seasons
   - [x] Set default action if no command is given 
@@ -137,7 +137,7 @@ and may cause the app to hang, since it waits for the torrents to download befor
       - [x] differenciate beetween video finished and user closing vlc
       - [ ] inquire and set to db
       - [ ] clean code
-  - [ ] Clear searchAttempts option
+  - [x] Set config key maxSearchAttempts to 0 to infinite search attempts
 - [ ] Change output / debug
   - [x] Add output module, uses debug package behind the scenes
   - [ ] Migrate module?

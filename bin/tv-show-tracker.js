@@ -31,9 +31,8 @@ program
 	.command('watch', 'watch show', {executableFile: 'watch'})
 	.command('track', 'track show', {executableFile: 'track', isDefault: true})
 
-
-
-// /**
-//  * Parse arguments given
-//  */
+/**
+ * Parse arguments given
+ */
 program.parseAsync(process.argv);
+

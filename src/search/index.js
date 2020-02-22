@@ -32,6 +32,7 @@ config.get('torrentSearchDisableProviders').forEach(provider => {
  * @returns search results
  */
 module.exports = async function searchEpisodes(episodes = []) {
+
   episodes = _getFilteredEpisodes(episodes);
 
   if(episodes.length) {
@@ -164,7 +165,13 @@ function _parseSize(size) {
  * @param {Number} searchAttempts
  */
 function checkMaxAttempts (searchAttempts, show, season, episode) {
-	const attemptsLeft = config.get('maxSearchAttempts') - searchAttempts;
+	const maxSearchAttempts = config.get('maxSearchAttempts');
+
+	if (!maxSearchAttempts) {
+		return true;
+	}
+
+	const attemptsLeft = maxSearchAttempts - searchAttempts;
 
 	if (attemptsLeft <= 0){
 		output(`Reached max search attempts for ${show} ${season} ${episode}..`);

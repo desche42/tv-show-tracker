@@ -26,8 +26,9 @@ module.exports = {
 	/**
 	 * Attempts to search for a torrent. Careful if restart option is activated,
 	 * search limit will be reached, maybe blocking new episodes for being downloaded.
+	 * Set to 0 to infinite attempts
 	 */
-	maxSearchAttempts: 999,
+	maxSearchAttempts: 0,
   /**
    * Restarts life cycle (keeps relaunching until all torrents have been downloaded)
    */
