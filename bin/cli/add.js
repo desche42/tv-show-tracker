@@ -10,16 +10,18 @@ add();
  */
 async function add () {
 	const choices = {
-		"Magnet": _addMagnet,
-		"Show": _addShow
+		"Show": _addShow,
+		// "Magnet": _addMagnet
 	};
 
-	const {selected} = await inquirer.prompt([{
-		name: 'selected',
-		type: 'list',
-		message: chalk.green('Select one option'),
-		choices: Object.keys(choices)
-	}]);
+	const selected = 'Show';
+
+	// const {selected} = await inquirer.prompt([{
+	// 	name: 'selected',
+	// 	type: 'list',
+	// 	message: chalk.green('Select one option'),
+	// 	choices: Object.keys(choices)
+	// }]);
 
 	const {item} = await inquirer.prompt([{
 		name: 'item',
