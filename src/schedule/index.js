@@ -1,4 +1,5 @@
-const getMonthSchedule = require('./schedule');
+const path = require('path');
+const getMonthSchedule = require(path.join(__dirname, 'schedule'));
 const output = require('../utils').output('schedule');
 const {rawDb} = require('../database');
 const config = require('config');

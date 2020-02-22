@@ -6,10 +6,11 @@
  const episodeParser = require('episode-parser');
  const {rawDb} = require('../database');
  const output = require('../utils').output('check downloads');
+ const path = require('path');
 
 
  async function checkDownloads () {
-   const paths = await fs.readdir(config.get('downloadPath'));
+   const paths = await fs.readdir(path.join(__dirname, '../../', config.get('downloadPath')));
    const downloadedEpisodes = paths.map(ep => {
      ep = episodeParser(ep || ' ') || {};
      ep.show = (ep.show || '').toLowerCase();

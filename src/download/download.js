@@ -8,7 +8,8 @@ const torrentStream = require('torrent-stream');
 const {rawDb} = require('../database');
 const config = require('config');
 const utils = require('../utils');
-const logProgress = require('./logProgress');
+const path = require('path');
+const logProgress = require(path.join(__dirname, 'logProgress'));
 
 /**
  * Handles the download of a single torrent
@@ -78,5 +79,6 @@ function isVideoFile (fileName) {
  */
 function _getFilePath(show, season, episode) {
 	const folderName = `S${utils.doubleDigit(season)}E${utils.doubleDigit(episode)}`;
-	return [config.get('downloadPath'), show, folderName].join('/');
+   const downloadPath = path.join(__dirname, '../../', config.get('downloadPath'));
+	return [downloadPath, show, folderName].join('/');
 }

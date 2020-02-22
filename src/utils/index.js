@@ -1,4 +1,5 @@
-const output = require('./output');
+const path = require('path');
+const output = require(path.join(__dirname, 'output'));
 
 
 /**

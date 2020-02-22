@@ -2,7 +2,8 @@
  * Wrapper of torrent-stream for torrent download
  */
 const {rawDb} = require('../database');
-const downloadTorrent = require('./download');
+const path = require('path');
+const downloadTorrent = require(path.join(__dirname, 'download'));
 const output = require('../utils').output('download');
 const config = require('config');
 

@@ -2,9 +2,10 @@ const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 const fs = require('fs-extra');
 const config = require('config');
+const path = require('path');
 
 
-const DATABASE_PATH = config.get('databasePath');
+const DATABASE_PATH = path.join(__dirname, '../../', config.get('databasePath'));
 fs.ensureFileSync(DATABASE_PATH);
 
 const adapter = new FileSync(DATABASE_PATH);

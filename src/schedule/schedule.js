@@ -5,7 +5,8 @@
 
 const cheerio = require('cheerio');
 const rp = require('request-promise-native');
-const saveData = require('./saveData');
+const path = require('path');
+const saveData = require(path.join(__dirname, 'saveData'));
 
 /**
  * CURRENT MONTH SHCEDULE URL

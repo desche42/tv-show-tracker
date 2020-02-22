@@ -1,6 +1,7 @@
 /**
  * Entry point of the library
  */
-const {start} = require('./src/lifecycle');
+const path = require('path');
+const {start} = require(path.join(__dirname, 'src/lifecycle'));
 
 module.exports = {start};

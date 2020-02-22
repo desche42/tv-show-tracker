@@ -3,14 +3,17 @@
 /**
  * Entry point of the library
  */
+const path = require('path');
+
+// Set configuration file paths
+process.env["NODE_CONFIG_DIR"] = path.join(__dirname, "../config");
+
+
 const commander = require('commander');
-const {version, description} = require('../package.json');
+const {version, description} = require(path.join(__dirname, '../package.json'));
 const chalk = require('chalk');
 const figlet = require('figlet');
 const clear = require('clear');
-
-// default option
-const app = require('..');
 
 /**
  * Print title

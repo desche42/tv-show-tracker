@@ -12,11 +12,11 @@ module.exports = {
    */
 	completeLatestSeason: false,
 	/**
-	 * Path for the database
+	 * Relative path for the database
 	 */
 	databasePath: './data/db.json',
   /**
-   * Torrent dir download path.
+   * Torrent dir download relative path.
    */
 	downloadPath:  './data/downloads',
 	/**
