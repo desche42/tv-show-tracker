@@ -1,9 +1,10 @@
 /**
  * Wrapper of torrent-stream for torrent download
  */
-const DB = require('../database');
-const downloadTorrent = require('./download');
-const debug = require('debug')('tv-show-tracker: download ')
+const {rawDb} = require('../database');
+const path = require('path');
+const downloadTorrent = require(path.join(__dirname, 'download'));
+const output = require('../utils').output('download');
 const config = require('config');
 
 async function downloadTorrents(torrents) {
@@ -26,14 +27,14 @@ function forceAddEpisode(ep) {
   ep.date = new Date(0);
   ep.downloaded = false;
 
-  const isAlready = DB.get('episodes').find({show, season, episode}).value();
+  const isAlready = rawDb.get('episodes').find({show, season, episode}).value();
 
 
   if (!isAlready) {
-    debug(`force download on show ${ep.show} S${ep.season} E${ep.episode}`);
-    DB.get('episodes').push(ep).write();
+    output(`force download on show ${ep.show} S${ep.season} E${ep.episode}`);
+    rawDb.get('episodes').push(ep).write();
   } else {
-    debug('forced fail, episode exists');
+    output('forced fail, episode exists');
   }
 }
 

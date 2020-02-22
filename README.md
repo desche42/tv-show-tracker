@@ -6,41 +6,55 @@ as they're available!
 
 - [TV SHOW TRACKER](#tv-show-tracker)
 - [Installation](#installation)
-	- [Configuration](#configuration)
+- [Usage](#usage)
+	- [Adding shows to track](#adding-shows-to-track)
+	- [Track shows](#track-shows)
+	- [Watch downloaded shows](#watch-downloaded-shows)
+	- [Further configuration](#further-configuration)
 - [Lifecycle](#lifecycle)
 - [Limitations](#limitations)
 - [TO DO's](#to-dos)
-	- [v1.1](#v11)
-	- [v2](#v2)
+	- [v2.1](#v21)
 - [Change log](#change-log)
 	- [v1](#v1)
+	- [v2](#v2)
 
 # Installation
 
 >
 >*Commands may change depending on your OS.*
->
-Clone the repo and install node dependencies:
+
+
+Globally install the package:
 
 ```bash
-git clone https://github.com/desche42/tv-show-tracker.git
-cd tv-show-tracker
-npm i
+npm i -g tv-show-tracker
 ```
 
-Change into directory and start!
+Program will be installed in your `node/bin` folder. Node folder can be found executing in a terminal:
 
-```bash
-# starts with lots of console info
-npm run debug
-
-# starts with redable console info
-npm start
+```
+which node
 ```
 
-TV Show schedule is crawled from an online web and available tv shows are populated in the database: `database/db.json`. 
+In this folder **database**, **downloads** and **config** files are stored.
 
-Edit the file `config/local.js` to **select the shows want to track**:
+
+# Usage
+
+## Adding shows to track
+
+To add a show to track execute in a terminal:
+
+```
+tv-show-tracker add
+```
+
+and you will be prompted for the show name.
+
+> Note that show name has to be the same as stored in database file.
+
+Selected shos are stored the file `config/local.json`:
 
 ```javascript
 {
@@ -55,27 +69,48 @@ Edit the file `config/local.js` to **select the shows want to track**:
 }
 ```
 
+## Track shows
+
+To track shows (search for and download new episodes), execute in a terminal:
+
+```
+tv-show-tracker track
+
+// or simply
+
+tv-show-tracker
+```
+
+The first time the program is run, TV Show schedule is crawled from an online web and available tv shows are populated in the database: `database/db.json`. 
+
+
 And that's it!
 
-> **TIP**
-> 
-> If your terminal allows you to create aliases for commands (like zsh), adding: 
-> 
-> ```bash
-> alias checkTvShows="cd ~/path/to/tv-show-tracker/; npm start;"
-> ```
-> 
-> to your `.zshrc` file (or similar) will allow you to run the app opening a terminal and doing: > `checkTvShows`.
+## Watch downloaded shows
 
-## Configuration
-
-Copy `config/default.js` to a file `config/local.js`:
+Shows are downloaded in `data/downloads/` folder inside app folder.
+To watch completely downloaded episodes execute:
 
 ```
-cp config/default.js config/local.js
+tv-show-tracker watch
 ```
 
-Although config options are described, there is more information in:
+And you will be prompted to select a show and an episode.
+
+
+## Further configuration
+
+File `config/default.js` has the default config and config keys descriptions.
+
+You can create a local config file doing (in app installation folder):
+
+```
+echo '{}' > config/local.json
+```
+
+> Note that if you've added a show with 'tv-show-tracker add', the file will be automatically created.
+
+Although config options are described in `config/default.js`, there is more information in:
 
 - [Search](src/search/README.md)
 - [Schedule](src/schedule/README.md)
@@ -98,17 +133,17 @@ and below.
    	
 		 Aired episodes without a torrent are searched. Results are stored
 		 into the DB to be downloaded next cycle.
-		 Config key `maxSearchAttempts` sets the number of times an episode will be searched for a torrent before considering its dead.
+		 Config key `maxSearchAttempts` sets the number of times an episode will be searched for a torrent before considering its dead. Set to 0 to infinite attempts.
 
    2. **Download available magnets**
    
-	 	Episodes marked as not downloaded and have a torrent magnet start downloading.
+	 	Episodes marked as not downloaded and have a torrent magnet start downloading (throttled with `simultaneousDownloadLimit` config key).
 
 3. **Start new cycle** 
    
 	 If *config key* `reset` is set to true, and there are new episodes to
 	 search, new cycle is started.
-	 --> if not torrents are found, it will keep searching **forever**.
+	 --> if not torrents are found, it will keep searching **forever** (or until `maxSearchAttempts` are reached for all torrents)
 
 
 # Limitations
@@ -118,20 +153,41 @@ and may cause the app to hang, since it waits for the torrents to download befor
 
 # TO DO's
 
-## v1.1
+- [ ] Tests:
 
-- [ ] Tests
+	Ohh tests! I love testing. I really do!!
 
-## v2
-- [ ] Event emitters?
-- [ ] Create separate DDBB for shows info (committed), and episodes
-- [ ] Globally available / CLI 
-  - [ ] Add / remove shows
+
+	Sadly, this project started as:
+	
+	>Fuck! I missed the last season of The Magicians! And Modern Family! And The flash! And Dr Who! And ... <several more>, why Netflix doesn't have these shows?? (in Spain at least). 
+	> 
+	> This can never happen again...
+	>
+	> Anyway lets download them... 
+	>
+	> Ugh! 35 magnets? Let's automate this
+
+	So tests weren't implemented. I needed to watch new shows I didn't have time for tests!
+
+## v2.1
+
+- CLI
   - [ ] Add / remove seasons
-  - [ ] Launch vlc for selected episode
+  - [ ] Add magnet
+- [ ] Change output / debug
+  - [x] Add output module, uses debug package behind the scenes
+  - [ ] Migrate module?
 - [ ] Option of downloading complete seasons
   - [ ] Show info search --> episode details
-
+- [ ] Create separate DDBB for shows info (committed), and episodes
+  - [ ] Move all db transactions to a module with exposed methods, v3?
+    - [ ] Mark episode as watched
+      - [x] detect vlc video finished
+      - [x] differenciate beetween video finished and user closing vlc
+      - [ ] inquire and set to db
+      - [ ] clean code
+    - [ ] remove shows / mark as disabled
 
 # Change log
 
@@ -149,4 +205,15 @@ and may cause the app to hang, since it waits for the torrents to download befor
   - [x] Restart lifecycle
 - [x] Figure out which torrent search provider is giving timeout and disable it to speed up process
 - [x] Restart lifecycle to keep searching for torrents while dowloading
+- [x] Documentation
+
+## v2
+- [x] Globally available / CLI 
+  - [x] Change file path reading using path library
+  - [x] Add show **add command**
+  - [x] Set track shows as default action if no command is given **track command**
+  - [x] Launch vlc for selected episode - **watch command**
+    - [x] Filter episodes that are marked as downloaded
+  - [x] Set config key maxSearchAttempts to 0 to infinite search attempts
+  - [x] Move cli files to bin folder
 - [x] Documentation

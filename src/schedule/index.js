@@ -1,6 +1,7 @@
-const getMonthSchedule = require('./schedule');
-const debug = require('debug')('tv-show-tracker: schedule');
-const DB = require('../database');
+const path = require('path');
+const getMonthSchedule = require(path.join(__dirname, 'schedule'));
+const output = require('../utils').output('schedule');
+const {rawDb} = require('../database');
 const config = require('config');
 
 
@@ -18,19 +19,19 @@ async function update (month, year) {
 
   const date = `${month}-${year}`;
 
-  const monthSchedule = DB.get('schedules')
+  const monthSchedule = rawDb.get('schedules')
     .find(schedule => schedule === date)
     .value();
 
   if (monthSchedule) {
-    debug('This month schedule is already loaded in db');
+    output('This month schedule is already loaded in db');
     return;
   }
 
   try {
-    debug('Load online tv calendar.');
-    const response = await getMonthSchedule(month, year);
-    DB.get('schedules').push(date).write();
+    output('Load online tv calendar.');
+    await getMonthSchedule(month, year);
+    rawDb.get('schedules').push(date).write();
   } catch (err) {
     console.error(err);
   }
@@ -65,7 +66,7 @@ async function getAvailableEpisodes() {
  */
 function _getNotDownloaded(shows) {
   return shows.reduce((acc, show) => {
-    let episodes = DB.get('episodes')
+    let episodes = rawDb.get('episodes')
       .filter({
         show
 			}).value();

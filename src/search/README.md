@@ -1,6 +1,6 @@
 # Search episodes
 
-`torrent-search-api ` is used.
+`torrent-search-api` is used.
 
 Module exports a function that accepts an array of episodes to search.
 

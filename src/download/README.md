@@ -1,11 +1,11 @@
 # Download torrents
 
-Downloads all given torrents to path configured (defaults to `database/downloads`) and classified by show and episode.
+Downloads all given torrents to path configured (defaults to `data/downloads`) and classified by show and episode.
 
 For example, episode `3`, season `12` of `doctor who` would be saved into
 
 ```
-database/downloads/doctor who/S12E03/<file downloaded>.avi
+data/downloads/doctor who/S12E03/<file downloaded>.avi
 ```
 
 # Limitations

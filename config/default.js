@@ -10,11 +10,15 @@ module.exports = {
    * Download all episodes of current season for each selected show
 	 * @todo not implemented
    */
-  completeLatestSeason: false,
+	completeLatestSeason: false,
+	/**
+	 * Relative path for the database
+	 */
+	databasePath: './data/db.json',
   /**
-   * Torrent dir download path.
+   * Torrent dir download relative path.
    */
-	downloadPath:  './database/downloads',
+	downloadPath:  './data/downloads',
 	/**
 	 * If false, all episodes in db of selected shows will be downloaded
 	 */
@@ -22,8 +26,9 @@ module.exports = {
 	/**
 	 * Attempts to search for a torrent. Careful if restart option is activated,
 	 * search limit will be reached, maybe blocking new episodes for being downloaded.
+	 * Set to 0 to infinite attempts
 	 */
-	maxSearchAttempts: 999,
+	maxSearchAttempts: 0,
   /**
    * Restarts life cycle (keeps relaunching until all torrents have been downloaded)
    */

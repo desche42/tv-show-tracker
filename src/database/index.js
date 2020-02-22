@@ -1,18 +1,21 @@
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
 const fs = require('fs-extra');
+const config = require('config');
+const path = require('path');
 
-const DATABASE_PATH = './database/db.json';
+
+const DATABASE_PATH = path.join(__dirname, '../../', config.get('databasePath'));
 fs.ensureFileSync(DATABASE_PATH);
 
-const adapter = new FileSync('./database/db.json');
+const adapter = new FileSync(DATABASE_PATH);
 
-const db = low(adapter);
+const rawDb = low(adapter);
 
 /**
  * Database default structure
  */
-db.defaults({
+rawDb.defaults({
   // array of tv shows { title: string , selected: bool}
   shows: [],
   // episodes
@@ -20,4 +23,6 @@ db.defaults({
   schedules: []
 }).write();
 
-module.exports = db;
+module.exports = {
+	rawDb
+};

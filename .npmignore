@@ -2,9 +2,9 @@
 node_modules
 
 # Database
-database
+data
 
 # config
-config/local.js
+config/local.json
 .editorconfig
 .gitignore
