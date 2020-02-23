@@ -1,8 +1,6 @@
 const output = require('../utils').output('schedule');
-const {rawDb} = require('../database');
+const database = require('../database');
 
-const DB_SHOWS_KEY = 'shows';
-const DB_EPISODES_KEY = 'episodes';
 /**
  * Saves data into database
  * - update show collection
@@ -14,8 +12,8 @@ module.exports = async function saveData (episodes) {
   episodes.forEach(episode => {
     episode.show = episode.show.toLowerCase();
     shows.push(episode.show);
-    episode.downloaded = false;
-    rawDb.get(DB_EPISODES_KEY).push(episode).write();
+		episode.downloaded = false;
+		database.push(episode);
   });
 
   await _updateShowsInfo(shows);
@@ -29,13 +27,11 @@ module.exports = async function saveData (episodes) {
  */
 async function _updateShowsInfo (newShows) {
   return Promise.all(newShows.map(async (showName) => {
-    const show = rawDb.get(DB_SHOWS_KEY)
-      .find({ title: showName })
-      .value();
+    const show = database.shows.find(showName);
 
     if (!show) {
-      output(`new show "${showName}" available!!`);
-      rawDb.get(DB_SHOWS_KEY).push({title: showName}).write();
+			output(`new show "${showName}" available!!`);
+			database.shows.push(showName);
     }
   }));
 }
