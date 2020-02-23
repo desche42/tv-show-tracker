@@ -1,6 +1,6 @@
 {
   "name": "tv-show-tracker",
-  "version": "2.0.2",
+  "version": "2.1.0",
   "description": "Select which shows you want to track and new episodes will be automatically dowloaded as soon as they're available!",
   "main": "index.js",
   "scripts": {
@@ -38,6 +38,7 @@
     "pretty-bytes": "^5.3.0",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.8",
+    "rsync": "^0.6.1",
     "torrent-search-api": "^2.0.10",
     "torrent-stream": "^1.2.0"
   },

@@ -10,14 +10,16 @@ as they're available!
 	- [Adding shows to track](#adding-shows-to-track)
 	- [Track shows](#track-shows)
 	- [Watch downloaded shows](#watch-downloaded-shows)
+	- [Backup data](#backup-data)
 	- [Further configuration](#further-configuration)
 - [Lifecycle](#lifecycle)
 - [Limitations](#limitations)
 - [TO DO's](#to-dos)
-	- [v2.1](#v21)
+	- [v2.2](#v22)
 - [Change log](#change-log)
 	- [v1](#v1)
 	- [v2](#v2)
+	- [v2.1](#v21)
 
 # Installation
 
@@ -97,6 +99,19 @@ tv-show-tracker watch
 
 And you will be prompted to select a show and an episode.
 
+## Backup data
+
+You can backup database and downloads to another directory / external drive:
+
+```
+tv-show-tracker backup <destination directory>
+```
+
+This command is useful if you want to backup app's state: *downloads* and *database*.
+
+It will not delete files present in destination but not in origin. 
+
+After executing the command, you can manually delete downloaded episodes that you have already watched without loosing any data.
 
 ## Further configuration
 
@@ -170,7 +185,7 @@ and may cause the app to hang, since it waits for the torrents to download befor
 
 	So tests weren't implemented. I needed to watch new shows I didn't have time for tests!
 
-## v2.1
+## v2.2
 
 - CLI
   - [ ] Add / remove seasons
@@ -217,3 +232,8 @@ and may cause the app to hang, since it waits for the torrents to download befor
   - [x] Set config key maxSearchAttempts to 0 to infinite search attempts
   - [x] Move cli files to bin folder
 - [x] Documentation
+
+## v2.1
+
+- [x] Remove unused packages
+- [x] Add backup command 

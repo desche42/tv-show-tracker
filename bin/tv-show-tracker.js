@@ -30,6 +30,7 @@ program
 	.description(description)
 	.command('watch', 'watch show', {executableFile: 'cli/watch'})
 	.command('add', 'adds a show or a magnet to download', {executableFile: 'cli/add'})
+	.command('backup', 'backup data', {executableFile: 'cli/backup'})
 	.command('track', 'track show', {executableFile: 'cli/track', isDefault: true})
 
 /**
