@@ -6,7 +6,7 @@ const path = require('path');
 
 // submodules
 const episodes = require('./episodes');
-
+const schedule = require('./schedule');
 
 
 const DATABASE_PATH = path.join(__dirname, '../../', config.get('databasePath'));
@@ -29,5 +29,6 @@ rawDb.defaults({
 
 module.exports = {
 	rawDb,
-	episodes: episodes(rawDb)
+	episodes: episodes(rawDb),
+	schedule: schedule(rawDb)
 };

@@ -4,7 +4,8 @@
 module.exports = rawDb => {
 	return {
 		setDownloaded: setDownloaded(rawDb),
-		getDownloaded: getDownloaded(rawDb)
+		getDownloaded: getDownloaded(rawDb),
+		getShowEpisodes: getShowEpisodes(rawDb)
 	}
 }
 
@@ -23,3 +24,13 @@ const setDownloaded = rawDb => ({show, season, episode}) => {
  * Returns downloaded episodes
  */
 const getDownloaded = rawDb => () => rawDb.get('episodes').filter({downloaded: true}).value()
+
+/**
+ * Gets shows episodes
+ */
+const getShowEpisodes = rawDb => show => {
+	return rawDb.get('episodes')
+		.filter({
+			show
+		}).value();
+}
