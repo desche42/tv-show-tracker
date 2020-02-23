@@ -23,21 +23,21 @@ const path = require('path');
  */
 async function _selectEpisode () {
 	let downloadPath = path.join(__dirname, '/../../', config.get('downloadPath'));
-	const availableShows = await fs.readdir(downloadPath);
+	const availableShows = await _readDirFilterHidden(downloadPath);
 
 	// select show
 	const {show} = await _promptSelectList('show', availableShows, 'Select a show to watch');
 	let filePath = `${downloadPath}/${show}`;
 
 	// select episode
-	const availableEpisodes = await fs.readdir(filePath);
+	const availableEpisodes = await _readDirFilterHidden(filePath);
 	const {episode} = await _promptSelectList('episode', availableEpisodes, 'Select an episode to watch');
 
 	filePath += `/${episode}`;
 
 	// filter by extension?
 	// @todo
-	const [fileName] = await fs.readdir(filePath);
+	const [fileName] = await _readDirFilterHidden(filePath);
 
 	return { show, episode, filePath, fileName };
 }
@@ -108,4 +108,13 @@ function _checkVideoFinished(dataStr) {
 	];
 
 	return options.find(option => dataStr.includes(option.value));
+}
+
+/**
+ * Reads a dir and filters hidden folders
+ * @param {String} path
+ */
+async function _readDirFilterHidden(path) {
+	const files = await fs.readdir(path);
+	return files.filter(fileName => !fileName.startsWith('.'));
 }
