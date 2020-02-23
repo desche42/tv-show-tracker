@@ -17,11 +17,8 @@ const findShow = rawDb => showName =>{
 		.value();
 }
 
-const pushShow = rawDb => showName =>{
+const pushShow = rawDb => showName => {
 	return rawDb.get(DB_SHOWS_KEY)
 		.push({ title: showName })
 		.write();
 }
-
-
-

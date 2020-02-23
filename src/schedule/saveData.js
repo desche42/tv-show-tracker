@@ -13,7 +13,7 @@ module.exports = async function saveData (episodes) {
     episode.show = episode.show.toLowerCase();
     shows.push(episode.show);
 		episode.downloaded = false;
-		database.push(episode);
+		database.episodes.push(episode);
   });
 
   await _updateShowsInfo(shows);

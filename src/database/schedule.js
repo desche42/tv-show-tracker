@@ -24,7 +24,7 @@ const pushSchedule = rawDb => (month, year) => {
  * @returns {Boolean}
  */
 const findSchedule = rawDb => (month, year) => {
-	const schedules = rawDb.get('schedules');
+	const schedules = rawDb.get('schedules').value();
 	const date = getDate(month, year);
 	return schedules.includes(date);
 }
