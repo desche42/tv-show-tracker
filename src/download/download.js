@@ -5,7 +5,7 @@ const output = require('../utils').output('download');
 
 // torrent-search-api download not working
 const torrentStream = require('torrent-stream');
-const {rawDb} = require('../database');
+const database = require('../database');
 const config = require('config');
 const utils = require('../utils');
 const path = require('path');
@@ -42,10 +42,7 @@ module.exports = function downloadTorrent(episode) {
     });
 
     engine.on('idle', () => {
-      rawDb.get('episodes')
-      .find({ show, season, episode: ep })
-      .set('downloaded', true)
-      .write();
+			database.episodes.setDownloaded({show, season, episode: ep});
       engine.destroy(() => {
         output(`Torrent ${torrent.title} downloaded.`);
         res();

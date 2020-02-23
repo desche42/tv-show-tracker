@@ -4,6 +4,10 @@ const fs = require('fs-extra');
 const config = require('config');
 const path = require('path');
 
+// submodules
+const episodes = require('./episodes');
+
+
 
 const DATABASE_PATH = path.join(__dirname, '../../', config.get('databasePath'));
 fs.ensureFileSync(DATABASE_PATH);
@@ -24,5 +28,6 @@ rawDb.defaults({
 }).write();
 
 module.exports = {
-	rawDb
+	rawDb,
+	episodes: episodes(rawDb)
 };
