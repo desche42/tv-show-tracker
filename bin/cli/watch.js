@@ -2,11 +2,7 @@ const inquirer = require('inquirer');
 const chalk = require('chalk');
 
 const fs = require('fs-extra');
-const { readdir } = require('fs').promises;
-
-const config = require('config');
 const cp = require('child_process');
-const path = require('path');
 
 const database = require('../../src/database');
 
@@ -41,7 +37,9 @@ async function _selectEpisode () {
 	const availableShows = [...new Set(availableEpisodes.map(e => e.show))];
 	const {show} = await _promptSelectList('show', availableShows, 'Select a show to watch');
 
-	const showEpisodes = availableEpisodes.filter(ep => ep.show === show);
+	const showEpisodes = availableEpisodes.filter(ep =>
+		ep.show === show && fs.existsSync(ep.path)
+	);
 
 	// select episode
 	const {episode} = await _promptSelectList(
