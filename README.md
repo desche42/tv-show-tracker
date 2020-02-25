@@ -196,7 +196,8 @@ and may cause the app to hang, since it waits for the torrents to download befor
 - [ ] Option of downloading complete seasons
   - [ ] Show info search --> episode details
 - [ ] Create separate DDBB for shows info (committed), and episodes
-  - [ ] Move all db transactions to a module with exposed methods, v3?
+  - [ ] Allow for different show names 
+  - [x] Move all db transactions to a module with exposed methods
     - [ ] Mark episode as watched
       - [x] detect vlc video finished
       - [x] differenciate beetween video finished and user closing vlc

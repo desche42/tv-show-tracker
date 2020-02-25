@@ -1,7 +1,7 @@
 const path = require('path');
 const getMonthSchedule = require(path.join(__dirname, 'schedule'));
 const output = require('../utils').output('schedule');
-const {rawDb} = require('../database');
+const database = require('../database');
 const config = require('config');
 
 
@@ -17,11 +17,7 @@ async function update (month, year) {
   month = month || ((new Date()).getMonth() + 1);
   year = year || (new Date()).getFullYear();
 
-  const date = `${month}-${year}`;
-
-  const monthSchedule = rawDb.get('schedules')
-    .find(schedule => schedule === date)
-    .value();
+  const monthSchedule = database.schedule.findSchedule(month, year);
 
   if (monthSchedule) {
     output('This month schedule is already loaded in db');
@@ -30,8 +26,8 @@ async function update (month, year) {
 
   try {
     output('Load online tv calendar.');
-    await getMonthSchedule(month, year);
-    rawDb.get('schedules').push(date).write();
+		await getMonthSchedule(month, year);
+		database.schedule.push(month, year);
   } catch (err) {
     console.error(err);
   }
@@ -66,10 +62,7 @@ async function getAvailableEpisodes() {
  */
 function _getNotDownloaded(shows) {
   return shows.reduce((acc, show) => {
-    let episodes = rawDb.get('episodes')
-      .filter({
-        show
-			}).value();
+    let episodes = database.episodes.getShowEpisodes(show);
 
 		if(config.get('downloadLastSeasonOnly')) {
 			const lastSeasonAvailable = Math.max(...episodes.map(episode => episode.season));
