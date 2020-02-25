@@ -16,13 +16,18 @@ module.exports = rawDb => {
 }
 
 /**
- * Sets an episode as downloaded: true
+ * Sets an episode as downloaded: true and sets path
  * @param {Object} episodeData {show, season, episode}
+ * @param {String} path path of the file
  */
-const setDownloaded = rawDb => ({show, season, episode}) => {
+const setDownloaded = rawDb => ({show, season, episode}, path) => {
 	rawDb.get(DB_EPISODES_KEY)
 		.find({show, season, episode})
 		.set('downloaded', true)
+		.write();
+	rawDb.get(DB_EPISODES_KEY)
+		.find({show, season, episode})
+		.set('path', path)
 		.write();
 }
 

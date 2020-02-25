@@ -32,21 +32,25 @@ const database = require('../../src/database');
 async function _selectEpisode () {
 	const availableEpisodes = await getAvailableEpisodes();
 
+	if(!availableEpisodes.length) {
+		console.log(chalk.red('No episodes available'));
+		return;
+	}
+
 	// select show
-	const availableShows = [...new Set(availableEpisodes.map(e => e.episodeData.show))];
+	const availableShows = [...new Set(availableEpisodes.map(e => e.show))];
 	const {show} = await _promptSelectList('show', availableShows, 'Select a show to watch');
 
-	const showEpisodes = availableEpisodes.filter(ep => ep.episodeData.show === show);
+	const showEpisodes = availableEpisodes.filter(ep => ep.show === show);
 
 	// select episode
 	const {episode} = await _promptSelectList(
 		'episode',
-		showEpisodes.map(ep => `Season ${ep.episodeData.season} Episode ${ep.episodeData.episode}`),
+		showEpisodes.map(ep => `Season ${ep.season} Episode ${ep.episode}`),
 		'Select an episode to watch'
 	);
 
-	return showEpisodes.find(ep => {
-		const {episodeData} = ep;
+	return showEpisodes.find(episodeData => {
 		const [season, nEp] = episode.split(' ').map(Number).filter(Boolean);
 		return episodeData.season === season && episodeData.episode === nEp;
 	});
@@ -120,49 +124,12 @@ function _checkVideoFinished(dataStr) {
 	return options.find(option => dataStr.includes(option.value));
 }
 
-/**
- * Reads a dir and filters hidden folders
- * @param {String} path
- */
-async function _readDirFilterHidden(path) {
-	const files = await fs.readdir(path);
-	return files.filter(fileName => !fileName.startsWith('.'));
-}
-
-/**
- * Recursivelly gets files in dir
- * @param {String} dir
- */
-async function getFiles(dir) {
-	const dirents = await readdir(dir, { withFileTypes: true });
-	const files = await Promise.all(dirents.map((dirent) => {
-		const res = path.resolve(dir, dirent.name);
-		return dirent.isDirectory() ? getFiles(res) : res;
-	}));
-	return Array.prototype.concat(...files);
-}
-
-/**
-* Get all files in dir and subdirs
-*/
-async function getVideoFiles (dir) {
-	const files = await getFiles(dir);
-	const extensions = config.get('allowedVideoExtensions');
-	return files.filter(f => extensions.some(extension => f.endsWith(extension)));
-}
 
 /**
 * Returns an array of downloaded episodes
 */
 async function getAvailableEpisodes () {
-	let downloadPath = path.join(__dirname, '/../../', config.get('downloadPath'));
-	const files = await getVideoFiles(downloadPath);
-	const downloadedEpidoes = database.episodes.getDownloaded();
+	const downloaded = database.episodes.getDownloaded();
 
-	return files.map(fileName => {
-		const isDownloaded = downloadedEpidoes.find(ep => fileName.includes(ep.torrent.title));
-		return isDownloaded
-			? {episodeData: isDownloaded, path: fileName}
-			: undefined;
-	}).filter(Boolean);
+	return downloaded.filter(episode => fs.existsSync(episode.path));
 }

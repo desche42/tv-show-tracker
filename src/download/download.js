@@ -18,10 +18,9 @@ module.exports = function downloadTorrent(episode) {
   const {show, season, episode: ep, torrent}  = episode;
   return new Promise((res, rej) => {
 		let engine;
+		let path = _getFilePath(show, season, ep);
     try {
-      engine = torrentStream(torrent.magnet, {
-				path: _getFilePath(show, season, ep)
-      });
+      engine = torrentStream(torrent.magnet, {path});
     } catch (error) {
       output(`Error downloading episode ${episode.show} ${episode.season} ${episode.ep}`);
       rej();
@@ -33,6 +32,7 @@ module.exports = function downloadTorrent(episode) {
       engine.files.forEach(file => {
         if (isVideoFile(file.name)) {
 					file.select();
+					path += `/${file.name}`;
 					selectedFile = file;
           output(`${file.name} downloading!`);
         } else {
@@ -42,7 +42,7 @@ module.exports = function downloadTorrent(episode) {
     });
 
     engine.on('idle', () => {
-			database.episodes.setDownloaded({show, season, episode: ep});
+			database.episodes.setDownloaded({show, season, episode: ep}, path);
       engine.destroy(() => {
         output(`Torrent ${torrent.title} downloaded.`);
         res();
