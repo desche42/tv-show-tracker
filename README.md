@@ -195,6 +195,7 @@ and may cause the app to hang, since it waits for the torrents to download befor
   - [ ] Migrate module?
 - [ ] Option of downloading complete seasons
   - [ ] Show info search --> episode details
+- [x] Add path to downloaded file when complete, show in watch only if file exists
 - [ ] Create separate DDBB for shows info (committed), and episodes
   - [ ] Allow for different show names 
   - [x] Move all db transactions to a module with exposed methods

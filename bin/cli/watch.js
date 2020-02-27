@@ -1,9 +1,10 @@
 const inquirer = require('inquirer');
 const chalk = require('chalk');
+
 const fs = require('fs-extra');
-const config = require('config');
 const cp = require('child_process');
-const path = require('path');
+
+const database = require('../../src/database');
 
 
 /**
@@ -12,7 +13,10 @@ const path = require('path');
  */
 (async function watch () {
 
-	const {filePath, fileName} = await _selectEpisode();
+	const selectedEpisodePath = await _selectEpisode().then(ep => ep.path.split('/'))
+
+	const fileName = selectedEpisodePath.pop();
+	const filePath = selectedEpisodePath.join('/');
 
 	return await _launchVlc(filePath, fileName);
 })();
@@ -22,24 +26,32 @@ const path = require('path');
  * @returns {show, episode, filePath, file}
  */
 async function _selectEpisode () {
-	let downloadPath = path.join(__dirname, '/../../', config.get('downloadPath'));
-	const availableShows = await _readDirFilterHidden(downloadPath);
+	const availableEpisodes = await getAvailableEpisodes();
+
+	if(!availableEpisodes.length) {
+		console.log(chalk.red('No episodes available'));
+		return;
+	}
 
 	// select show
+	const availableShows = [...new Set(availableEpisodes.map(e => e.show))];
 	const {show} = await _promptSelectList('show', availableShows, 'Select a show to watch');
-	let filePath = `${downloadPath}/${show}`;
+
+	const showEpisodes = availableEpisodes.filter(ep =>
+		ep.show === show && fs.existsSync(ep.path)
+	);
 
 	// select episode
-	const availableEpisodes = await _readDirFilterHidden(filePath);
-	const {episode} = await _promptSelectList('episode', availableEpisodes, 'Select an episode to watch');
+	const {episode} = await _promptSelectList(
+		'episode',
+		showEpisodes.map(ep => `Season ${ep.season} Episode ${ep.episode}`),
+		'Select an episode to watch'
+	);
 
-	filePath += `/${episode}`;
-
-	// filter by extension?
-	// @todo
-	const [fileName] = await _readDirFilterHidden(filePath);
-
-	return { show, episode, filePath, fileName };
+	return showEpisodes.find(episodeData => {
+		const [season, nEp] = episode.split(' ').map(Number).filter(Boolean);
+		return episodeData.season === season && episodeData.episode === nEp;
+	});
 }
 
 /**
@@ -110,11 +122,12 @@ function _checkVideoFinished(dataStr) {
 	return options.find(option => dataStr.includes(option.value));
 }
 
+
 /**
- * Reads a dir and filters hidden folders
- * @param {String} path
- */
-async function _readDirFilterHidden(path) {
-	const files = await fs.readdir(path);
-	return files.filter(fileName => !fileName.startsWith('.'));
+* Returns an array of downloaded episodes
+*/
+async function getAvailableEpisodes () {
+	const downloaded = database.episodes.getDownloaded();
+
+	return downloaded.filter(episode => fs.existsSync(episode.path));
 }
