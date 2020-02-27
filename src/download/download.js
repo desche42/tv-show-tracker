@@ -32,7 +32,7 @@ module.exports = function downloadTorrent(episode) {
       engine.files.forEach(file => {
         if (isVideoFile(file.name)) {
 					file.select();
-					path += `/${file.name}`;
+					path += `/${file.path}`;
 					selectedFile = file;
           output(`${file.name} downloading!`);
         } else {
