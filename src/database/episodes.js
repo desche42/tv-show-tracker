@@ -24,9 +24,6 @@ const setDownloaded = rawDb => ({show, season, episode}, path) => {
 	rawDb.get(DB_EPISODES_KEY)
 		.find({show, season, episode})
 		.set('downloaded', true)
-		.write();
-	rawDb.get(DB_EPISODES_KEY)
-		.find({show, season, episode})
 		.set('path', path)
 		.write();
 }

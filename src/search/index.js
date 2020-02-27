@@ -121,7 +121,7 @@ async function _parseSearchResult (torrents) {
 		}
 	});
 
-	if (!result.length) {
+	if (!result.filter(Boolean).length) {
 		output('No torrents found');
 	}
 }

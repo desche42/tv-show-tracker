@@ -74,6 +74,6 @@ function isVideoFile (fileName) {
  */
 function _getFilePath(show, season, episode) {
 	const folderName = `S${utils.doubleDigit(season)}E${utils.doubleDigit(episode)}`;
-   const downloadPath = path.join(__dirname, '../../', config.get('downloadPath'));
+  const downloadPath = path.join(__dirname, '../../', config.get('downloadPath'));
 	return [downloadPath, show, folderName].join('/');
 }
