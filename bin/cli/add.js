@@ -2,6 +2,10 @@ const fs = require('fs-extra');
 const path = require('path');
 const inquirer = require('inquirer');
 const chalk = require('chalk');
+const episodeparser = require('episode-parser');
+const database = require('../../src/database');
+const output = require('../../src/utils').output('add');
+
 
 add();
 
@@ -52,6 +56,31 @@ async function _addShow (name) {
 /**
 * Adds a magnet
 */
-async function _addMagnet () {
- console.error('not implemented')
+async function _addMagnet (magnet) {
+	const title = magnet.split('=')[2].replace('&tr', '');
+	const parsed = episodeparser(title);
+
+	const {correct} = await inquirer.prompt([{
+		name: 'correct',
+		type: 'confirm',
+		message: chalk.green(`Is ${parsed.show} season ${parsed.season} episode ${parsed.episode} correct?`)
+	}]);
+
+	if (!correct) {
+		return add();
+	}
+
+	// if is correct
+	parsed.torrent = {magnet, title};
+	parsed.show = parsed.show.toLowerCase();
+
+	const exists = database.episodes.find(parsed);
+
+	if (exists) {
+		database.episodes.setTorrent(parsed, parsed.torrent);
+		output('Torrent added to existing database episode');
+	} else {
+		database.episodes.push(parsed);
+		output('New episode added to database');
+	}
 }
