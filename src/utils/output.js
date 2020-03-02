@@ -15,6 +15,6 @@ debug.enable(`${DEBUG_NAMESPACE}:*`);
  * @example fn('download')('modern family') debugs
  * tv-show-tracker: download: modern family
  */
-module.exports = subSpace => message => {
-	debug(`${DEBUG_NAMESPACE}: ${subSpace}`)(message);
+module.exports = subSpace => (...args) => {
+	debug(`${DEBUG_NAMESPACE}: ${subSpace}`)(...args);
 }
