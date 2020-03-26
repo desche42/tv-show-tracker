@@ -7,3 +7,6 @@ data/*
 
 # local configuration
 config/local.json
+
+# logs
+logs

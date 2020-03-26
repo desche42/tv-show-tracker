@@ -39,7 +39,7 @@
     "request": "^2.88.2",
     "request-promise-native": "^1.0.8",
     "rsync": "^0.6.1",
-    "torrent-search-api": "^2.0.10",
+    "torrent-search-api": "^2.1.1",
     "torrent-stream": "^1.2.0"
   },
   "devDependencies": {
