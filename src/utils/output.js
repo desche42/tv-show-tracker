@@ -1,11 +1,11 @@
 /**
  * Proxy for the colorized output
  */
-const DEBUG_NAMESPACE = 'tv-show-tracker';
+const DEBUG_NAMESPACE = 'tv-show-tracker:';
 const debug = require('debug');
 
 // enable debug for app
-debug.enable(`${DEBUG_NAMESPACE}:*`);
+debug.enable(`${DEBUG_NAMESPACE}*`);
 
 /**
  * Easy output aproach function
@@ -16,5 +16,5 @@ debug.enable(`${DEBUG_NAMESPACE}:*`);
  * tv-show-tracker: download: modern family
  */
 module.exports = subSpace => message => {
-	debug(`${DEBUG_NAMESPACE}: ${subSpace}`)(message);
+	debug(`${DEBUG_NAMESPACE} ${subSpace}`)(message);
 }
