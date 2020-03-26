@@ -80,28 +80,29 @@ async function _searchEpisode(episode) {
 
   const torrents = await torrentSearch.search(query, 'All');
 
-	return await _parseSearchResult(torrents);
+	return await _parseSearchResult(torrents, query);
 }
 
 
 /**
 * Analyzes search result
 */
-async function _parseSearchResult (torrents) {
-	output('Parsing search results...');
+async function _parseSearchResult (torrents, query) {
+	output('Parsing search results for %s...', query);
 	const selectedShows = config.get('selectedShows');
 
-	const result = torrents.filter(torrent => torrent.title).map(torrent => {
-		if (!torrent.magnet){
+	const result = torrents.filter(torrent => torrent.title && torrent.magnet).map(torrent => {
+		const parsed = episodeParser(torrent.title);
+		if (!parsed){
+			// output('Invalid torrent title %s', torrent.title);
 			return;
 		}
 
-		const parsed = episodeParser(torrent.title);
-		parsed.show = parsed.show.toLowerCase();
 
 		// if show is selected in database
-		const {show, season, episode} = parsed;
-		if (selectedShows.includes(parsed.show)) {
+		let show = getSelectedShow(parsed.show, selectedShows);
+		if (show) {
+			const {season, episode} = parsed;
 			const exists = database.episodes.find({show, season, episode});
 
 			if (exists && exists.torrent) {
@@ -148,4 +149,18 @@ function checkMaxAttempts (searchAttempts, show, season, episode) {
 	}
 
 	return attemptsLeft > 0;
+}
+
+/**
+ * Checks if torrent show is included in selected shows,
+ * accounting for variations:
+ * dcs legends of tomorrow / legends of tomorros
+ * @param {String} showName from torrent
+ * @param {*} selectedShows	array of selected shows
+ */
+function getSelectedShow(showName, selectedShows) {
+	showName = (showName || '').toLowerCase();
+	return selectedShows.find(selectedShow =>
+		selectedShow.includes(showName) || showName.includes(selectedShow)
+	);
 }
