@@ -20,6 +20,10 @@ module.exports = {
    */
 	downloadPath:  './data/downloads',
 	/**
+	 * Path for backup database and downloads
+	 */
+	backupPath: '',
+	/**
 	 * If false, all episodes in db of selected shows will be downloaded
 	 */
 	downloadLastSeasonOnly: true,
@@ -59,5 +63,10 @@ module.exports = {
   /**
    * Updates TV Schedule Calendar
    */
-  updateCalendar: true
+	updateCalendar: true,
+	/**
+	 * vlc command
+	 * for macOs: '/Applications/VLC.app/Contents/MacOS/VLC'
+	 */
+	vlcCommand: 'vlc'
 }

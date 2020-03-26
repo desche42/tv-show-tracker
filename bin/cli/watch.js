@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 const chalk = require('chalk');
-
+const config = require('config');
 const fs = require('fs-extra');
 const cp = require('child_process');
 
@@ -72,7 +72,7 @@ function _promptSelectList(name, choices, message) {
 }
 
 function _launchVlc(filePath, file) {
-	const vlc_process = cp.spawn('vlc', ['--fullscreen', '-vv', `${file}`], {
+	const vlc_process = cp.spawn(config.get('vlcCommand'), ['--fullscreen', '-vv', `${file}`], {
 		cwd: filePath
 	});
 
