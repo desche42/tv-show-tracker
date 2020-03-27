@@ -10,3 +10,6 @@ config/local.json
 
 # logs
 logs
+
+# Crap
+.DS_Store
