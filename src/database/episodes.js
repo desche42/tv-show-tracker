@@ -11,7 +11,8 @@ module.exports = rawDb => {
 		getShowEpisodes: getShowEpisodes(rawDb),
 		push: push(rawDb),
 		find: find(rawDb),
-		updateSearchAttempts: updateSearchAttempts(rawDb)
+		updateSearchAttempts: updateSearchAttempts(rawDb),
+		getForcedEpisodes: getForcedEpisodes(rawDb)
 	}
 }
 
@@ -32,17 +33,27 @@ const setDownloaded = rawDb => ({show, season, episode}, path) => {
  * Sets a torrent in episode
  * @param {Object} episodeData {show, season, episode}
  */
-const setTorrent = rawDb => ({show, season, episode}, torrent) => {
+const setTorrent = rawDb => ({show, season, episode, forceDownload}, torrent) => {
 	rawDb.get(DB_EPISODES_KEY)
 		.find({show, season, episode})
 		.set('torrent', torrent)
+		.set('forceDownload', !!forceDownload)
 		.write();
 }
 
 /**
  * Returns downloaded episodes
  */
-const getDownloaded = rawDb => () => rawDb.get(DB_EPISODES_KEY).filter({downloaded: true}).value()
+const getDownloaded = rawDb => () => rawDb.get(DB_EPISODES_KEY).filter({downloaded: true}).value();
+
+/**
+ * Returns episodes forced to download
+ * that are not downloaded yet
+ */
+const getForcedEpisodes = rawDb => () => rawDb.get(DB_EPISODES_KEY).filter({
+	downloaded: false,
+	forceDownload: true
+}).value();
 
 /**
  * Gets shows episodes

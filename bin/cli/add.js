@@ -10,6 +10,7 @@ const episodeparser = require('episode-parser');
 const database = require('../../src/database');
 const output = require('../../src/utils').output('add');
 
+const AVAILABLE_SHOWS = database.shows.getAllShows().map(show => show.title);
 
 add();
 
@@ -56,13 +57,12 @@ async function _addShow () {
 * Prompts for selecting an available show, or nee show
 */
 async function _promptSelectShow () {
-	const availableShows = database.shows.getAllShows().map(show => show.title);
 	const {showName} = await inquirer.prompt([{
 			type: 'autocomplete',
 			name: 'showName',
 			pageSize: 5,
 			message: chalk.green('Select a show or enter a new one'),
-			source: _searchShows(availableShows)
+			source: _searchShows
 	}]);
 
 	const {correct} = await inquirer.prompt([{
@@ -79,11 +79,11 @@ async function _promptSelectShow () {
  * Filters shows according to input
  * @param {Array} avilableShows
  */
-const _searchShows = availableShows => async (answers, input) => {
-	let shows = availableShows;
+async function _searchShows (answers, input) {
+	let shows = AVAILABLE_SHOWS;
 
 	if (input) {
-		shows = fuzzy.filter(input, availableShows);
+		shows = fuzzy.filter(input, AVAILABLE_SHOWS);
 		shows = shows.length ? shows.map(el => el.original) : [input];
 	}
 
@@ -106,34 +106,58 @@ function _getLocalConfig(localConfigPath) {
 	return localConfig;
 }
 
+
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+
+
+
 /**
 * Adds a magnet
 */
 async function _addMagnet () {
 	const {magnet} = await inquirer.prompt([{
-		name: 'item',
+		name: 'magnet',
 		message: chalk.green(`Enter magnet:`)
 	}]);
 
-	const title = magnet.split('=')[2].replace('&tr', '');
-	const parsed = episodeparser(title);
+	let title = _getMagnetTitle(magnet);
 
-	const {correct} = await inquirer.prompt([{
-		name: 'correct',
-		type: 'confirm',
-		message: chalk.green(`Is ${parsed.show} season ${parsed.season} episode ${parsed.episode} correct?`)
-	}]);
-
-	if (!correct) {
-		return add();
+	if (!title) {
+		output(`Magnet doesn't have a display name`);
+		return;
 	}
 
-	// if is correct
-	parsed.torrent = {magnet, title};
-	parsed.show = parsed.show.toLowerCase();
+	const parsed = await _confirmParsedMagnet(title, magnet);
+	if (parsed) {
+		parsed.forceDownload = true;
+		_addEpisodeToDatabase(parsed);
+	} else {
+		await add();
+	}
+}
 
+/**
+ * Adds episode to database
+ * @param {Object} parsed
+ */
+function _addEpisodeToDatabase(parsed) {
 	const exists = database.episodes.find(parsed);
-
 	if (exists) {
 		database.episodes.setTorrent(parsed, parsed.torrent);
 		output('Torrent added to existing database episode');
@@ -141,4 +165,44 @@ async function _addMagnet () {
 		database.episodes.push(parsed);
 		output('New episode added to database');
 	}
+}
+
+/**
+ * Extracts title from magnet
+ * @param {String} magnet
+ */
+function _getMagnetTitle(magnet) {
+	let title = (/.*magnet:\?xt=urn.*&dn=([^&]*)&.*/i.exec(magnet) || [])[1] || '';
+	return title.toLowerCase().replace(/season[.\s]/, 's');
+}
+
+/**
+ * Parses torrent data and propmts for confirmation
+ * @param {Strineg} title
+ * @param {String} magnet
+ */
+async function _confirmParsedMagnet(title, magnet) {
+	const parsed = episodeparser(title) || {};
+
+	parsed.torrent = {magnet, title};
+	parsed.show = getShowName(parsed.show);
+
+	const {correct} = await inquirer.prompt([{
+		name: 'correct',
+		type: 'confirm',
+		message: chalk.green(`Is ${parsed.show} season ${parsed.season} episode ${parsed.episode ||  parsed.name} correct?`)
+	}]);
+
+	return correct ? parsed : correct;
+}
+
+/**
+ * Looks in database for the show, and if found,
+ * returns that name. Avoids show duplication
+ * @example legends of tomorrow // dcs legends of tomorrow
+ * @param {String} showName
+ */
+function getShowName (showName) {
+	const found = (fuzzy.filter(showName, AVAILABLE_SHOWS) || [])[0];
+	return found ? found.original : showName;
 }

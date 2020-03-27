@@ -46,7 +46,7 @@ async function getAvailableEpisodes() {
 
 	const episodes = _filterFutureEpisodes(
 		_getNotDownloaded(selectedShows)
-	);
+	).filter(ep => !ep.forceDownload).concat(database.episodes.getForcedEpisodes())
 
 	return {
 		magnets: episodes.filter(ep => ep.torrent && ep.torrent.magnet),
