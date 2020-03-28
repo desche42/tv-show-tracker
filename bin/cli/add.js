@@ -1,5 +1,6 @@
 const fs = require('fs-extra');
 const path = require('path');
+const config = require('config');
 
 const inquirer = require('inquirer');
 const fuzzy = require('fuzzy');
@@ -10,7 +11,7 @@ const episodeparser = require('episode-parser');
 const database = require('../../src/database');
 const output = require('../../src/utils').output('add');
 
-const AVAILABLE_SHOWS = database.shows.getAllShows().map(show => show.title);
+const AVAILABLE_SHOWS = database.shows.getAllShowNames();
 
 add();
 
@@ -38,7 +39,7 @@ async function add () {
 * @todo change to db insertion when module developed
 */
 async function _addShow () {
-	const localConfigPath = path.join(__dirname, '../../config/local.json');
+	const localConfigPath = path.join(__dirname, `../../${config.get('localConfigPath')}`);
 	const localConfig = _getLocalConfig(localConfigPath);
 
 	// infinite loop, always returns something

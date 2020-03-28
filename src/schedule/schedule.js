@@ -10,8 +10,10 @@ const saveData = require(path.join(__dirname, 'saveData'));
 
 /**
  * CURRENT MONTH SHCEDULE URL
+ * If this changes, must adapt database/shows for fuzzy search
+ * of shows, as currently show titles are saved as this website
+ * mr robot // mr. robot
  */
-
 const SCHEDULE_URL = 'https://www.pogdesign.co.uk/cat';
 
 /**

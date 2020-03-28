@@ -6,6 +6,10 @@ module.exports = {
 	 * File extensions to download
 	 */
 	allowedVideoExtensions: ['mkv', 'avi', 'mp4'],
+	/**
+	 * Path for backup database and downloads
+	 */
+	backupPath: '',
   /**
    * Download all episodes of current season for each selected show
 	 * @todo not implemented
@@ -20,13 +24,13 @@ module.exports = {
    */
 	downloadPath:  './data/downloads',
 	/**
-	 * Path for backup database and downloads
-	 */
-	backupPath: '',
-	/**
 	 * If false, all episodes in db of selected shows will be downloaded
 	 */
 	downloadLastSeasonOnly: true,
+	/**
+	 * Local configuration path
+	 */
+	localConfigPath: 'config/local.json',
 	/**
 	 * Attempts to search for a torrent. Careful if restart option is activated,
 	 * search limit will be reached, maybe blocking new episodes for being downloaded.

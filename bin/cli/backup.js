@@ -13,7 +13,7 @@ program
 
 const downloadPath = path.join(__dirname, '../../', config.get('downloadPath'));
 const databasePath = path.join(__dirname, '../../', config.get('databasePath'));
-const localConfig = path.join(__dirname, '../../', 'config/local.json');
+const localConfig = path.join(__dirname, '../../', config.get('localConfigPath'));
 
 // check if destination directory exists
 const destination = program.destination || config.get('backupPath');

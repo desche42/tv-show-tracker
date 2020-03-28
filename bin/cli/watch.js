@@ -38,7 +38,7 @@ async function _selectEpisode () {
 	const {show} = await _promptSelectList('show', availableShows, 'Select a show to watch');
 
 	const showEpisodes = availableEpisodes.filter(ep =>
-		ep.show === show && fs.existsSync(ep.path)
+		ep.show === show
 	);
 
 	// select episode
