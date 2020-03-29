@@ -1,6 +1,8 @@
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 const config = require('config');
+const path = require('path');
+
 const fs = require('fs-extra');
 const cp = require('child_process');
 
@@ -12,12 +14,16 @@ const database = require('../../src/database');
  * @returns {Promise} that resolves when vlc is closed
  */
 (async function watch () {
+	const selectedEpisode = await _selectEpisode();
 
-	const selectedEpisodePath = await _selectEpisode().then(ep => ep.path.split('/'))
+	if (!selectedEpisode) {
+		return;
+	}
+
+	const selectedEpisodePath = selectedEpisode.path.split('/');
 
 	const fileName = selectedEpisodePath.pop();
 	const filePath = selectedEpisodePath.join('/');
-
 	return await _launchVlc(filePath, fileName);
 })();
 
@@ -129,5 +135,22 @@ function _checkVideoFinished(dataStr) {
 async function getAvailableEpisodes () {
 	const downloaded = database.episodes.getDownloaded();
 
-	return downloaded.filter(episode => fs.existsSync(episode.path));
+	const localPath = path.join(__dirname, '../../', config.get('downloadPath'));
+	const backupPath = path.join(config.get('backupPath'), config.get('downloadPath'));
+
+	return downloaded.filter(e => checkEpisodePath(localPath, backupPath, e))
+}
+
+function checkEpisodePath(localPath, backupPath, episode) {
+	if (!episode.path) return false;
+	return checkPath(episode, localPath) || checkPath(episode, backupPath);
+}
+
+function checkPath(episode, basePath) {
+	basePath = path.resolve(path.join(basePath, episode.path));
+	const exists = fs.existsSync(basePath);
+	if (exists) {
+		episode.path = basePath;
+	}
+	return exists;
 }

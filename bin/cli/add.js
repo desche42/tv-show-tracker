@@ -174,7 +174,7 @@ function _addEpisodeToDatabase(parsed) {
  */
 function _getMagnetTitle(magnet) {
 	let title = (/.*magnet:\?xt=urn.*&dn=([^&]*)&.*/i.exec(magnet) || [])[1] || '';
-	return title.toLowerCase().replace(/season[.\s]/, 's');
+	return title.toLowerCase().replace(/season[.\s]/, 's').replace(/\+/g, '.');
 }
 
 /**
@@ -204,6 +204,6 @@ async function _confirmParsedMagnet(title, magnet) {
  * @param {String} showName
  */
 function getShowName (showName) {
-	const found = (fuzzy.filter(showName, AVAILABLE_SHOWS) || [])[0];
+	const found = database.shows.ffilterFuzzyShow(showName);
 	return found ? found.original : showName;
 }

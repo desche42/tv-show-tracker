@@ -27,7 +27,7 @@ const findShow = rawDb => showName =>{
  */
 const filterFuzzyShow = rawDb => showName => {
 	const showNames = getAllShowNames(rawDb)();
-	return fuzzy.filter(showName, showNames)[0];
+	return (fuzzy.filter(showName, showNames)[0] || {}).original;
 }
 
 /**
