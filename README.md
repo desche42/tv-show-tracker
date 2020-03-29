@@ -179,7 +179,7 @@ and may cause the app to hang, since it waits for the torrents to download befor
 	> 
 	> This can never happen again...
 	>
-	> Anyway lets download them... 
+	> Anyway lets download them...
 	>
 	> Ugh! 35 magnets? Let's automate this
 
@@ -189,7 +189,7 @@ and may cause the app to hang, since it waits for the torrents to download befor
 
 - CLI
   - [ ] Add / remove seasons
-  - [ ] Add magnet
+  - [x] Add magnet
 - [ ] Change output / debug
   - [x] Add output module, uses debug package behind the scenes
   - [ ] Migrate module?

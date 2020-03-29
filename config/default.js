@@ -18,11 +18,11 @@ module.exports = {
 	/**
 	 * Relative path for the database
 	 */
-	databasePath: './data/db.json',
+	databasePath: 'data/db.json',
   /**
    * Torrent dir download relative path.
    */
-	downloadPath:  './data/downloads',
+	downloadPath:  'data/downloads',
 	/**
 	 * If false, all episodes in db of selected shows will be downloaded
 	 */

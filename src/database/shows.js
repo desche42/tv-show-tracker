@@ -27,6 +27,14 @@ const findShow = rawDb => showName =>{
  */
 const filterFuzzyShow = rawDb => showName => {
 	const showNames = getAllShowNames(rawDb)();
+	const words = showName.split(' ');
+	if (words.length > 2) {
+		const filteredName = words.filter(word => word.length > 3).join(' ');
+		const found = fuzzy.filter(filteredName, showNames);
+		if (found.length === 1) {
+			return found.pop().original;
+		}
+	}
 	return (fuzzy.filter(showName, showNames)[0] || {}).original;
 }
 

@@ -144,7 +144,10 @@ async function getAvailableEpisodes () {
 	const downloaded = database.episodes.getDownloaded();
 
 	const localPath = path.join(__dirname, '../../', config.get('downloadPath'));
-	const backupPath = path.join(config.get('backupPath'), config.get('downloadPath'));
+	
+	const backupPath = path.join(
+		config.get('backupPath'), config.get('downloadPath').split('/').pop()
+	);
 
 	return downloaded.filter(e => checkEpisodePath(localPath, backupPath, e))
 }
