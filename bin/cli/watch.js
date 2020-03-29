@@ -14,17 +14,14 @@ const database = require('../../src/database');
  * @returns {Promise} that resolves when vlc is closed
  */
 (async function watch () {
-	const selectedEpisode = await _selectEpisode();
+	const selectedEpisodes = await _selectEpisode();
 
-	if (!selectedEpisode) {
+	if (!selectedEpisodes.length) {
 		return;
 	}
 
-	const selectedEpisodePath = selectedEpisode.path.split('/');
-
-	const fileName = selectedEpisodePath.pop();
-	const filePath = selectedEpisodePath.join('/');
-	return await _launchVlc(filePath, fileName);
+	const selectedEpisodesPath = selectedEpisodes.map(ep => ep.path);
+	return await _launchVlc(selectedEpisodesPath);
 })();
 
 /**
@@ -54,9 +51,10 @@ async function _selectEpisode () {
 		'Select an episode to watch'
 	);
 
-	return showEpisodes.find(episodeData => {
-		const [season, nEp] = episode.split(' ').map(Number).filter(Boolean);
-		return episodeData.season === season && episodeData.episode === nEp;
+	// filter array to return selected episode and next episodes
+	const [season, nEp] = episode.split(' ').map(Number).filter(Boolean);
+	return showEpisodes.filter(episodeData => {
+		return episodeData.season === season && episodeData.episode >= nEp;
 	});
 }
 
@@ -77,10 +75,20 @@ function _promptSelectList(name, choices, message) {
 	]);
 }
 
-function _launchVlc(filePath, file) {
-	const vlc_process = cp.spawn(config.get('vlcCommand'), ['--fullscreen', '-vv', `${file}`], {
-		cwd: filePath
-	});
+/**
+ * Array of paths to reproduce.
+ * Somehow next button in vlc is not working,
+ * but reproduces next episode when previous ends
+ * @param {Array} selectedEpisodesPath
+ */
+function _launchVlc(selectedEpisodesPath) {
+	const options = [
+		'--fullscreen',
+		'-vv',
+		...selectedEpisodesPath
+	];
+
+	const vlc_process = cp.spawn(config.get('vlcCommand'), options);
 
 	return new Promise((resolve) => {
 		_monitorProcess(vlc_process, resolve);
