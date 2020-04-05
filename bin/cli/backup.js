@@ -6,6 +6,7 @@ const fs = require('fs-extra');
 const output = require('../../src/utils').output('backup');
 const path = require('path');
 const rsync = require('rsync');
+const utils = require('./utils');
 
 const program = new commander.Command();
 program
@@ -98,34 +99,47 @@ function getBackupPatterns() {
  * Scans backup directory for shows and adds them to database
  */
  async function scanBackup (backupPath, downloadPath) {
-	console.error('this can alter the database very badly. ask for prompt and do a backup first or comment this code.');
-	// coment the line below at your own risk @todo
-	return;
-
 	backupPath += '/' + downloadPath.split('/').pop();
-	const backupShows = await fs.readdir(backupPath).then(dir =>
-		dir.filter(path => path !== '.DS_Store')
-	);
-	const found = backupShows.map(database.shows.ffilterFuzzyShow);
 
-	for (let i = 0; i < backupShows.length; i++) {
-		const showPath = [backupPath, backupShows[i]].join('/');
-		const episodes = await searchEpisodes(showPath);
+	if (await utils.confirmAction(
+		'This can alter the database very badly. Have you made a recent backup?', 'red'
+	)) {
+		output('Scanning path %s', backupPath);
 
-		const showName = found[i] || backupShows[i];
-
-
-		for (let episode of episodes) {
-			const [season, epNumber] = episode.match(/S(\d\d)E(\d\d)/).slice(1, 3).map(Number);
-			const showData = {show: showName, episode: epNumber, season}
-			const dbEpisode = database.episodes.find(showData);
-			if (!dbEpisode) {
-				database.episodes.push(showData);
+		for (let show of await readDir(backupPath)) {
+			const found = database.shows.find(show);
+			if (!found) {
+				output('Show "%s" not found in the database. Add it to sync with db.', show);
+			} else {
+				await scanShowDirectory(backupPath, found);
 			}
-			database.episodes.setDownloaded(showData, `${found[i]}/${episode}`);
 		}
 	}
  }
+
+ const readDir = async path => await fs.readdir(path).then(dir =>
+	dir.filter(path => path !== '.DS_Store')
+ );
+
+ /**
+ * Scans show's directory searching for episodes
+ */
+ async function scanShowDirectory (backupPath, showInfo) {
+		const showPath = [backupPath, showInfo.title].join('/');
+		const episodes = await searchEpisodes(showPath)
+
+		output('Scanning "%s"\'s episodes', showInfo.title);
+
+		for (let episode of episodes) {
+			const [season, epNumber] = episode.match(/S(\d\d)E(\d\d)/).slice(1, 3).map(Number);
+			const episodeData = {show: showInfo.title, episode: epNumber, season};
+			if (!database.episodes.find(episodeData)) {
+				output('New episode %s', episode);
+				database.episodes.push(episodeData);
+			}
+			database.episodes.setDownloaded(episodeData, `${episodeData.show}/${episode}`);
+		}
+}
 
  /**
  * Scans dir and looks for episodes

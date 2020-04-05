@@ -52,6 +52,11 @@ async function _addShow () {
 		await fs.writeJson(localConfigPath, localConfig, {spaces: 2});
 		output('Show "%s" added to local config', newShow);
 	}
+
+	if (!database.shows.find(newShow)) {
+		output('Adding show to database');
+		database.shows.push(newShow);
+	}
 }
 
 /**
@@ -81,11 +86,12 @@ async function _promptSelectShow () {
  * @param {Array} avilableShows
  */
 async function _searchShows (answers, input) {
-	let shows = AVAILABLE_SHOWS;
+	let shows = AVAILABLE_SHOWS || [];
 
 	if (input) {
 		shows = fuzzy.filter(input, AVAILABLE_SHOWS);
-		shows = shows.length ? shows.map(el => el.original) : [input];
+		shows = [...shows.map(el => el && el.original || el)];
+		!shows.includes(input) && shows.unshift(input);
 	}
 
 	return shows;
