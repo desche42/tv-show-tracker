@@ -37,7 +37,7 @@ async function _selectEpisode () {
 	}
 
 	// select show
-	const availableShows = [...new Set(availableEpisodes.map(e => e.show))];
+	const availableShows = [...new Set(availableEpisodes.map(e => e.show))].sort();
 	const {show} = await _promptSelectList('show', availableShows, 'Select a show to watch');
 
 	const showEpisodes = availableEpisodes.filter(ep =>
@@ -78,7 +78,9 @@ function _promptSelectList(name, choices, message) {
 /**
  * Array of paths to reproduce.
  * Somehow next button in vlc is not working,
+ * // _monitorProcess detects end of episode and kills process
  * but reproduces next episode when previous ends
+ *
  * @param {Array} selectedEpisodesPath
  */
 function _launchVlc(selectedEpisodesPath) {
@@ -107,7 +109,7 @@ function _monitorProcess(process, resolve) {
 		const isEnd = _checkVideoFinished(data.toString());
 
 		if (isEnd) {
-			process.kill();
+			// process.kill();
 			result = isEnd.isVideoFinished;
 		}
 	});
@@ -144,7 +146,7 @@ async function getAvailableEpisodes () {
 	const downloaded = database.episodes.getDownloaded();
 
 	const localPath = path.join(__dirname, '../../', config.get('downloadPath'));
-	
+
 	const backupPath = path.join(
 		config.get('backupPath'), config.get('downloadPath').split('/').pop()
 	);
