@@ -6,6 +6,8 @@ const database = require('../database');
 const config = require('config');
 const episodeParser = require('episode-parser');
 const utils = require('../utils');
+const log = require('log-to-file');
+const path = require('path');
 
 // Configure torrent search
 // more info about providers using await torrentSearch.getActiveProviders();
@@ -78,7 +80,11 @@ async function _searchEpisode(episode) {
 
 	output(`Searching ${query}`);
 
-  const torrents = await torrentSearch.search(query, 'All');
+	const torrents = await torrentSearch.search(query, 'All');
+
+	log(
+		`Torrents for query ${query}:\n	${JSON.stringify(torrents, null, 2)}`,
+		path.join(__dirname, '../../', config.get('logPath')));
 
 	return await _parseSearchResult(torrents, query);
 }
@@ -92,8 +98,10 @@ async function _parseSearchResult (torrents, query) {
 	const selectedShows = config.get('selectedShows');
 
 	const result = torrents.filter(torrent => torrent.title && torrent.magnet).map(torrent => {
-		const parsed = episodeParser(torrent.title);
-		if (!parsed){
+		const parsed = episodeParser(torrent.title.replace(' ','.'));
+		const {season, episode} = parsed || {};
+
+		if (!season || !episode){
 			// output('Invalid torrent title %s', torrent.title);
 			return;
 		}
@@ -102,7 +110,6 @@ async function _parseSearchResult (torrents, query) {
 		// if show is selected in database
 		let show = getSelectedShow(parsed.show, selectedShows);
 		if (show) {
-			const {season, episode} = parsed;
 			const exists = database.episodes.find({show, season, episode});
 
 			if (exists && exists.torrent) {
@@ -113,7 +120,7 @@ async function _parseSearchResult (torrents, query) {
 				output(`Torrent found for episode ${show} ${season} ${episode}`);
 				database.episodes.setTorrent({show, season, episode}, torrent);
 			} else {
-				output(`New episode found! ${show} ${season} ${episode}`);
+				output(`New episode found! ${show} ${season} ${episode}: ${torrent.title}`);
 				database.episodes.push({
 					show, season, episode, torrent
 				});

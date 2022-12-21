@@ -32,6 +32,10 @@ module.exports = {
 	 */
 	localConfigPath: 'config/local.json',
 	/**
+	 * Logs path
+	 */
+	logPath: 'logs/log.log',
+	/**
 	 * Attempts to search for a torrent. Careful if restart option is activated,
 	 * search limit will be reached, maybe blocking new episodes for being downloaded.
 	 * Set to 0 to infinite attempts

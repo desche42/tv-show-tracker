@@ -153,6 +153,7 @@ async function _addMagnet () {
 	const parsed = await _confirmParsedMagnet(title, magnet);
 	if (parsed) {
 		parsed.forceDownload = true;
+		parsed.downloaded = false;
 		_addEpisodeToDatabase(parsed);
 	} else {
 		await add();
